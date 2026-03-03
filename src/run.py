@@ -20,7 +20,7 @@ OUT_JSONL       = BASE_DIR / "data" / "dataset.jsonl"
 
 # ---------- settings ----------
 COUNT_PER_DOMAIN = 50
-SENTENCE_LENGTH_BANDS = ("4-8", "9-14", "15-25")
+SENTENCE_LENGTH_BANDS = ("6-10", "10-15", "16-20")
 QUOTAS = (16, 18, 16)
 
 # Sleep between domains
