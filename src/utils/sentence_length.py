@@ -16,7 +16,7 @@ from nltk.tokenize import TweetTokenizer
     before executing the script.
 
     The corpus is used to estimate sentence-length distribution
-    (mean and MAD) for defining generation constraints.
+    (mean and std) for defining generation constraints.
 """
 
 # ----------------------------
@@ -119,7 +119,7 @@ def extract_text(record: dict) -> str:
 
 
 # ----------------------------
-# Core: lengths + mean + MAD
+# Core: lengths + mean + std
 # ----------------------------
 def all_sentence_lengths(texts: List[str], min_words: int = 3) -> List[int]:
     """
@@ -152,33 +152,39 @@ def all_sentence_lengths(texts: List[str], min_words: int = 3) -> List[int]:
     return lengths
 
 
-def mean_and_mad(lengths: List[int]) -> Tuple[float, float]:
+from typing import List, Tuple
+import math
+
+def mean_and_std(lengths: List[int]) -> Tuple[float, float]:
     """
-    Compute mean and Mean Absolute Deviation (MAD) from a list of lengths.
+    Compute mean and standard deviation from a list of lengths.
 
     Mean:
         mean = sum(x) / N
-    MAD:
-        mad = sum(|x - mean|) / N
+
+    Standard Deviation:
+        std = sqrt(sum((x - mean)^2) / N)
 
     Args:
         lengths (List[int]): List of sentence lengths (word counts).
 
     Returns:
-        Tuple[float, float]: (mean, mad). Returns (0.0, 0.0) if the input is empty.
+        Tuple[float, float]: (mean, std). Returns (0.0, 0.0) if the input is empty.
     """
     if not lengths:
         return 0.0, 0.0
 
     mean_val = sum(lengths) / len(lengths)
-    mad_val = sum(abs(x - mean_val) for x in lengths) / len(lengths)
 
-    return mean_val, mad_val
+    variance = sum((x - mean_val) ** 2 for x in lengths) / len(lengths)
+    std_val = math.sqrt(variance)
+
+    return mean_val, std_val
 
 
 if __name__ == "__main__":
     """
-    Compute sentence-length mean and MAD for a JSONL corpus.
+    Compute sentence-length mean and Std for a JSONL corpus.
 
     """
     PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -187,8 +193,8 @@ if __name__ == "__main__":
     texts = [extract_text(record) for record in read_jsonl(dataset_path)]
 
     lengths = all_sentence_lengths(texts, min_words=3)
-    mean_val, mad_val = mean_and_mad(lengths)
+    mean_val, std_val = mean_and_std(lengths)
 
     print(f"Total sentences: {len(lengths)}")
     print(f"Mean words per sentence: {mean_val:.2f}")
-    print(f"MAD words per sentence: {mad_val:.2f}")
+    print(f"Std words per sentence: {std_val:.2f}")
