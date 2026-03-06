@@ -16,7 +16,7 @@ API_KEY     = os.getenv("AZURE_OPENAI_API_KEY")
 # ---------- Paths ----------
 BASE_DIR = Path(__file__).resolve().parent.parent
 DOMAINS_FILE    = BASE_DIR / "data" / "domains.json"
-OUT_JSONL       = BASE_DIR / "data" / "dataset.jsonl"
+OUT_JSONL       = BASE_DIR / "data" / "RTTBench-Mono-ES.jsonl.jsonl"
 
 # ---------- settings ----------
 COUNT_PER_DOMAIN = 50
@@ -316,7 +316,7 @@ def main() -> None:
     rows = build_rows(domains, client)
     write_jsonl(OUT_JSONL, rows)
 
-    print("\n✅ Dataset generated successfully.")
+    print("\n✅ RTTBench-Mono-ES.jsonl generated successfully.")
     print(f"Total rows: {len(rows)} (expected {len(domains) * COUNT_PER_DOMAIN})")
 
 

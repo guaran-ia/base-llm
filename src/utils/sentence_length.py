@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
 from typing import Iterator, List, Tuple
-
 import spacy
 from nltk.tokenize import TweetTokenizer
-
+from typing import List, Tuple
+import math
 
 """
     SETUP REQUIREMENT:
@@ -151,9 +151,6 @@ def all_sentence_lengths(texts: List[str], min_words: int = 3) -> List[int]:
 
     return lengths
 
-
-from typing import List, Tuple
-import math
 
 def mean_and_std(lengths: List[int]) -> Tuple[float, float]:
     """

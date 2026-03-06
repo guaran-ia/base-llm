@@ -14,7 +14,7 @@ from huggingface_hub import PyTorchModelHubMixin, hf_hub_download
 MODEL_ID = "nvidia/domain-classifier"
 
 BASE_DIR    = Path(__file__).resolve().parent.parent
-INPUT_FILE  = BASE_DIR / "data" / "dataset.jsonl"   
+INPUT_FILE  = BASE_DIR / "data" / "RTTBench-Mono-ES.jsonl.jsonl"   
 OUTPUT_FILE = BASE_DIR / "data" / "domains.json"    # JSON array with confusables
 
 TOP_K = 3
