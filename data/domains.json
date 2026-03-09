@@ -1,0 +1,127 @@
+[
+  {
+    "name": "Artes_y_Entretenimiento",
+    "description": "Contenido relacionado con música, cine, televisión, teatro, arte visual, cultura, celebridades y eventos de entretenimiento.",
+    "confusables": ["Libros_y_Literatura", "Juegos", "Pasatiempos_y_Ocio"]
+  },
+  {
+    "name": "Autos_y_Vehiculos",
+    "description": "Información sobre automóviles, motocicletas, transporte motorizado, mantenimiento vehicular, industria automotriz y novedades del sector.",
+    "confusables": ["Negocios_e_Industria", "Noticias", "Empleos_y_Educacion"]
+  },
+  {
+    "name": "Belleza_y_Fitness",
+    "description": "Temas relacionados con cuidado personal, cosmética, estética, ejercicio físico, rutinas de entrenamiento y bienestar corporal.",
+    "confusables": ["Salud", "Personas_y_Sociedad", "Noticias"]
+  },
+  {
+    "name": "Libros_y_Literatura",
+    "description": "Contenido sobre libros, novelas, poesía, autores, reseñas literarias, géneros narrativos y análisis de obras escritas.",
+    "confusables": ["Artes_y_Entretenimiento", "Personas_y_Sociedad", "Noticias"]
+  },
+  {
+    "name": "Negocios_e_Industria",
+    "description": "Información sobre empresas, emprendimientos, gestión corporativa, procesos industriales, producción, logística y economía empresarial.",
+    "confusables": ["Noticias", "Empleos_y_Educacion", "Computadoras_y_Electronica"]
+  },
+  {
+    "name": "Computadoras_y_Electronica",
+    "description": "Temas relacionados con hardware, software, programación, dispositivos electrónicos, sistemas informáticos y avances tecnológicos.",
+    "confusables": ["Salud", "Belleza_y_Fitness", "Artes_y_Entretenimiento"]
+  },
+  {
+    "name": "Finanzas",
+    "description": "Contenido sobre banca, inversiones, mercados financieros, impuestos, seguros, planificación financiera y economía monetaria.",
+    "confusables": ["Noticias", "Empleos_y_Educacion", "Artes_y_Entretenimiento"]
+  },
+  {
+    "name": "Comida_y_Bebida",
+    "description": "Información sobre gastronomía, recetas, cocina, restaurantes, bebidas, cultura culinaria y nutrición alimentaria.",
+    "confusables": ["Noticias", "Deportes", "Comunidades_En_Linea"]
+  },
+  {
+    "name": "Juegos",
+    "description": "Contenido sobre videojuegos, juegos de mesa, juegos en línea, mecánicas de juego, plataformas y comunidades gamer.",
+    "confusables": ["Artes_y_Entretenimiento", "Comunidades_En_Linea", "Computadoras_y_Electronica"]
+  },
+  {
+    "name": "Salud",
+    "description": "Información médica, enfermedades, tratamientos, prevención, sistemas de salud y bienestar físico y mental.",
+    "confusables": ["Noticias", "Personas_y_Sociedad", "Negocios_e_Industria"]
+  },
+  {
+    "name": "Pasatiempos_y_Ocio",
+    "description": "Actividades recreativas realizadas por entretenimiento personal como manualidades, coleccionismo, actividades al aire libre y hobbies.",
+    "confusables": ["Artes_y_Entretenimiento", "Noticias", "Computadoras_y_Electronica"]
+  },
+  {
+    "name": "Hogar_y_Jardin",
+    "description": "Contenido sobre decoración, mantenimiento del hogar, jardinería, mejoras domésticas y diseño de espacios residenciales.",
+    "confusables": ["Artes_y_Entretenimiento", "Pasatiempos_y_Ocio", "Belleza_y_Fitness"]
+  },
+  {
+    "name": "Internet_y_Telecomunicaciones",
+    "description": "Información sobre servicios de internet, redes, telecomunicaciones, conectividad, infraestructura digital y comunicación en línea.",
+    "confusables": ["Noticias", "Computadoras_y_Electronica", "Comunidades_En_Linea"]
+  },
+  {
+    "name": "Empleos_y_Educacion",
+    "description": "Contenido relacionado con formación académica, carreras profesionales, oportunidades laborales, capacitación y desarrollo educativo.",
+    "confusables": ["Negocios_e_Industria", "Noticias", "Computadoras_y_Electronica"]
+  },
+  {
+    "name": "Ley_y_Gobierno",
+    "description": "Temas sobre legislación, políticas públicas, administración estatal, sistemas jurídicos y procesos gubernamentales.",
+    "confusables": ["Noticias", "Finanzas", "Personas_y_Sociedad"]
+  },
+  {
+    "name": "Noticias",
+    "description": "Información actual sobre acontecimientos recientes, eventos políticos, económicos, sociales o internacionales reportados de manera informativa.",
+    "confusables": ["Personas_y_Sociedad", "Ley_y_Gobierno", "Temas_Sensibles"]
+  },
+  {
+    "name": "Comunidades_En_Linea",
+    "description": "Contenido relacionado con redes sociales, foros, interacción digital, plataformas colaborativas y participación en línea.",
+    "confusables": ["Personas_y_Sociedad", "Noticias", "Empleos_y_Educacion"]
+  },
+  {
+    "name": "Personas_y_Sociedad",
+    "description": "Temas sociales, cultura, relaciones humanas, tradiciones, demografía y comportamiento colectivo.",
+    "confusables": ["Noticias", "Empleos_y_Educacion", "Ley_y_Gobierno"]
+  },
+  {
+    "name": "Mascotas_y_Animales",
+    "description": "Información sobre animales domésticos, cuidado de mascotas, comportamiento animal y fauna en general.",
+    "confusables": ["Salud", "Noticias", "Personas_y_Sociedad"]
+  },
+  {
+    "name": "Bienes_Raices",
+    "description": "Contenido sobre compra, venta y alquiler de propiedades, mercado inmobiliario, inversiones inmobiliarias y desarrollo urbano.",
+    "confusables": ["Finanzas", "Negocios_e_Industria", "Compras"]
+  },
+  {
+    "name": "Referencia",
+    "description": "Contenido informativo de carácter general como definiciones, enciclopedias, datos históricos, conceptos técnicos y explicaciones neutrales.",
+    "confusables": ["Personas_y_Sociedad", "Empleos_y_Educacion", "Noticias"]
+  },
+  {
+    "name": "Ciencia",
+    "description": "Contenido relacionado con investigaciones científicas, física, química, biología, tecnología aplicada y descubrimientos académicos.",
+    "confusables": ["Noticias", "Computadoras_y_Electronica", "Empleos_y_Educacion"]
+  },
+  {
+    "name": "Compras",
+    "description": "Información sobre productos, comparativas, precios, decisiones de consumo, comercio minorista y comercio electrónico.",
+    "confusables": ["Finanzas", "Noticias", "Empleos_y_Educacion"]
+  },
+  {
+    "name": "Deportes",
+    "description": "Contenido sobre actividades deportivas, competiciones, atletas, resultados, entrenamiento y eventos deportivos.",
+    "confusables": ["Noticias", "Pasatiempos_y_Ocio", "Salud"]
+  },
+  {
+    "name": "Viajes_y_Transporte",
+    "description": "Información sobre turismo, destinos, transporte público y privado, planificación de viajes y experiencias de movilidad.",
+    "confusables": ["Noticias", "Pasatiempos_y_Ocio", "Artes_y_Entretenimiento"]
+  }
+]
