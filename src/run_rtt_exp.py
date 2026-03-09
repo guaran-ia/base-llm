@@ -1,6 +1,7 @@
 import torch
 import json
 import os
+import time
 
 from dotenv import load_dotenv
 from huggingface_hub import login
@@ -70,6 +71,7 @@ def load_model(model_id):
 
 
 def do_translation(model, tokenizer, sys_prompt, task_prompt):
+    start_timestamp = time.time()
     messages = [
         {'role': 'system', 'content': sys_prompt},
         {'role': 'user', 'content': task_prompt},
@@ -95,6 +97,9 @@ def do_translation(model, tokenizer, sys_prompt, task_prompt):
         output[0][inputs['input_ids'].shape[-1]:],
         skip_special_tokens=True
     )
+    end_timestamp = time.time()
+    duration = end_timestamp - start_timestamp
+    print(f'Translation lasted: {duration} sec')
     return translated_text
 
 
