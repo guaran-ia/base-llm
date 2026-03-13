@@ -1,8 +1,10 @@
-import torch
 import json
 import os
+import re
 import time
+import torch
 
+from datetime import datetime
 from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -38,16 +40,37 @@ def get_system_prompt(to_lang='guaraní', to_lang_iso='gn',
     return f"""
         Eres un experto traductor de {from_lang} (iso 639-1: {from_lang_iso}) a 
         {to_lang} (iso 639-1: {to_lang_iso}) y viceversa.
-    """
+    """.strip()
+
+def get_system_prompt_en(to_lang='guarani', to_lang_iso='gn', 
+                         from_lang='spanish', from_lang_iso='es'):
+    return f"""
+        You are an expert translator from {from_lang} to {to_lang}.
+    """.strip()
 
 
 def get_task_prompt(text, from_lang='español', to_lang='guaraní'):
-    return f"""
-        Traduce el siguiente texto del {from_lang} al {to_lang}, manteniendo 
-        el significado del texto original. El resultado debe ser solo la 
-        traduccion.
+    #return f"""
+    #    Traduce el siguiente texto del {from_lang} al {to_lang}. Devuelve SOLO 
+    #    la traduccion.
         
-        Texto a traducir: `{text}`
+    #    Texto: `{text}`
+    #""".strip()
+    return f"""
+        Traduce de {from_lang} a {to_lang}. Solo devuelve la traducción, sin 
+        explicaciones."
+
+        Texto: "{text}"
+    """.strip()
+
+
+def get_task_prompt_en(text, from_lang='spanish', to_lang='guarani'):
+    return f"""
+        Translate from {from_lang} to {to_lang} the following text. Provide a short
+        translation (max 40 words) and output the translation enclosed in 
+        <translation></translation>.
+        
+        Text: `{text}`
     """.strip()
 
 
@@ -68,16 +91,30 @@ def get_text_prompt(text, from_lang, to_lang):
     """.strip()
 
 
+def sanitize_prompt(prompt_text):
+    return ' '.join([pt for pt in prompt_text.replace('\n', ' ').split(' ') if pt])
+
+
 def load_model(model_id):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f'Using device: {device}')
-    print(f'Device name: {torch.cuda.get_device_name(0)}')
+    # define device
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # load model and tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_id,
+        trust_remote_code=True,
+        padding_side='left'
+    )
+    
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        dtype=torch.bfloat16
+        dtype=torch.bfloat16,
+        trust_remote_code=True,
+        device_map=None
     ).to(device) # type: ignore
+    
     # put model in evaluation mode (inference)
     model.eval()
     return model, tokenizer
@@ -103,95 +140,126 @@ def do_translation(model, tokenizer, sys_prompt, task_prompt):
     with torch.no_grad():
         output = model.generate(
             **inputs,
-            max_new_tokens=40
+            max_new_tokens=40,
+            pad_token_id=tokenizer.pad_token_id
         )
-    #translated_text = tokenizer.batch_decode(output, skip_special_tokens=True)
     translated_text = tokenizer.decode(
         output[0][inputs['input_ids'].shape[-1]:],
         skip_special_tokens=True
     )
     end_time = time.time()
     duration = end_time - start_time
-    print(f'Translation lasted: {duration} secs')
     return translated_text, duration
 
 
-def do_batch_translation(model, tokenizer, sys_prompt, task_prompt, sentences,
-                         from_lang, to_lang, batch_size=256):
-    
+def parse_model_output(output, model_id):
+    if model_id == 'openai/gpt-oss-20b':
+        final_output = output.split('|>final<|')[1]
+    else:
+        final_output= output.replace('\n', ' ').strip()
+    return re.findall(r'<translation>(.*?)</translation>', final_output, re.DOTALL)[-1].strip()
+
+
+def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang, 
+                         to_lang, batch_size):
+    model_id = model.config._name_or_path
+    if model_id == 'openai/gpt-oss-20b':
+        max_new_tokens = 200
+    else:
+        max_new_tokens = 50
     trans_results = []
-    for i in tqdm(range(0, len(sentences), batch_size), desc='Translating sentences in batches'):
+    loop_desc = f'Translating in batches sentences to {to_lang}'
+    for i in tqdm(range(0, len(sentences), batch_size), desc=loop_desc):
+        start_time = time.time()
         batch = sentences[i:i + batch_size]
-        #content_prompt = task_prompt + '\n\n'
         prompts = []
         for sentence in batch:
             # concatenate batch sentence to the task prompt
-            task_prompt = get_task_prompt(sentence, from_lang, to_lang)
-            content_prompt = task_prompt + '\n\n' + f'`{sentence}`\n'    
+            task_prompt = sanitize_prompt(
+                get_task_prompt_en(sentence, from_lang, to_lang)
+            )
             messages = [
                 {'role': 'system', 'content': sys_prompt},
-                {'role': 'user', 'content': content_prompt},
+                {'role': 'user', 'content': task_prompt},
             ]
             # apply the chat template
             prompt = tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
-                add_generation_prompt=True
+                add_generation_prompt=True,
+                reasoning_effort='low'
             )
             prompts.append(prompt)
         # apply tokenization and move the input tensors to the same device as the model
         inputs = tokenizer(
-            prompts, return_tensors='pt', padding=True, truncation=True, pad_to_multiple_of=8
+            prompts, return_tensors='pt', padding=True, truncation=True, padding_side='left'
         ).to(model.device)
-        start_time = time.time()
         # generate translation
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=35,
-                use_cache=True
+                max_new_tokens=max_new_tokens,
+                do_sample=False
             )
-        print("Peak GPU memory (GB):", torch.cuda.max_memory_allocated() / 1e9)
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f'Translation of {batch_size} sentences lasted: {duration} secs')
         # process output
         for j in range(len(batch)):
-            generated_tokens = outputs[j, inputs['input_ids'].shape[1]:]
+            #input_len = inputs['attention_mask'][j].sum()
+            input_len = inputs['input_ids'].shape[1]
+            generated_tokens = outputs[j, input_len:]
             translation = tokenizer.decode(
                 generated_tokens,
-                skip_special_tokens=True
+                skip_special_tokens=False
             ).strip()
+            translation = parse_model_output(translation, model_id)
             trans_results.append(translation)
-        
-        # generated_tokens = outputs[0, inputs['input_ids'].shape[-1]:]
-        # decoded = tokenizer.decode(generated_tokens, skip_special_tokens=True)
-        # batch_translations = [trans.split() for trans in decoded.split('\n')]
-        # if len(batch_translations) != batch_size:
-        #     raise Exception(f'The number of translations ({len(batch_translations)}) '\
-        #                     f'is inconsistent with the batch size {batch_size}. '\
-        #                     f'Decoded: {decoded}')
-        # trans_results.extend(batch_translations)
-
-    
+        end_time = time.time()
+        duration = end_time - start_time
+        #print(f'Translation of {batch_size} sentences lasted: {duration} secs')
     return trans_results
 
 
-def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, to_lang, 
-                     batch_size):
+def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
+                     to_lang, to_lang_iso, batch_size):
     model_variant_id = model_variant['huggingface_id']
     model, tokenizer = load_model(model_variant_id)
-    task_prompt = get_batch_task_prompt(from_lang, to_lang)
     sentences = [record['text'] for record in rtt_data]
-    results = do_batch_translation(model, tokenizer, sys_prompt, task_prompt, sentences, 
-                                   from_lang, to_lang, batch_size)
-    
+    # batch translate to language (e.g., guarani)
+    forward_trans = do_batch_translation(model, tokenizer, sys_prompt, sentences, 
+                                         from_lang, to_lang, batch_size)
+    assert len(forward_trans) == len(sentences), \
+        f'The numer of forward translations ({len(forward_trans)}) is '\
+        f'inconsistent with the number of sentences ({len(sentences)})'
+    # batch translate back to language (e.g., spanish)
+    backward_trans = do_batch_translation(model, tokenizer, sys_prompt, forward_trans, 
+                                          to_lang, from_lang, batch_size)
+    assert len(backward_trans) == len(sentences), \
+        f'The numer of backward translations ({len(backward_trans)}) is '\
+        f'inconsistent with the number of sentences ({len(sentences)})'
+    rtt_model = {
+        'model': {
+            'name': model_variant['huggingface_id']
+        },
+        'params': {
+            'from_lang': f'{from_lang} ({from_lang_iso})',
+            'to_lang': f'{to_lang} ({to_lang_iso})'
+        },
+        'rtt_translation': []
+    }
+    for idx, record in enumerate(rtt_data):
+        rtt_model['rtt_translation'].append(
+            {
+                'id': record['id'],
+                f'source_text_{from_lang_iso}': record['text'],
+                f'translated_{to_lang_iso}_text': forward_trans[idx],
+                f'translated_{from_lang_iso}_text': backward_trans[idx]
+            }
+        )
+    return rtt_model
     
 
 def do_run_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
-               to_lang, to_lang_iso, output_dir):
+               to_lang, to_lang_iso):
     trans_duration = []
-    results = []
     model_variant_id = model_variant['huggingface_id']
     model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
     model, tokenizer = load_model(model_variant_id)
@@ -203,7 +271,7 @@ def do_run_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
             'from_lang': f'{from_lang} ({from_lang_iso})',
             'to_lang': f'{to_lang} ({to_lang_iso})'
         },
-        'results': []
+        'rtt_translation': []
     }
     for record in tqdm(rtt_data, desc=f'Translating sentences with {model_variant_name}'):
         source_text = record['text']
@@ -220,7 +288,7 @@ def do_run_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
             model, tokenizer, sys_prompt, task_prompt
         )
         trans_duration.append(duration)
-        rtt_model['results'].append(
+        rtt_model['rtt_translation'].append(
             {
                 f'source_text_{from_lang_iso}': source_text,
                 f'translated_{to_lang_iso}_text': trans_text_to_lang,
@@ -228,33 +296,45 @@ def do_run_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
             }
         )
         if len(trans_duration) > 0 and len(trans_duration)%100 == 0:
-            print(f'\nMean duration in secs per 100 translatos={sum(trans_duration)/len(trans_duration)}')
-    # save the results in output_dir (not implemented here)
+            print(f'\nMean duration in secs per 100 translations={sum(trans_duration)/len(trans_duration)}')
+    return rtt_model
+
+
+def save_results(results, model_variant_name, output_dir):
+    # save the results in output_dir
     with open(os.path.join(output_dir, f'{model_variant_name}_rtt_results.json'), 'w') as f:
-        json.dump(rtt_model, f, ensure_ascii=False, indent=4)
-    results.append(rtt_model)
+        json.dump(results, f, ensure_ascii=False, indent=4)
 
 
-def run_rtt(rtt_data, list_base_models, output_dir, to_lang='guaraní', to_lang_iso='gn', 
-            from_lang='español', from_lang_iso='es', batch_mode=False):
-    sys_prompt = get_system_prompt(to_lang, to_lang_iso, from_lang, from_lang_iso)
+def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso, 
+            from_lang, from_lang_iso, batch_size=0):
+    sys_prompt = sanitize_prompt(
+        get_system_prompt_en(to_lang, to_lang_iso, from_lang, from_lang_iso)
+    )
     results = []
     for base_model in tqdm(list_base_models, desc=f'Running RTT'):
         for model_variant in base_model['variants']:
             model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
-            if model_variant_name == 'gemma-3-4b-it':
-                if not batch_mode:
-                    rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
-                                        from_lang, from_lang_iso, to_lang, 
-                                        to_lang_iso, output_dir)
-                    results.append(rtt_model)
-                else:
-                    batch_size = 256
-                    do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
-                                     from_lang, to_lang, batch_size)
+            if 'gpt' not in model_variant_name:
+                continue
+            print(f'\n\nRunning RTT with model: {model_variant_name}...')
+            if batch_size == 0:
+                rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
+                                    from_lang, from_lang_iso, to_lang, 
+                                    to_lang_iso)
+            else:
+                rtt_model = do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
+                                                from_lang, from_lang_iso, to_lang, 
+                                                to_lang_iso, batch_size)
+            # save results
+            print(f'Saving RTT results...')
+            save_results(rtt_model, model_variant_name, output_dir)
+            results.append(rtt_model)
+    print(f'RTT experiments have successfully finished!')
+    return results        
 
 
-def main(project_dir, exp_config_file_path):
+def main(project_dir, exp_config_file_path, batch_size=0):
     # 0. load environment variables
     load_dotenv(os.path.join(project_dir, 'src', '.env'))
     # 1. login to HuggingFace Hub so we can access gated models, like gemma-3
@@ -263,7 +343,7 @@ def main(project_dir, exp_config_file_path):
     print(f'Reading experiment configuration...')
     exp_config = read_experiment_config(exp_config_file_path)
     # 3. create output directory (if it does not exist)
-    output_dir = exp_config['output_dir']
+    output_dir = f'{exp_config["output_dir"]}_{datetime.now().strftime("%Y%m%d%H%M%S")}'
     output_dir_path = os.path.join(project_dir, output_dir)
     os.makedirs(output_dir_path, exist_ok=True)
     # 4. read RTT data
@@ -276,15 +356,16 @@ def main(project_dir, exp_config_file_path):
     base_models_list_path = os.path.join(project_dir, exp_config['base_models_list_path'])
     list_base_models = read_base_models(base_models_list_path)
     # 6. run RTT for each base model and save the results in output_dir
-    to_lang = exp_config['to_lang']
+    to_lang = exp_config['to_lang_en']
     to_lang_iso = exp_config['to_lang_iso']
-    from_lang = exp_config['from_lang']
+    from_lang = exp_config['from_lang_en']
     from_lang_iso = exp_config['from_lang_iso']
-    results = run_rtt(rtt_data, list_base_models, output_dir_path, to_lang, to_lang_iso, 
-                      from_lang, from_lang_iso, batch_mode=True)
-
+    trans_results = run_rtt(rtt_data, list_base_models, output_dir_path, to_lang, to_lang_iso, 
+                            from_lang, from_lang_iso, batch_size)
+    
 
 if __name__ == '__main__':
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     config_path = os.path.join(project_dir, 'data', 'rtt_experiments', 'es_gn', 'config.json')
-    main(project_dir, config_path)
+    batch_size = 64
+    main(project_dir, config_path, batch_size)
