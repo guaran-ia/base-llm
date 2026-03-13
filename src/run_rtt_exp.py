@@ -12,11 +12,6 @@ from transformers.utils import logging
 from tqdm import tqdm
 
 
-# disable logging from transformers to avoid cluttering the output with warnings
-# logging.set_verbosity_error()
-# logging.disable_progress_bar()
-
-
 load_dotenv()
 
 
@@ -50,12 +45,6 @@ def get_system_prompt_en(to_lang='guarani', to_lang_iso='gn',
 
 
 def get_task_prompt(text, from_lang='español', to_lang='guaraní'):
-    #return f"""
-    #    Traduce el siguiente texto del {from_lang} al {to_lang}. Devuelve SOLO 
-    #    la traduccion.
-        
-    #    Texto: `{text}`
-    #""".strip()
     return f"""
         Traduce de {from_lang} a {to_lang}. Solo devuelve la traducción, sin 
         explicaciones."
@@ -66,9 +55,8 @@ def get_task_prompt(text, from_lang='español', to_lang='guaraní'):
 
 def get_task_prompt_en(text, from_lang='spanish', to_lang='guarani'):
     return f"""
-        Translate from {from_lang} to {to_lang} the following text. Provide a short
-        translation (max 40 words) and output the translation enclosed in 
-        <translation></translation>.
+        Translate from {from_lang} to {to_lang} the following text. Provide only
+        the translation.
         
         Text: `{text}`
     """.strip()
@@ -101,20 +89,14 @@ def load_model(model_id):
     # load model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
-        trust_remote_code=True,
-        padding_side='left'
+        trust_remote_code=True
     )
-    
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-    
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         dtype=torch.bfloat16,
         trust_remote_code=True,
         device_map=None
     ).to(device) # type: ignore
-    
     # put model in evaluation mode (inference)
     model.eval()
     return model, tokenizer
@@ -152,21 +134,9 @@ def do_translation(model, tokenizer, sys_prompt, task_prompt):
     return translated_text, duration
 
 
-def parse_model_output(output, model_id):
-    if model_id == 'openai/gpt-oss-20b':
-        final_output = output.split('|>final<|')[1]
-    else:
-        final_output= output.replace('\n', ' ').strip()
-    return re.findall(r'<translation>(.*?)</translation>', final_output, re.DOTALL)[-1].strip()
-
-
 def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang, 
                          to_lang, batch_size):
-    model_id = model.config._name_or_path
-    if model_id == 'openai/gpt-oss-20b':
-        max_new_tokens = 200
-    else:
-        max_new_tokens = 50
+    max_new_tokens = 50
     trans_results = []
     loop_desc = f'Translating in batches sentences to {to_lang}'
     for i in tqdm(range(0, len(sentences), batch_size), desc=loop_desc):
@@ -186,20 +156,18 @@ def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang,
             prompt = tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
-                add_generation_prompt=True,
-                reasoning_effort='low'
+                add_generation_prompt=True
             )
             prompts.append(prompt)
         # apply tokenization and move the input tensors to the same device as the model
         inputs = tokenizer(
-            prompts, return_tensors='pt', padding=True, truncation=True, padding_side='left'
+            prompts, return_tensors='pt', padding=True, truncation=True
         ).to(model.device)
         # generate translation
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=max_new_tokens,
-                do_sample=False
+                max_new_tokens=max_new_tokens
             )
         # process output
         for j in range(len(batch)):
@@ -210,7 +178,7 @@ def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang,
                 generated_tokens,
                 skip_special_tokens=False
             ).strip()
-            translation = parse_model_output(translation, model_id)
+            translation = translation.replace('\n', ' ').strip()
             trans_results.append(translation)
         end_time = time.time()
         duration = end_time - start_time
