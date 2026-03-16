@@ -13,15 +13,6 @@
         ]
     },
     {
-       "name":"gpt-oss",
-       "variants": [
-            {
-               "name":"20b",
-               "huggingface_id":"openai/gpt-oss-20b"
-            }
-        ]
-    },
-    {
         "name": "apertus",
         "variants": [
             {
