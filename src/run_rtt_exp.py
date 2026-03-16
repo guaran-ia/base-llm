@@ -1,6 +1,6 @@
+import click
 import json
 import os
-import re
 import time
 import torch
 
@@ -8,7 +8,6 @@ from datetime import datetime
 from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers.utils import logging
 from tqdm import tqdm
 
 
@@ -327,14 +326,19 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
     print(f'RTT experiments have successfully finished!')
 
 
-def main(project_dir, exp_config_file_path, batch_size=0):
+@click.command()
+@click.option('--exp_dir', default='es_gn')
+@click.option('--batch_size', default=64)
+def main(exp_dir, batch_size):
+    project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    config_path = os.path.join(project_dir, 'data', 'rtt_experiments', exp_dir, 'config.json')
     # 0. load environment variables
     load_dotenv(os.path.join(project_dir, 'src', '.env'))
     # 1. login to HuggingFace Hub so we can access gated models, like gemma-3
     login(token=os.getenv('HF_ACCESS_TOKEN'))
     # 2. read experiment configuration
     print(f'Reading experiment configuration...')
-    exp_config = read_experiment_config(exp_config_file_path)
+    exp_config = read_experiment_config(config_path)
     # 3. create output directory (if it does not exist)
     output_dir = f'{exp_config["output_dir"]}_{datetime.now().strftime("%Y%m%d%H%M%S")}'
     output_dir_path = os.path.join(project_dir, output_dir)
@@ -359,7 +363,4 @@ def main(project_dir, exp_config_file_path, batch_size=0):
     
 
 if __name__ == '__main__':
-    project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    config_path = os.path.join(project_dir, 'data', 'rtt_experiments', 'es_gn', 'config.json')
-    batch_size = 64
-    main(project_dir, config_path, batch_size)
+    main()
