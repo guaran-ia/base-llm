@@ -55,8 +55,9 @@ def get_task_prompt(text, from_lang='español', to_lang='guaraní'):
 
 def get_task_prompt_en(text, from_lang='spanish', to_lang='guarani'):
     return f"""
-        Translate from {from_lang} to {to_lang} the following text. Provide only
-        the translation.
+        Translate from {from_lang} to {to_lang} the following text. Output exactly 
+        one line with the translation ONLY. No further comments, explanation, 
+        description, or thoughts are needed.
         
         Text: `{text}`
     """.strip()
@@ -89,8 +90,10 @@ def load_model(model_id):
     # load model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained(
         model_id,
-        trust_remote_code=True
+        trust_remote_code=True,
+        padding_side='left'
     )
+    tokenizer.pad_token = tokenizer.eos_token
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         dtype=torch.bfloat16,
@@ -164,10 +167,31 @@ def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang,
             prompts, return_tensors='pt', padding=True, truncation=True
         ).to(model.device)
         # generate translation
+        model.generation_config.pad_token_id = tokenizer.eos_token_id
+        # add tokens that tell the model to stop generating
+        stop_tokens = [
+            tokenizer.eos_token_id,
+            tokenizer.convert_tokens_to_ids('<|eot_id|>'),
+            tokenizer.convert_tokens_to_ids('<|im_end|>'),
+            tokenizer.convert_tokens_to_ids('<|assistant_end|>'),
+            tokenizer.convert_tokens_to_ids('</s>')
+        ]
+        stop_tokens = [t for t in stop_tokens if t is not None]
+        stop_strings = [
+            '<extra_id_1>',
+            '<|im_end|>',
+            '<|assistant_end|>',
+            '<|eot_id|>',
+            '</s>'
+        ]
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=max_new_tokens
+                max_new_tokens=max_new_tokens,
+                pad_token_id=tokenizer.eos_token_id,
+                eos_token_id=stop_tokens,
+                stop_strings=stop_strings,
+                tokenizer=tokenizer
             )
         # process output
         for j in range(len(batch)):
@@ -176,8 +200,12 @@ def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang,
             generated_tokens = outputs[j, input_len:]
             translation = tokenizer.decode(
                 generated_tokens,
-                skip_special_tokens=False
+                skip_special_tokens=True
             ).strip()
+            # remove stop tokens
+            for stop in stop_strings:
+                if stop in translation:
+                    translation = translation.split(stop)[0]
             translation = translation.replace('\n', ' ').strip()
             trans_results.append(translation)
         end_time = time.time()
@@ -275,31 +303,28 @@ def save_results(results, model_variant_name, output_dir):
 
 
 def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso, 
-            from_lang, from_lang_iso, batch_size=0):
+            from_lang, from_lang_iso, batch_size, models_to_exclude):
     sys_prompt = sanitize_prompt(
         get_system_prompt_en(to_lang, to_lang_iso, from_lang, from_lang_iso)
     )
-    results = []
     for base_model in tqdm(list_base_models, desc=f'Running RTT'):
         for model_variant in base_model['variants']:
             model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
-            if 'gpt' not in model_variant_name:
+            if model_variant_name in models_to_exclude:
                 continue
             print(f'\n\nRunning RTT with model: {model_variant_name}...')
-            if batch_size == 0:
-                rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
-                                    from_lang, from_lang_iso, to_lang, 
-                                    to_lang_iso)
-            else:
+            if batch_size > 0:
                 rtt_model = do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
-                                                from_lang, from_lang_iso, to_lang, 
-                                                to_lang_iso, batch_size)
+                                             from_lang, from_lang_iso, to_lang, 
+                                             to_lang_iso, batch_size)
+            else:
+                rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
+                                       from_lang, from_lang_iso, to_lang, 
+                                       to_lang_iso)
             # save results
             print(f'Saving RTT results...')
             save_results(rtt_model, model_variant_name, output_dir)
-            results.append(rtt_model)
     print(f'RTT experiments have successfully finished!')
-    return results        
 
 
 def main(project_dir, exp_config_file_path, batch_size=0):
@@ -328,8 +353,9 @@ def main(project_dir, exp_config_file_path, batch_size=0):
     to_lang_iso = exp_config['to_lang_iso']
     from_lang = exp_config['from_lang_en']
     from_lang_iso = exp_config['from_lang_iso']
-    trans_results = run_rtt(rtt_data, list_base_models, output_dir_path, to_lang, to_lang_iso, 
-                            from_lang, from_lang_iso, batch_size)
+    models_to_exclude = [m.lower() for m in exp_config['exclude']]
+    run_rtt(rtt_data, list_base_models, output_dir_path, to_lang, to_lang_iso, 
+            from_lang, from_lang_iso, batch_size, models_to_exclude)
     
 
 if __name__ == '__main__':
