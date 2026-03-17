@@ -1,43 +1,188 @@
-import evaluate
+import click
+import json
+import os
+import pandas as pd
 
-from nltk.tokenize import TweetTokenizer
+from collections import defaultdict
+from sacrebleu.metrics.bleu import BLEU
+from sacrebleu.metrics.chrf import CHRF
+from utils.utils import clean_text
+from utils.utils import get_random_text
+from utils.utils import tokenize
+from utils.utils import read_bench_data
+from corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
+from tqdm import tqdm
 
 
-_tokenizer = TweetTokenizer(preserve_case=False)
+identifier = LanguageIdentifier(glotlid=True, fasttext=True, openlid=True)
 
 
-def tokenize(text: str):
-    """
-    Tokenizes text using NLTK TweetTokenizer and yields alphabetic tokens only.
-    """
-    for token in _tokenizer.tokenize(text):
-        if token.isalpha():
-            yield token
+def compute_rtt_score(scores_dict):
+    rtt_score = {}
+    domain_score = []
+    for domain, scores in scores_dict.items():
+        if not scores:
+            continue
+        rtt_domain = sum(scores) / len(scores) if scores else 0.0
+        rtt_score[domain.lower()] = rtt_domain
+        domain_score.append(rtt_domain)
+    rtt_score_general = sum(domain_score) / len(scores_dict) if domain_score else 0.0
+    return rtt_score, rtt_score_general
 
 
-def evaluate_results(trans_results, metric_name):
-    predictions = [tokenize(result['translated_es_text']) for result in trans_results['rtt_translation']]
-    references = [[tokenize(result['source'])] for result in trans_results['rtt_translation']]
-    if metric_name == 'sacrebleu':
-        metric = evaluate.load('sacrebleu')
-        eval_results = metric.compute(predictions=predictions, references=references)
-    elif metric_name == 'chrf++':
-        metric = evaluate.load('chrf')
-        eval_results = metric.compute(
-            predictions=predictions, 
-            references=references,
-            word_order=2
-        )
+def evaluate_results(predictions, references, metric, mode='sentence'):
+    if mode == 'sentence':
+        eval_results = metric['obj'].sentence_score(predictions, references)
     else:
-        print(f'Unknown metric: {metric_name}')
-    
-    if eval_results:
-        trans_results['evaluation'] = {metric_name: eval_results}
+        eval_results = metric['obj'].corpus_score(predictions, references)
     return eval_results
 
 
-def main():
-    rtt_model = []
-    for metric in ['sacrebleu', 'chrf++']:
-        print(f'Evaluating results using {metric} metric...')
-        rtt_model = evaluate_results(rtt_model, metric)
+def validate_translation(source, translation_tl, translation_fl):
+    if source == translation_tl:
+        # if source and translation are equal, it means that the translation
+        # was not conducted. A random text is generated then to penalize
+        # the translator
+        translation_fl = get_random_text(len(source))
+    else:
+        result = identifier.identify_languages(translation_tl, k=1)
+        if result is not None and \
+           'languages' in result and \
+           result['languages'] is not None and \
+           len(result['languages']) > 0:
+            # if the language of the translation is not guarani, we assume the 
+            # translation was not conducted. A random text is generated then to 
+            # penalize the translator
+            if result['languages'][0] != 'grn':
+                translation_fl = get_random_text(len(source))
+    return translation_fl
+
+
+def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
+    # clean text
+    source = clean_text(translation_dict[f'source_text_{from_lang}'])
+    translation_fl = clean_text(translation_dict[f'translated_{from_lang}_text'])
+    translation_tl = clean_text(translation_dict[f'translated_{to_lang}_text'])
+    # record clean text
+    translation_dict[f'source_text_{from_lang}'] = source
+    translation_dict[f'translated_{from_lang}_text'] = translation_fl
+    translation_dict[f'translated_{to_lang}_text'] = translation_tl
+    translation_fl = validate_translation(source, translation_tl, translation_fl)
+    # tokenize text
+    source = ' '.join(tokenize(source))
+    translation_fl = ' '.join(tokenize(translation_fl))
+    # evaluate metrics
+    for metric in metrics:
+        eval_result = evaluate_results(source, [translation_fl], metric)
+        if 'evaluation' not in translation_dict:
+            translation_dict['evaluation'] = {}
+        if eval_result:
+            translation_dict['evaluation'][metric['name']] = eval_result.score
+    return translation_dict, source, translation_fl
+
+
+def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
+    predictions = []
+    references = []
+    new_model_results = {}
+    bleu_scores = defaultdict(list)
+    chrf_scores = defaultdict(list)
+    with open(result_file_path, 'r') as f:
+        model_results = json.load(f)
+    new_model_results['model'] = model_results['model']
+    new_model_results['params'] = model_results['params']
+    new_model_results['rtt_translation'] = []
+    new_model_results['evaluation'] = {}
+    translations_dict = model_results['rtt_translation']
+    # run evaluation of pair translations
+    for translation_dict in tqdm(translations_dict, desc='Evaluating pair translations...'):
+        translation_dict, source, translation = run_pair_evaluation(
+            translation_dict, from_lang, to_lang, metrics
+        )
+        translation_domain = bench_data[translation_dict['id']]
+        # add to overall list of references and predictions
+        predictions.append(translation)
+        references.append([source])
+        bleu_scores[translation_domain].append(translation_dict['evaluation']['sacrebleu'])
+        chrf_scores[translation_domain].append(translation_dict['evaluation']['chrf++'])
+        new_model_results['rtt_translation'].append(translation_dict)
+    # run overall evaluation
+    print('Conducting overall evaluation...')
+    overall_eval = {'model_name': model_results['model']['name'].split('/')[1]}
+    for metric in metrics:
+        eval_result = evaluate_results(predictions, references, metric, 'corpus')
+        if eval_result:
+            new_model_results['evaluation'][metric['name']] = eval_result.score
+            overall_eval[metric['name']] = eval_result.score
+    rtt_score_domains, rtt_score_general = compute_rtt_score(bleu_scores)
+    new_model_results['evaluation']['rtt_sacrebleu'] = rtt_score_general
+    new_model_results['evaluation']['rtt_sacrebleu_domains'] = rtt_score_domains
+    overall_eval['rtt_sacrebleu'] = rtt_score_general
+    rtt_score_domains, rtt_score_general = compute_rtt_score(chrf_scores)
+    new_model_results['evaluation']['rtt_chrf++'] = rtt_score_general
+    new_model_results['evaluation']['rtt_chrf++_domains'] = rtt_score_domains
+    overall_eval['rtt_chrf++'] = rtt_score_general
+    # save results
+    print('Saving results...')
+    with open(result_file_path, 'w') as f:
+        json.dump(new_model_results, f, ensure_ascii=False, indent=4)
+    return overall_eval
+    
+
+def load_metrics(metric_names):
+    metrics = []
+    for metric_name in metric_names:
+        if metric_name == 'sacrebleu':
+            metrics.append(
+                {'name': 'sacrebleu', 'obj': BLEU(effective_order=True)}
+            )
+        elif metric_name == 'chrf++':
+            metrics.append(
+                {'name': 'chrf++', 'obj': CHRF(word_order=2)}
+            )
+    return metrics
+
+
+def get_bench_data(project_dir, lang):
+    if lang == 'es':
+        bench_dataset_file_path = os.path.join(project_dir, 'data', 'RTTBench-Mono-ES.jsonl')
+    else:
+        bench_dataset_file_path = os.path.join(project_dir, 'data', 'RTTBench-Mono.jsonl')
+    data = read_bench_data(bench_dataset_file_path)
+    bench_data = {d['id']: d['domain'] for d in data}
+    return bench_data
+ 
+
+@click.command()
+@click.option('--res_dir', default='')
+def main(res_dir):
+    project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    metrics = load_metrics(['sacrebleu', 'chrf++'])
+    if not res_dir:
+        print('Name of the directory containing the results should be included '\
+              'as parameter (only the name)')
+        return
+    from_lang = res_dir.split('_')[0]
+    to_lang = res_dir.split('_')[1]
+    bench_data = get_bench_data(project_dir, from_lang)
+    results_dir = os.path.join(project_dir, 'outputs', 'rtt_experiment', res_dir)
+    result_files = [
+        e for e in os.listdir(results_dir) 
+        if os.path.isfile(os.path.join(results_dir, e)) and e.endswith('.json')
+    ]
+    eval_results = []
+    for model_result_file in tqdm(result_files, desc='Evaluating model translations...'):
+        result_file_path = os.path.join(results_dir, model_result_file)
+        model_name = model_result_file.split('_')[0]
+        print(f'\n\nEvaluation results of the model: {model_name}')
+        model_eval_results = run_evaluation(
+            result_file_path, from_lang, to_lang, metrics, bench_data
+        )
+        eval_results.append(model_eval_results)
+    eval_results_df = pd.DataFrame(eval_results)
+    eval_results_df.to_csv(os.path.join(results_dir, f'overall_evaluation_{res_dir}.csv'), index=False)
+    print('Evaluation has successfully finished.')
+
+
+if __name__ == '__main__':
+    main()
