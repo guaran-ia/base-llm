@@ -51,5 +51,14 @@
                 "huggingface_id": "nvidia/Mistral-NeMo-Minitron-8B-Instruct"
             }
         ]
+    },
+    {
+        "name": "mistral",
+        "variants": [
+            {
+                "name": "7b-it",
+                "huggingface_id": "Mistral-7B-Instruct-v0.3"
+            }
+        ]
     }
 ]
