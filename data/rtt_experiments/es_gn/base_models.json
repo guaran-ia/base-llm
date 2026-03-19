@@ -57,7 +57,7 @@
         "variants": [
             {
                 "name": "7b-it",
-                "huggingface_id": "Mistral-7B-Instruct-v0.3"
+                "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3"
             }
         ]
     }
