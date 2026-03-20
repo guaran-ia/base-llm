@@ -342,7 +342,7 @@ def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang,
         'rtt_translation': []
     }
     # iterate over sentences
-    loop_desc = 'Translating sentences...'
+    loop_desc = 'Translating sentences with Qwen 3.5...'
     for record in tqdm(rtt_data, desc=loop_desc):
         sentence = record['text']
         # translate to `to_lang` (e.g., guarani) using qwen
