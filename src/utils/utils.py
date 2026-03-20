@@ -11,7 +11,15 @@ def clean_text(text: str):
     text = text.replace("`", "").replace("‘","'")
     text = text.replace("‘", "'").replace("’","'")
     text = text.replace("\"","'")
+    # remove leading and traling single quotes
     text = text.strip("'")
+    # if a period is present remove everything after the period
+    # since texts correspond to single sentences that don't have punctuations, 
+    # we assume that the text after the period can be removed
+    punctuations = ['.', '(', ';']
+    for punctuation in punctuations:
+        if punctuation in text:
+            text = text.split(punctuation)[0]
     return text
 
 
