@@ -1,6 +1,7 @@
 import click
 import json
 import os
+import openai
 import time
 import torch
 
@@ -297,6 +298,76 @@ def save_results(results, model_variant_name, output_dir):
         json.dump(results, f, ensure_ascii=False, indent=4)
 
 
+def translate_qwen3_5(sys_prompt, task_prompt, client):
+    messages = [
+            {'role': 'system', 'content': sys_prompt},
+            {'role': 'user', 'content': task_prompt},
+        ]    
+    chat_response = client.chat.completions.create(
+        model='Qwen/Qwen3.5-9B',
+        messages=messages, # type: ignore
+        max_tokens=81920,
+        temperature=0.7,
+        top_p=0.8,
+        presence_penalty=1.5,
+        extra_body={
+            'chat_template_kwargs': {'enable_thinking': False},
+            'top_k': 20,
+            'min_p': 0.0,
+            'repetition_penalty':1.0
+        }
+    )
+    if len(chat_response.choices) > 0:
+        return chat_response.choices[0].message.content
+    else:
+        return ''
+
+
+def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang, 
+                       from_lang_iso, to_lang, to_lang_iso):
+    # set qwen requirements from environment variables
+    openai.api_key=os.getenv('OPENAI_API_KEY')
+    openai.base_url=os.getenv('OPENAI_BASE_URL')
+    # instantiate openai client
+    client = openai.OpenAI()
+    # initialize object to save translations
+    rtt_model = {
+        'model': {
+            'name': model_variant
+        },
+        'params': {
+            'from_lang': f'{from_lang} ({from_lang_iso})',
+            'to_lang': f'{to_lang} ({to_lang_iso})'
+        },
+        'rtt_translation': []
+    }
+    # iterate over sentences
+    loop_desc = 'Translating sentences...'
+    for record in tqdm(rtt_data, desc=loop_desc):
+        sentence = record['text']
+        # translate to `to_lang` (e.g., guarani) using qwen
+        task_prompt = sanitize_prompt(
+            get_task_prompt_en(sentence, from_lang, to_lang)
+        )
+        forward_trans = translate_qwen3_5(sys_prompt, task_prompt, client)
+        # translate to `from_lang` (e.g., spanish) using qwen
+        backward_trans = ''
+        if forward_trans:
+            task_prompt = sanitize_prompt(
+                get_task_prompt_en(forward_trans, to_lang, from_lang)
+            )
+            backward_trans = translate_qwen3_5(sys_prompt, task_prompt, client)
+        # save translations
+        rtt_model['rtt_translation'].append(
+            {
+                f'source_text_{from_lang_iso}': sentence,
+                f'translated_{to_lang_iso}_text': forward_trans,
+                f'translated_{from_lang_iso}_text': backward_trans
+            }
+        )
+    return rtt_model
+
+
 def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso, 
             from_lang, from_lang_iso, batch_size, models_to_exclude):
     sys_prompt = sanitize_prompt(
@@ -307,15 +378,23 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
             model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
             if model_variant_name in models_to_exclude:
                 continue
-            print(f'\n\nRunning RTT with model: {model_variant_name}...')
-            if batch_size > 0:
-                rtt_model = do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
-                                             from_lang, from_lang_iso, to_lang, 
-                                             to_lang_iso, batch_size)
+            if model_variant_name == 'qwen3.5-9b':
+                # Qwen 3.5 is treated differently since it is not invoked through
+                # the Huggingface API but OpenAI's following the model documentation
+                rtt_model = do_run_rtt_qwen3_5(
+                    rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso, 
+                    to_lang, to_lang_iso
+                )
             else:
-                rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
-                                       from_lang, from_lang_iso, to_lang, 
-                                       to_lang_iso)
+                print(f'\n\nRunning RTT with model: {model_variant_name}...')
+                if batch_size > 0:
+                    rtt_model = do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
+                                                from_lang, from_lang_iso, to_lang, 
+                                                to_lang_iso, batch_size)
+                else:
+                    rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
+                                        from_lang, from_lang_iso, to_lang, 
+                                        to_lang_iso)
             # save results
             print(f'Saving RTT results...')
             save_results(rtt_model, model_variant_name, output_dir)
