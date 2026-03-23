@@ -1,7 +1,9 @@
+import ast
 import click
 import json
 import os
 import openai
+import requests
 import time
 import torch
 
@@ -300,9 +302,9 @@ def save_results(results, model_variant_name, output_dir):
 
 def translate_qwen3_5(sys_prompt, task_prompt, client):
     messages = [
-            {'role': 'system', 'content': sys_prompt},
-            {'role': 'user', 'content': task_prompt},
-        ]    
+        {'role': 'system', 'content': sys_prompt},
+        {'role': 'user', 'content': task_prompt},
+    ]    
     chat_response = client.chat.completions.create(
         model='Qwen/Qwen3.5-9B',
         messages=messages, # type: ignore
@@ -369,6 +371,92 @@ def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang,
     return rtt_model
 
 
+def translate_grok(sys_prompt, task_prompt, model_id, end_point):
+    headers = {
+        'Authorization': f'Bearer {os.getenv("AZURE_API_KEY")}',
+        'Content-Type': 'application/json'
+    }
+    
+    data = {
+        'model': model_id,
+        'messages': [
+            {'role': 'system', 'content': sys_prompt},
+            {'role': 'user', 'content': task_prompt},
+        ]
+    }
+    while True:
+        response = requests.post(end_point, headers=headers, json=data)
+        response_status_code = response.status_code
+        if response_status_code == 200:
+            result = response.json()
+            return ast.literal_eval(result['choices'][0]['message']['content'])
+        else:
+            time.sleep(1)
+            print(f'Retrying translation after 1 second pause because response '\
+                  f'status code={response_status_code}')
+
+
+def get_prompt_grok(from_lang, to_lang, sentences):
+    return f"""
+        Translate the following sentences from {from_lang} to {to_lang}. Respond 
+        strictly in this format: [\"translation1\", \"translation2\", ...].  No 
+        further comments, explanation, description, or thoughts are needed.
+
+        Sentences
+        {sentences}    
+    """
+
+
+def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso, 
+                    to_lang, to_lang_iso, end_point, batch_size):
+    # initialize object to save translations
+    rtt_model = {
+        'model': {
+            'name': model_id
+        },
+        'params': {
+            'from_lang': f'{from_lang} ({from_lang_iso})',
+            'to_lang': f'{to_lang} ({to_lang_iso})'
+        },
+        'rtt_translation': []
+    }
+    # iterate over sentences
+    loop_desc = f'Translating sentences with {model_id}...'
+    for record in rtt_data:
+        sentence = record['text']
+        # perform forward sentence to `to_lang` (e.g., guarani)
+        task_prompt = sanitize_prompt(get_task_prompt_en(sentence, from_lang, to_lang))
+        forward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+    
+    for i in tqdm(range(0, len(rtt_data), batch_size), desc=loop_desc):
+        batch = rtt_data[i:i + batch_size]
+        # perform forward sentence to `to_lang` (e.g., guarani)
+        sentences = {chr(10).join(f'{i+1}. {r["text"]}'for i, r in enumerate(batch))}
+        task_prompt = sanitize_prompt(get_prompt_grok(from_lang, to_lang, sentences))
+        forward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+        assert len(forward_trans) == len(batch),  \
+            f'The number of forward translations ({len(forward_trans)}) is '\
+            f'inconsistent with the number of sentences ({len(batch)})'
+        # perform backward sentences to `from_lang` (e.g., spanish)
+        sentences = {chr(10).join(f'{i+1}. {s}'for i, s in enumerate(forward_trans))}
+        task_prompt = sanitize_prompt(get_prompt_grok(to_lang, from_lang, sentences))
+        backward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+        assert len(backward_trans) == len(batch),  \
+            f'The number of backward translations ({len(backward_trans)}) is '\
+            f'inconsistent with the number of sentences ({len(batch)})'
+        # save translations
+        for idx, s in enumerate(batch):
+            rtt_model['rtt_translation'].append(
+                {
+                    'id': s['id'],
+                    f'source_text_{from_lang_iso}': s['text'],
+                    f'translated_{to_lang_iso}_text': forward_trans[idx],
+                    f'translated_{from_lang_iso}_text': backward_trans[idx]
+                }
+            )
+    return rtt_model
+
+
 def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso, 
             from_lang, from_lang_iso, batch_size, models_to_exclude):
     sys_prompt = sanitize_prompt(
@@ -376,9 +464,13 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
     )
     for base_model in tqdm(list_base_models, desc=f'Running RTT'):
         for model_variant in base_model['variants']:
-            model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
+            if 'huggingface_id' in model_variant:
+                model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
+            else:
+                model_variant_name = model_variant['model_id']
             if model_variant_name in models_to_exclude:
                 continue
+            print(f'\n\nRunning RTT with model: {model_variant_name}...')
             if model_variant_name == 'qwen3.5-9b':
                 # Qwen 3.5 is treated differently since it is not invoked through
                 # the Huggingface API but OpenAI's following the model documentation
@@ -386,8 +478,14 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
                     rtt_data, model_variant_name, sys_prompt, from_lang, from_lang_iso, 
                     to_lang, to_lang_iso
                 )
+            elif model_variant_name == 'grok-4-fast-non-reasoning':
+                # Grok 4 has a special treatment since it is called through
+                # the Azure API
+                rtt_model = do_run_rtt_grok(
+                    rtt_data, model_variant_name, sys_prompt, from_lang, from_lang_iso, 
+                    to_lang, to_lang_iso, model_variant['end_point'], batch_size
+                )
             else:
-                print(f'\n\nRunning RTT with model: {model_variant_name}...')
                 if batch_size > 0:
                     rtt_model = do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
                                                 from_lang, from_lang_iso, to_lang, 
