@@ -360,6 +360,7 @@ def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang,
         # save translations
         rtt_model['rtt_translation'].append(
             {
+                'id': record['id'],
                 f'source_text_{from_lang_iso}': sentence,
                 f'translated_{to_lang_iso}_text': forward_trans,
                 f'translated_{from_lang_iso}_text': backward_trans
@@ -382,7 +383,7 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
                 # Qwen 3.5 is treated differently since it is not invoked through
                 # the Huggingface API but OpenAI's following the model documentation
                 rtt_model = do_run_rtt_qwen3_5(
-                    rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso, 
+                    rtt_data, model_variant_name, sys_prompt, from_lang, from_lang_iso, 
                     to_lang, to_lang_iso
                 )
             else:
