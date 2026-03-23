@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 INPUT_FILE = BASE_DIR / "data" / "RTTBench-Mono-ES.jsonl"
 DOMAINS_FILE = BASE_DIR / "data" / "domains.json"
 
-REPORT_DIR = BASE_DIR / "data" / "report"
+REPORT_DIR = BASE_DIR / "outputs" / "report"
 
 REPORT_FILE = REPORT_DIR / "validation_report.json"
 ERRORS_FILE = REPORT_DIR / "validation_errors.jsonl"
@@ -203,7 +203,7 @@ def compute_tsne_coordinates(rows: List[dict]) -> pd.DataFrame:
 
 def save_tsne_plot(df: pd.DataFrame, output_path: Path) -> None:
     """
-    Save the t-SNE scatter plot with domain labels at cluster centroids.
+    Save the t-SNE scatter plot with domain labels placed at cluster centroids.
 
     Args:
         df (pd.DataFrame): DataFrame with t-SNE coordinates.
@@ -215,46 +215,56 @@ def save_tsne_plot(df: pd.DataFrame, output_path: Path) -> None:
     plt.figure(figsize=(16, 12))
 
     domains = sorted(df["domain"].unique())
-    cmap = matplotlib.colormaps.get_cmap("hsv").resampled(len(domains))
+    cmap = matplotlib.colormaps.get_cmap("tab20").resampled(len(domains))
+
     for i, domain_name in enumerate(domains):
         subset = df[df["domain"] == domain_name]
+        color = cmap(i)
 
-        # Scatter points
+        # Plot domain points.
         plt.scatter(
             subset["x"],
             subset["y"],
-            color=cmap(i),
-            alpha=0.6,
-            s=25,
+            color=color,
+            alpha=0.8,
+            s=18,
+            edgecolors="none",
         )
 
-        # Compute centroid
-        centroid_x = subset["x"].mean()
-        centroid_y = subset["y"].mean()
+        # Compute centroid.
+        centroid_x = float(subset["x"].mean())
+        centroid_y = float(subset["y"].mean())
 
-        # Add domain label at centroid
+        # Add label with white box and colored border.
         text = plt.text(
             centroid_x,
             centroid_y,
-            domain_name,
+            domain_name.replace("_", " "),
             fontsize=8,
             ha="center",
             va="center",
             weight="bold",
             color="black",
+            bbox=dict(
+                facecolor="white",
+                edgecolor=color,
+                linewidth=1.5,
+                boxstyle="round,pad=0.22",
+                alpha=0.95,
+            ),
+            zorder=5,
         )
 
+        # Add a subtle white outline to improve readability further.
         text.set_path_effects([
-            path_effects.Stroke(linewidth=3, foreground="white"),
+            path_effects.Stroke(linewidth=1.2, foreground="white"),
             path_effects.Normal(),
         ])
 
     plt.title("t-SNE visualization of RTTBench-Mono-ES by domain")
     plt.xlabel("t-SNE dimension 1")
     plt.ylabel("t-SNE dimension 2")
-
-    # Optional: remove legend since labels are inside the plot
-    # plt.legend(...)
+    plt.grid(alpha=0.25, linewidth=0.5)
 
     plt.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)

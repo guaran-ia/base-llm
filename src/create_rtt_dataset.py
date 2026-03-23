@@ -27,7 +27,7 @@ API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 # ---------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 DOMAINS_FILE = BASE_DIR / "data" / "domains.json"
-OUT_JSONL = BASE_DIR / "data" / "RTTBench-Mono-ES-Prueba.jsonl"
+OUT_JSONL = BASE_DIR / "data" / "RTTBench-Mono-ES.jsonl"
 
 
 # ---------------------------------------------------------------------
@@ -57,65 +57,6 @@ def load_domains(path: Path) -> List[dict]:
         return json.load(f)
 
 
-# def build_prompt(
-#     domain: str,
-#     description: str,
-#     confusables: List[str],
-#     count: int = COUNT_PER_DOMAIN,
-# ) -> str:
-#     """
-#     Build the Spanish prompt used to generate domain-specific sentences.
-
-#     Args:
-#         domain (str): Target domain name in Spanish.
-#         description (str): Domain description in Spanish.
-#         confusables (List[str]): List of confusable domains to avoid.
-#         count (int): Number of sentences to generate.
-
-#     Returns:
-#         str: Full prompt string.
-#     """
-#     confusable_text = ", ".join(confusables) if confusables else "ninguno"
-
-#     return f"""
-# Eres un asistente experto en redacción consciente del dominio temático.
-# Tu tarea es generar oraciones en español que serán utilizadas para evaluar sistemas de traducción automática.
-
-# Las oraciones deben ser naturales, diversas en estilo y complejidad, y altamente específicas del dominio indicado.
-# Cada oración debe ser autosuficiente y pertenecer de forma inequívoca a este dominio.
-
-# Dominio objetivo: {domain}
-# Descripción del dominio: {description}
-# Dominios confusables a evitar: {confusable_text}
-
-# Instrucciones
-# 1. Genera exactamente {count} oraciones independientes que sean clara y específicamente sobre el dominio "{domain}".
-# 2. Cada oración debe pertenecer de forma inequívoca a "{domain}" y no debe parecer razonablemente clasificable en ninguno de estos dominios relacionados: {confusable_text}. Esta es la regla más importante.
-# 3. Devuelve las oraciones como una lista numerada simple (1., 2., etc.). Sin comentarios adicionales.
-# 4. Cada oración debe ser única, autosuficiente, segura y obviamente sobre "{domain}".
-# 5. Cumple estrictamente con las cuotas de longitud. Tu salida final de {count} oraciones debe tener exactamente esta distribución:
-#    • Cortas ({SENTENCE_LENGTH_BANDS[0]} palabras): exactamente {QUOTAS[0]} oraciones.
-#    • Medianas ({SENTENCE_LENGTH_BANDS[1]} palabras): exactamente {QUOTAS[1]} oraciones.
-#    • Largas ({SENTENCE_LENGTH_BANDS[2]} palabras): exactamente {QUOTAS[2]} oraciones.
-#    Debes verificar tu propia salida para asegurar que esta distribución se cumple perfectamente.
-# 6. Varía el tono, el registro y la complejidad. El conjunto debe incluir una mezcla orgánica de estilo cotidiano/accesible, informal con algo de jerga del dominio, formal/literario y técnico/profesional. No sigas un patrón fijo.
-# 7. Cubre distintas dimensiones lingüísticas a lo largo del conjunto:
-#    • tipo de oración: declarativa, interrogativa, imperativa, exclamativa, factual, con razonamiento, comparativa, causal, hipotética, contrafactual, estilo indirecto;
-#    • voz: activa y pasiva;
-#    • tiempo/aspecto: pasado, presente, futuro, perfecto, condicional;
-#    • terminología: mezcla vocabulario común del dominio con jerga más especializada o acrónimos;
-#    • entidades y números: nombres, fechas, monedas, unidades, mediciones;
-#    • lenguaje figurado cuando sea apropiado;
-#    • correferencia y pronombres (él, ella, ellos, eso), pero no en todas las oraciones.
-# 8. Cada oración debe contener señales léxicas claras y distintivas del dominio "{domain}" (terminología, acciones, entidades o contextos característicos del dominio).
-# 9. Evita oraciones genéricas o ambiguas que podrían clasificarse en múltiples dominios. Cada oración debe incluir suficiente contexto para que el dominio sea claramente identificable.
-# 10. El dominio "{domain}" debe ser central en el significado de la oración, no solo mencionado superficialmente.
-# 11. Si una oración podría clasificarse razonablemente en otro dominio distinto de "{domain}", descártala y genera otra más específica.
-# 12. Prioriza terminología específica del dominio y evita formulaciones abstractas, demasiado generales o transferibles a otros dominios.
-# 13. Reglas finales de formato:
-#    • Si una oración necesita comillas, usa comillas simples (’).
-#    • No agregues comentarios externos ni repitas estas instrucciones en la salida.
-# """.strip()
 def build_prompt(
     domain: str,
     description: str,
@@ -351,7 +292,7 @@ def main() -> None:
     rows = build_rows(domains, client)
     write_jsonl(OUT_JSONL, rows)
 
-    print("\nRTTBench-Mono-ES.jsonl generated successfully.")
+    print(f"\n{OUT_JSONL} generated successfully.")
     print(f"Total rows: {len(rows)}")
     print(f"Expected rows: {len(domains) * COUNT_PER_DOMAIN}")
 
