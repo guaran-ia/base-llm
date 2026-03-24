@@ -36,6 +36,12 @@ def get_random_text(num_words: int):
     return lorem.words(num_words)
 
 
-def read_bench_data(dataset_filepath):
+def read_jsonl(dataset_filepath):
     with open(dataset_filepath, 'r') as f:
         return [json.loads(line) for line in f]
+
+
+def write_jsonl(output_filepath, data, mode='w'):
+    with open(output_filepath, mode, encoding='utf-8') as f:
+        for d in data:
+            f.write(json.dumps(d, ensure_ascii=False) + '\n')
