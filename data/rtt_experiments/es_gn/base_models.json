@@ -69,5 +69,25 @@
                 "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3"
             }
         ]
+    },
+    {
+        "name": "grok",
+        "variants": [
+            {
+                "name": "4-fast-non-reasoning",
+                "model_id": "grok-4-fast-non-reasoning",
+                "end_point": "https://guarania-maas.services.ai.azure.com/models/chat/completions?api-version=2024-05-01-preview"
+            }
+        ]
+    },
+    {
+        "name": "gpt",
+        "variants": [
+            {
+                "name": "4o-mini",
+                "model_id": "gpt-4o-mini",
+                "end_point": "https://guarania-maas.cognitiveservices.azure.com"
+            }
+        ]
     }
 ]

@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
-from utils.utils import read_bench_data
+from utils.utils import read_jsonl, write_jsonl
 
 
 load_dotenv()
@@ -376,7 +376,6 @@ def translate_grok(sys_prompt, task_prompt, model_id, end_point):
         'Authorization': f'Bearer {os.getenv("AZURE_API_KEY")}',
         'Content-Type': 'application/json'
     }
-    
     data = {
         'model': model_id,
         'messages': [
@@ -389,17 +388,19 @@ def translate_grok(sys_prompt, task_prompt, model_id, end_point):
         response_status_code = response.status_code
         if response_status_code == 200:
             result = response.json()
-            return ast.literal_eval(result['choices'][0]['message']['content'])
-        else:
-            time.sleep(1)
-            print(f'Retrying translation after 1 second pause because response '\
-                  f'status code={response_status_code}')
+            if 'choices' in result and len(result['choices']) > 0 and \
+               'message' in result['choices'][0] and \
+               'content' in result['choices'][0]['message']:
+                return result['choices'][0]['message']['content']
+        time.sleep(1)
+        print(f'Retrying translation after 1 second pause because response '\
+              f'status code={response_status_code}')
 
 
 def get_prompt_grok(from_lang, to_lang, sentences):
     return f"""
         Translate the following sentences from {from_lang} to {to_lang}. Respond 
-        strictly in this format: [\"translation1\", \"translation2\", ...].  No 
+        strictly in this format: [\"translation1\", \"translation2\", ...]. No 
         further comments, explanation, description, or thoughts are needed.
 
         Sentences
@@ -408,7 +409,14 @@ def get_prompt_grok(from_lang, to_lang, sentences):
 
 
 def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso, 
-                    to_lang, to_lang_iso, end_point, batch_size):
+                    to_lang, to_lang_iso, end_point, output_dir):
+    
+    # read grok translation file, if exist
+    trans_file_path = os.path.join(output_dir, 'tmp_grok_translations.jsonl')
+    tmp_trans_lookup = None
+    if os.path.isfile(trans_file_path):
+        tmp_trans = read_jsonl(trans_file_path)
+        tmp_trans_lookup = {tt['id']: tt for tt in tmp_trans}
     # initialize object to save translations
     rtt_model = {
         'model': {
@@ -422,38 +430,28 @@ def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso,
     }
     # iterate over sentences
     loop_desc = f'Translating sentences with {model_id}...'
-    for record in rtt_data:
-        sentence = record['text']
-        # perform forward sentence to `to_lang` (e.g., guarani)
-        task_prompt = sanitize_prompt(get_task_prompt_en(sentence, from_lang, to_lang))
-        forward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
-    
-    for i in tqdm(range(0, len(rtt_data), batch_size), desc=loop_desc):
-        batch = rtt_data[i:i + batch_size]
-        # perform forward sentence to `to_lang` (e.g., guarani)
-        sentences = {chr(10).join(f'{i+1}. {r["text"]}'for i, r in enumerate(batch))}
-        task_prompt = sanitize_prompt(get_prompt_grok(from_lang, to_lang, sentences))
-        forward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
-        assert len(forward_trans) == len(batch),  \
-            f'The number of forward translations ({len(forward_trans)}) is '\
-            f'inconsistent with the number of sentences ({len(batch)})'
-        # perform backward sentences to `from_lang` (e.g., spanish)
-        sentences = {chr(10).join(f'{i+1}. {s}'for i, s in enumerate(forward_trans))}
-        task_prompt = sanitize_prompt(get_prompt_grok(to_lang, from_lang, sentences))
-        backward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
-        assert len(backward_trans) == len(batch),  \
-            f'The number of backward translations ({len(backward_trans)}) is '\
-            f'inconsistent with the number of sentences ({len(batch)})'
-        # save translations
-        for idx, s in enumerate(batch):
-            rtt_model['rtt_translation'].append(
-                {
-                    'id': s['id'],
-                    f'source_text_{from_lang_iso}': s['text'],
-                    f'translated_{to_lang_iso}_text': forward_trans[idx],
-                    f'translated_{from_lang_iso}_text': backward_trans[idx]
+    for record in tqdm(rtt_data, desc=loop_desc):
+        # do the translation only if the sentence hasn't translated yet
+        if not tmp_trans_lookup or (tmp_trans_lookup and record['id'] not in tmp_trans_lookup):
+            sentence = record['text']
+            # perform forward sentence to `to_lang` (e.g., guarani)
+            task_prompt = sanitize_prompt(get_task_prompt_en(sentence, from_lang, to_lang))
+            forward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+            if forward_trans:
+                # perform backward sentences to `from_lang` (e.g., spanish)
+                task_prompt = sanitize_prompt(get_task_prompt_en(forward_trans, to_lang, from_lang))
+                backward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+                trans_dict = {
+                    'id': record['id'],
+                    f'source_text_{from_lang_iso}': sentence,
+                    f'translated_{to_lang_iso}_text': forward_trans,
+                    f'translated_{from_lang_iso}_text': backward_trans
                 }
-            )
+                write_jsonl(trans_file_path, [trans_dict], mode='a')
+                rtt_model['rtt_translation'].append(trans_dict)
+            else:
+                raise Exception(f'Forward translation is empty, stopping the process. '\
+                                f'Sentence: {sentence}.')
     return rtt_model
 
 
@@ -483,7 +481,7 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
                 # the Azure API
                 rtt_model = do_run_rtt_grok(
                     rtt_data, model_variant_name, sys_prompt, from_lang, from_lang_iso, 
-                    to_lang, to_lang_iso, model_variant['end_point'], batch_size
+                    to_lang, to_lang_iso, model_variant['end_point'], output_dir
                 )
             else:
                 if batch_size > 0:
@@ -520,7 +518,7 @@ def main(exp_dir, batch_size):
     # 4. read RTT data
     rtt_data_path = os.path.join(project_dir, exp_config['rtt_data_path'])
     print(f'Reading dataset of sentences...')
-    rtt_data = read_bench_data(rtt_data_path)
+    rtt_data = read_jsonl(rtt_data_path)
     print(f'In total, {len(rtt_data)} records were read')
     # 5. read list of base models
     print(f'Reading list of base models...')
