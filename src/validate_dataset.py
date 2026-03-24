@@ -15,7 +15,7 @@ from src.utils.domain_classifier import (
     map_domain_to_english,
     validate_domains,
 )
-from src.utils.utils import read_json, read_bench_data, write_json, write_jsonl
+from src.utils.utils import read_json, read_jsonl, write_json, write_jsonl
 
 
 # ---------------------------------------------------------------------
@@ -323,7 +323,7 @@ def main() -> None:
     """
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
-    rows = read_bench_data(INPUT_FILE)
+    rows = read_jsonl(INPUT_FILE)
     validate_rows(rows)
 
     # Run classifier-based validation.

@@ -8,7 +8,7 @@ from src.utils.domain_classifier import (
     build_domain_metadata,
     validate_domains,
 )
-from src.utils.utils import read_json, read_bench_data, write_json
+from src.utils.utils import read_json, read_jsonl, write_json
 
 
 # -------------------------------
@@ -140,7 +140,7 @@ def main() -> None:
     Returns:
         None
     """
-    rows = read_bench_data(INPUT_FILE)
+    rows = read_jsonl(INPUT_FILE)
     validate_rows(rows)
 
     domains = read_json(DOMAINS_FILE)

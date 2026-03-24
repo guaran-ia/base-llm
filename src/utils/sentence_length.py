@@ -2,7 +2,7 @@ import math
 from pathlib import Path
 from typing import List, Tuple
 
-from src.utils.utils import read_bench_data,extract_text, sentences, words
+from src.utils.utils import read_jsonl,extract_text, sentences, words
 
 
 """
@@ -98,7 +98,7 @@ def main() -> None:
     Returns:
         None
     """
-    rows = read_bench_data(INPUT_FILE)
+    rows = read_jsonl(INPUT_FILE)
     texts = list(extract_text(rows, field="text"))
 
     lengths = all_sentence_lengths(texts, min_words=MIN_WORDS)

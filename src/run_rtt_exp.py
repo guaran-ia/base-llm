@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
-from utils.utils import read_bench_data
+from utils.utils import read_jsonl
 
 
 load_dotenv()
@@ -342,7 +342,7 @@ def main(exp_dir, batch_size):
     # 4. read RTT data
     rtt_data_path = os.path.join(project_dir, exp_config['rtt_data_path'])
     print(f'Reading dataset of sentences...')
-    rtt_data = read_bench_data(rtt_data_path)
+    rtt_data = read_jsonl(rtt_data_path)
     print(f'In total, {len(rtt_data)} records were read')
     # 5. read list of base models
     print(f'Reading list of base models...')

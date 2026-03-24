@@ -1,9 +1,8 @@
 import json
-from pathlib import Path
+from pathlib import Path,Iterator, List
 from typing import Any, Dict, List
 from lorem_text import lorem
 from nltk.tokenize import TweetTokenizer
-from typing import Iterator, List
 import spacy
 # ---------------------------------------------------------------------
 # NLP initialization for sentence segmentation
@@ -21,7 +20,15 @@ def clean_text(text: str):
     text = text.replace("`", "").replace("‘","'")
     text = text.replace("‘", "'").replace("’","'")
     text = text.replace("\"","'")
+    # remove leading and traling single quotes
     text = text.strip("'")
+    # if a period is present remove everything after the period
+    # since texts correspond to single sentences that don't have punctuations, 
+    # we assume that the text after the period can be removed
+    punctuations = ['.', '(', ';']
+    for punctuation in punctuations:
+        if punctuation in text:
+            text = text.split(punctuation)[0]
     return text
 
 
@@ -38,7 +45,7 @@ def get_random_text(num_words: int):
     return lorem.words(num_words)
 
 
-def read_bench_data(dataset_filepath):
+def read_jsonl(dataset_filepath):
     with open(dataset_filepath, 'r') as f:
         return [json.loads(line) for line in f]
 

@@ -9,7 +9,7 @@ from sacrebleu.metrics.chrf import CHRF
 from utils.utils import clean_text
 from utils.utils import get_random_text
 from utils.utils import tokenize
-from utils.utils import read_bench_data
+from utils.utils import read_jsonl
 from corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
 from tqdm import tqdm
 
@@ -148,7 +148,7 @@ def get_bench_data(project_dir, lang):
         bench_dataset_file_path = os.path.join(project_dir, 'data', 'RTTBench-Mono-ES.jsonl')
     else:
         bench_dataset_file_path = os.path.join(project_dir, 'data', 'RTTBench-Mono.jsonl')
-    data = read_bench_data(bench_dataset_file_path)
+    data = read_jsonl(bench_dataset_file_path)
     bench_data = {d['id']: d['domain'] for d in data}
     return bench_data
  

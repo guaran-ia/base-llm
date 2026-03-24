@@ -9,3 +9,6 @@ torch==2.10.0
 tqdm==4.67.3
 transformers==5.3.0
 python-dotenv==1.2.2
+lorem-text==3.0
+matplotlib==3.10.8
+sentence-transformers==5.3.0
