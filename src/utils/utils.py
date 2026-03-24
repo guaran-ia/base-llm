@@ -1,9 +1,10 @@
 import json
-from pathlib import Path,Iterator, List
-from typing import Any, Dict, List
+from pathlib import Path
+from typing import Any, Dict, Iterator, List
+
+import spacy
 from lorem_text import lorem
 from nltk.tokenize import TweetTokenizer
-import spacy
 # ---------------------------------------------------------------------
 # NLP initialization for sentence segmentation
 # ---------------------------------------------------------------------

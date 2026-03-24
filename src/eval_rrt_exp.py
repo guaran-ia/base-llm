@@ -95,11 +95,14 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
     new_model_results['evaluation'] = {}
     translations_dict = model_results['rtt_translation']
     # run evaluation of pair translations
-    for translation_dict in tqdm(translations_dict, desc='Evaluating pair translations...'):
+    for idx, translation_dict in enumerate(tqdm(translations_dict, desc='Evaluating pair translations...'), start=1):
         translation_dict, source, translation = run_pair_evaluation(
             translation_dict, from_lang, to_lang, metrics
         )
-        translation_domain = bench_data[translation_dict['id']]
+        if 'id' in translation_dict:
+            translation_domain = bench_data[translation_dict['id']]
+        else:
+            translation_domain = bench_data[idx]
         # add to overall list of references and predictions
         predictions.append(translation)
         references.append([source])
@@ -108,7 +111,8 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
         new_model_results['rtt_translation'].append(translation_dict)
     # run overall evaluation
     print('Conducting overall evaluation...')
-    overall_eval = {'model_name': model_results['model']['name'].split('/')[1]}
+    model_name = model_results['model']['name'].split('/')[1] if '/' in model_results['model']['name'] else model_results['model']['name']
+    overall_eval = {'model_name': model_name}
     for metric in metrics:
         eval_result = evaluate_results(predictions, references, metric, 'corpus')
         if eval_result:

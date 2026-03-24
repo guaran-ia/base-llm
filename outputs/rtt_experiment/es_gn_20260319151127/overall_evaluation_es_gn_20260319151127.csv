@@ -1,0 +1,2 @@
+model_name,sacrebleu,chrf++,rtt_sacrebleu,rtt_chrf++
+Mistral-7B-Instruct-v0.3,75.10499815709778,92.98733462718413,16.060243698955162,33.32526136769074
