@@ -1,6 +1,9 @@
+import ast
 import click
 import json
 import os
+import openai
+import requests
 import time
 import torch
 
@@ -9,7 +12,7 @@ from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
-from utils.utils import read_bench_data
+from utils.utils import read_jsonl, write_jsonl
 
 
 load_dotenv()
@@ -297,6 +300,161 @@ def save_results(results, model_variant_name, output_dir):
         json.dump(results, f, ensure_ascii=False, indent=4)
 
 
+def translate_qwen3_5(sys_prompt, task_prompt, client):
+    messages = [
+        {'role': 'system', 'content': sys_prompt},
+        {'role': 'user', 'content': task_prompt},
+    ]    
+    chat_response = client.chat.completions.create(
+        model='Qwen/Qwen3.5-9B',
+        messages=messages, # type: ignore
+        max_tokens=81920,
+        temperature=0.7,
+        top_p=0.8,
+        presence_penalty=1.5,
+        extra_body={
+            'chat_template_kwargs': {'enable_thinking': False},
+            'top_k': 20,
+            'min_p': 0.0,
+            'repetition_penalty':1.0
+        }
+    )
+    if len(chat_response.choices) > 0:
+        return chat_response.choices[0].message.content
+    else:
+        return ''
+
+
+def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang, 
+                       from_lang_iso, to_lang, to_lang_iso):
+    # set qwen requirements from environment variables
+    openai.api_key=os.getenv('OPENAI_API_KEY')
+    openai.base_url=os.getenv('OPENAI_BASE_URL')
+    # instantiate openai client
+    client = openai.OpenAI()
+    # initialize object to save translations
+    rtt_model = {
+        'model': {
+            'name': model_variant
+        },
+        'params': {
+            'from_lang': f'{from_lang} ({from_lang_iso})',
+            'to_lang': f'{to_lang} ({to_lang_iso})'
+        },
+        'rtt_translation': []
+    }
+    # iterate over sentences
+    loop_desc = 'Translating sentences with Qwen 3.5...'
+    for record in tqdm(rtt_data, desc=loop_desc):
+        sentence = record['text']
+        # translate to `to_lang` (e.g., guarani) using qwen
+        task_prompt = sanitize_prompt(
+            get_task_prompt_en(sentence, from_lang, to_lang)
+        )
+        forward_trans = translate_qwen3_5(sys_prompt, task_prompt, client)
+        # translate to `from_lang` (e.g., spanish) using qwen
+        backward_trans = ''
+        if forward_trans:
+            task_prompt = sanitize_prompt(
+                get_task_prompt_en(forward_trans, to_lang, from_lang)
+            )
+            backward_trans = translate_qwen3_5(sys_prompt, task_prompt, client)
+        # save translations
+        rtt_model['rtt_translation'].append(
+            {
+                'id': record['id'],
+                f'source_text_{from_lang_iso}': sentence,
+                f'translated_{to_lang_iso}_text': forward_trans,
+                f'translated_{from_lang_iso}_text': backward_trans
+            }
+        )
+    return rtt_model
+
+
+def translate_grok(sys_prompt, task_prompt, model_id, end_point):
+    headers = {
+        'Authorization': f'Bearer {os.getenv("AZURE_API_KEY")}',
+        'Content-Type': 'application/json'
+    }
+    data = {
+        'model': model_id,
+        'messages': [
+            {'role': 'system', 'content': sys_prompt},
+            {'role': 'user', 'content': task_prompt},
+        ]
+    }
+    while True:
+        response = requests.post(end_point, headers=headers, json=data)
+        response_status_code = response.status_code
+        if response_status_code == 200:
+            result = response.json()
+            if 'choices' in result and len(result['choices']) > 0 and \
+               'message' in result['choices'][0] and \
+               'content' in result['choices'][0]['message']:
+                return result['choices'][0]['message']['content']
+        time.sleep(1)
+        print(f'Retrying translation after 1 second pause because response '\
+              f'status code={response_status_code}')
+
+
+def get_prompt_grok(from_lang, to_lang, sentences):
+    return f"""
+        Translate the following sentences from {from_lang} to {to_lang}. Respond 
+        strictly in this format: [\"translation1\", \"translation2\", ...]. No 
+        further comments, explanation, description, or thoughts are needed.
+
+        Sentences
+        {sentences}    
+    """
+
+
+def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso, 
+                    to_lang, to_lang_iso, end_point, output_dir):
+    
+    # read grok translation file, if exist
+    trans_file_path = os.path.join(output_dir, 'tmp_grok_translations.jsonl')
+    tmp_trans_lookup = None
+    if os.path.isfile(trans_file_path):
+        tmp_trans = read_jsonl(trans_file_path)
+        tmp_trans_lookup = {tt['id']: tt for tt in tmp_trans}
+    # initialize object to save translations
+    rtt_model = {
+        'model': {
+            'name': model_id
+        },
+        'params': {
+            'from_lang': f'{from_lang} ({from_lang_iso})',
+            'to_lang': f'{to_lang} ({to_lang_iso})'
+        },
+        'rtt_translation': []
+    }
+    # iterate over sentences
+    loop_desc = f'Translating sentences with {model_id}...'
+    for record in tqdm(rtt_data, desc=loop_desc):
+        # do the translation only if the sentence hasn't translated yet
+        if not tmp_trans_lookup or (tmp_trans_lookup and record['id'] not in tmp_trans_lookup):
+            sentence = record['text']
+            # perform forward sentence to `to_lang` (e.g., guarani)
+            task_prompt = sanitize_prompt(get_task_prompt_en(sentence, from_lang, to_lang))
+            forward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+            if forward_trans:
+                # perform backward sentences to `from_lang` (e.g., spanish)
+                task_prompt = sanitize_prompt(get_task_prompt_en(forward_trans, to_lang, from_lang))
+                backward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+                trans_dict = {
+                    'id': record['id'],
+                    f'source_text_{from_lang_iso}': sentence,
+                    f'translated_{to_lang_iso}_text': forward_trans,
+                    f'translated_{from_lang_iso}_text': backward_trans
+                }
+                write_jsonl(trans_file_path, [trans_dict], mode='a')
+                rtt_model['rtt_translation'].append(trans_dict)
+            else:
+                raise Exception(f'Forward translation is empty, stopping the process. '\
+                                f'Sentence: {sentence}.')
+    return rtt_model
+
+
 def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso, 
             from_lang, from_lang_iso, batch_size, models_to_exclude):
     sys_prompt = sanitize_prompt(
@@ -304,18 +462,36 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
     )
     for base_model in tqdm(list_base_models, desc=f'Running RTT'):
         for model_variant in base_model['variants']:
-            model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
+            if 'huggingface_id' in model_variant:
+                model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
+            else:
+                model_variant_name = model_variant['model_id']
             if model_variant_name in models_to_exclude:
                 continue
             print(f'\n\nRunning RTT with model: {model_variant_name}...')
-            if batch_size > 0:
-                rtt_model = do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
-                                             from_lang, from_lang_iso, to_lang, 
-                                             to_lang_iso, batch_size)
+            if model_variant_name == 'qwen3.5-9b':
+                # Qwen 3.5 is treated differently since it is not invoked through
+                # the Huggingface API but OpenAI's following the model documentation
+                rtt_model = do_run_rtt_qwen3_5(
+                    rtt_data, model_variant_name, sys_prompt, from_lang, from_lang_iso, 
+                    to_lang, to_lang_iso
+                )
+            elif model_variant_name == 'grok-4-fast-non-reasoning':
+                # Grok 4 has a special treatment since it is called through
+                # the Azure API
+                rtt_model = do_run_rtt_grok(
+                    rtt_data, model_variant_name, sys_prompt, from_lang, from_lang_iso, 
+                    to_lang, to_lang_iso, model_variant['end_point'], output_dir
+                )
             else:
-                rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
-                                       from_lang, from_lang_iso, to_lang, 
-                                       to_lang_iso)
+                if batch_size > 0:
+                    rtt_model = do_run_batch_rtt(rtt_data, model_variant, sys_prompt, 
+                                                from_lang, from_lang_iso, to_lang, 
+                                                to_lang_iso, batch_size)
+                else:
+                    rtt_model = do_run_rtt(rtt_data, model_variant, sys_prompt,
+                                        from_lang, from_lang_iso, to_lang, 
+                                        to_lang_iso)
             # save results
             print(f'Saving RTT results...')
             save_results(rtt_model, model_variant_name, output_dir)
@@ -342,7 +518,7 @@ def main(exp_dir, batch_size):
     # 4. read RTT data
     rtt_data_path = os.path.join(project_dir, exp_config['rtt_data_path'])
     print(f'Reading dataset of sentences...')
-    rtt_data = read_bench_data(rtt_data_path)
+    rtt_data = read_jsonl(rtt_data_path)
     print(f'In total, {len(rtt_data)} records were read')
     # 5. read list of base models
     print(f'Reading list of base models...')

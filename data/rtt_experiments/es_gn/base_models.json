@@ -31,6 +31,15 @@
         ]
     },
     {
+        "name": "qwen3.5",
+        "variants": [
+            {
+                "name": "9b",
+                "huggingface_id": "Qwen/Qwen3.5-9B"
+            }
+        ]
+    },
+    {
         "name": "llama-3.1",
         "variants": [
             {
@@ -57,7 +66,27 @@
         "variants": [
             {
                 "name": "7b-it",
-                "huggingface_id": "Mistral-7B-Instruct-v0.3"
+                "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3"
+            }
+        ]
+    },
+    {
+        "name": "grok",
+        "variants": [
+            {
+                "name": "4-fast-non-reasoning",
+                "model_id": "grok-4-fast-non-reasoning",
+                "end_point": "https://guarania-maas.services.ai.azure.com/models/chat/completions?api-version=2024-05-01-preview"
+            }
+        ]
+    },
+    {
+        "name": "gpt",
+        "variants": [
+            {
+                "name": "4o-mini",
+                "model_id": "gpt-4o-mini",
+                "end_point": "https://guarania-maas.cognitiveservices.azure.com"
             }
         ]
     }
