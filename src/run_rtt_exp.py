@@ -227,6 +227,16 @@ def get_lang_translation(translation):
         return ''
 
 
+def gemma4_postprocessing(sentences):
+    postprocess_sentences = []
+    for sentence in sentences:
+        if '.' in sentence:
+            postprocess_sentences.append(sentence.split('.')[0].strip())
+        else:
+            postprocess_sentences.append(sentence.strip())
+    return postprocess_sentences
+
+
 def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
                      to_lang, to_lang_iso, batch_size):
     model_variant_id = model_variant['huggingface_id']
@@ -235,12 +245,16 @@ def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_i
     # batch translate to language (e.g., guarani)
     forward_trans = do_batch_translation(model, tokenizer, sys_prompt, sentences, 
                                          from_lang, to_lang, batch_size)
+    if model_variant_id in ['google/gemma-4-26B-A4B-it', 'google/gemma-4-E4B-it']:
+        forward_trans = gemma4_postprocessing(forward_trans)
     assert len(forward_trans) == len(sentences), \
         f'The numer of forward translations ({len(forward_trans)}) is '\
         f'inconsistent with the number of sentences ({len(sentences)})'
     # batch translate back to language (e.g., spanish)
     backward_trans = do_batch_translation(model, tokenizer, sys_prompt, forward_trans, 
                                           to_lang, from_lang, batch_size)
+    if model_variant_id in ['google/gemma-4-26B-A4B-it', 'google/gemma-4-E4B-it']:
+        backward_trans = gemma4_postprocessing(backward_trans)
     assert len(backward_trans) == len(sentences), \
         f'The numer of backward translations ({len(backward_trans)}) is '\
         f'inconsistent with the number of sentences ({len(sentences)})'
