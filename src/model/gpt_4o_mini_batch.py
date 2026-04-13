@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 from dotenv import load_dotenv
 from openai import OpenAI
+from ..utils.utils import read_jsonl, write_jsonl, write_json
 
 load_dotenv()
 
@@ -25,8 +26,6 @@ def get_batch_result(client, batch_response):
         raw_responses = file_response.text.strip().split('\n')  
         for raw_response in raw_responses:  
             json_response = json.loads(raw_response)  
-            formatted_json = json.dumps(json_response, indent=2)  
-            print(formatted_json)
     return json_response
 
 
@@ -59,12 +58,12 @@ def submit_batch_job(client, file_id):
     return batch_response.id
 
 
-def upload_file(client):
+def upload_file(client, file_path):
     # Upload a file with a purpose of 'batch'
     # 'expires_after' is an optional parameter that can be set to a number between 
     # 1209600-2592000. This is equivalent to 14-30 days
     file = client.files.create(
-        file=open('test-gpt4o-batch.jsonl', 'rb'), 
+        file=open(file_path, 'rb'), 
         purpose='batch',
         extra_body={'expires_after':{'seconds': 1209600, 'anchor': 'created_at'}} 
     )
@@ -82,13 +81,61 @@ def create_client():
     return client
 
 
+def prepare_file_for_batch_gpt_4o_mini(rtt_data, from_lang_iso, to_lang_iso):
+    # prepare the input file for batch translation with GPT-4o mini
+    input_file_path = f'gpt_4o_mini_batch_input_{from_lang_iso}_{to_lang_iso}.jsonl'
+    with open(input_file_path, 'w') as f:
+        for record in rtt_data:
+            sentence = record['text']
+            json_line = json.dumps(
+                {
+                    'custom_id': f'task-{record["id"]}', 
+                    'method': 'POST',
+                    'url': '/v1/chat/completions',
+                    'body': {
+                        'model': 'gpt-4o-mini-2-batch',
+                        'messages': [
+                            {
+                                'role': 'system',
+                                'content': 'You are an expert translator from spanish to guarani.'
+                            },
+                            {
+                                'role': 'user',
+                                'content': f'Translate the following sentence: {sentence}'
+                            }
+                        ]
+                    }
+                }
+            )
+            f.write(json_line + '\n')
+    return input_file_path
+
+
+def prepare_experiment(project_dir, exp_dir):
+    config_path = os.path.join(project_dir, 'data', 'rtt_experiments', exp_dir, 'config.json')
+    exp_config = read_jsonl(config_path)
+    rtt_data_path = os.path.join(project_dir, exp_config['rtt_data_path']) # type: ignore
+    print(f'Reading dataset of sentences...')
+    rtt_data = read_jsonl(rtt_data_path)
+    from_lang_iso = exp_config['from_lang_iso'] # type: ignore
+    to_lang_iso = exp_config['to_lang_iso'] # type: ignore
+    return prepare_file_for_batch_gpt_4o_mini(rtt_data, from_lang_iso, to_lang_iso)
+
+
 def main():
+    project_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    exp_dir = 'es_gn'
+    file_to_process = prepare_experiment(project_dir, exp_dir)
     client = create_client()
-    #file_id = upload_file(client)
-    #batch_id = submit_batch_job(client, file_id)
-    batch_id = 'batch_c14e4427-001d-45d1-84de-b4d05be907c7'
+    file_id = upload_file(client, file_to_process)
+    batch_id = submit_batch_job(client, file_id)
     batch_response = check_batch_execution_status(client, batch_id)
     result = get_batch_result(client, batch_response)
+    output_dir = os.path.join(project_dir, 'outputs', 'rtt_experiment', f'gpt_4o_mini_batch_{datetime.now().strftime("%Y%m%d%H%M%S")}')
+    os.makedirs(output_dir, exist_ok=True)
+    output_file_path = os.path.join(output_dir, f'gpt_4o_mini_batch_results_{exp_dir}.json')
+    write_json(output_file_path, result)
+
 
 if __name__ == '__main__':
     main()
