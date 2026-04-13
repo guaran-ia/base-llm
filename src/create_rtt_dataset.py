@@ -26,8 +26,8 @@ API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 # Paths
 # ---------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
-DOMAINS_FILE = BASE_DIR / "data" / "domains.json"
-OUT_JSONL = BASE_DIR / "data" / "RTTBench-Mono-ES.jsonl"
+DOMAINS_FILE = os.path.join(BASE_DIR, "data", "domains.json")
+OUT_JSONL = os.path.join(BASE_DIR, "data", "RTTBench-Mono-ES.jsonl")
 
 
 # ---------------------------------------------------------------------
@@ -40,7 +40,7 @@ QUOTAS = (16, 18, 16)
 SLEEP_SEC = 0.4
 
 
-def load_domains(path: Path) -> List[dict]:
+def load_domains(path: str) -> List[dict]:
     """
     Load domain definitions from a JSON file.
 
@@ -50,10 +50,10 @@ def load_domains(path: Path) -> List[dict]:
     Returns:
         List[dict]: Loaded domain configuration objects.
     """
-    if not path.exists():
+    if not os.path.exists(path):
         raise FileNotFoundError(f"{path} not found.")
 
-    with path.open("r", encoding="utf-8") as f:
+    with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 
@@ -136,7 +136,7 @@ def call_model(prompt: str, client: OpenAI) -> str:
         str: Raw text returned by the model.
     """
     response = client.chat.completions.create(
-        model=DEPLOYMENT,
+        model=DEPLOYMENT,  # type: ignore
         messages=[{"role": "user", "content": prompt}],
     )
 
