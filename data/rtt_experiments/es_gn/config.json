@@ -8,5 +8,5 @@
     "to_lang_es": "guaraní",
     "to_lang_en": "guarani",
     "to_lang_iso": "gn",
-    "exclude": []
+    "exclude": ["'gpt-4o-mini'"]
 }
