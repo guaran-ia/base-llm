@@ -8,5 +8,5 @@
     "to_lang_es": "guaraní",
     "to_lang_en": "guarani",
     "to_lang_iso": "gn",
-    "exclude": ["gpt-4o-mini", "Qwen3.5-9B"]
+    "exclude": ["grok-4-fast-non-reasoning", "Mistral-7B-Instruct-v0.3", "Mistral-NeMo-Minitron-8B-Instruct", "Nemotron-Mini-4B-Instruct", "Meta-Llama-3.1-8B-Instruct", "Qwen3.5-9B", "Qwen3-4B-Instruct-2507", "Apertus-8B-Instruct-2509", "gemma-3-12b-it", "gemma-3-4b-it", "gpt-4o-mini", "Qwen3.5-9B"]
 }
