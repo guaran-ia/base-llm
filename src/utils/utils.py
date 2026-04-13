@@ -1,5 +1,5 @@
 import json
-from pathlib import Path
+import os
 from typing import Any, Dict, Iterator, List
 
 import spacy
@@ -51,54 +51,53 @@ def read_jsonl(dataset_filepath):
         return [json.loads(line) for line in f]
 
 
-def write_jsonl(path: Path, rows: List[Dict[str, Any]]) -> None:
+def write_jsonl(path: str , rows: List[Dict[str, Any]], mode='w') -> None:
     """
     Write a list of dictionaries to a JSONL file.
 
     Args:
-        path (Path): Output JSONL file path.
+        path (str): Output JSONL file path.
         rows (List[Dict[str, Any]]): Rows to write.
+        mode (str): File opening mode.
 
     Returns:
         None
     """
-    path.parent.mkdir(parents=True, exist_ok=True)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
 
-    with path.open("w", encoding="utf-8") as f:
+    with open(path, mode, encoding="utf-8") as f:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
-def read_json(path: Path) -> Any:
+def read_json(path: str) -> Any:
     """
     Read a JSON file.
 
     Args:
-        path (Path): Path to the JSON file.
+        path (str): Path to the JSON file.
 
     Returns:
         Any: Parsed JSON content.
     """
-    with path.open("r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def write_json(path: Path, data: Any) -> None:
+def write_json(path: str, data: Any, mode='w') -> None:
     """
     Write data to a JSON file using pretty formatting.
 
     Args:
-        path (Path): Output JSON file path.
+        path (str): Output JSON file path.
         data (Any): JSON-serializable object.
 
     Returns:
         None
     """
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, mode, encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
 
 
 def sentences(text: str) -> List[str]:
