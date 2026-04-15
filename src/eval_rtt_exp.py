@@ -6,10 +6,10 @@ import pandas as pd
 from collections import defaultdict
 from sacrebleu.metrics.bleu import BLEU
 from sacrebleu.metrics.chrf import CHRF
-from utils.utils import clean_text
-from utils.utils import get_random_text
-from utils.utils import tokenize
-from utils.utils import read_jsonl
+from src.utils.utils import clean_text
+from src.utils.utils import get_random_text
+from src.utils.utils import tokenize
+from src.utils.utils import read_jsonl
 from tqdm import tqdm
 
 
@@ -40,6 +40,10 @@ def validate_translation(source, translation_tl, translation_fl, lang_forward_tr
         # if source and translation are equal, it means that the translation
         # was not conducted. A random text is generated then to penalize
         # the translator
+        translation_fl = get_random_text(len(source))
+    elif translation_tl == '<translation_missing>' or \
+         translation_fl == '<<translation_missing>':
+        # if the translation is missing, we penalize the translator
         translation_fl = get_random_text(len(source))
     else:
         # if the language of the translation is not guarani, we assume the 
@@ -151,7 +155,7 @@ def get_bench_data(project_dir, lang):
  
 
 @click.command()
-@click.option('--res_dir', default='')
+@click.option('--res_dir', default='', help='Name of the directory containing the results (only the name, not the full path)')
 def main(res_dir):
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     metrics = load_metrics(['sacrebleu', 'chrf++'])
