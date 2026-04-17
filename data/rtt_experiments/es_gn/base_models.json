@@ -1,4 +1,17 @@
 [
+     {
+       "name":"gemma-4", 
+       "variants": [
+            {
+               "name":"e4b-it",
+               "huggingface_id":"google/gemma-4-E4B-it"
+            },
+            {
+               "name":"26b-a4b-it",
+               "huggingface_id":"google/gemma-4-26B-A4B-it"
+            }
+        ]
+    },
     {
        "name":"gemma-3", 
        "variants": [

@@ -6,15 +6,12 @@ import pandas as pd
 from collections import defaultdict
 from sacrebleu.metrics.bleu import BLEU
 from sacrebleu.metrics.chrf import CHRF
-from utils.utils import clean_text
-from utils.utils import get_random_text
-from utils.utils import tokenize
-from utils.utils import read_jsonl
-from corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
+from src.utils.utils import clean_text
+from src.utils.utils import get_random_text
+from src.utils.utils import tokenize
+from src.utils.utils import read_jsonl
 from tqdm import tqdm
 
-
-identifier = LanguageIdentifier(glotlid=True, fasttext=True, openlid=True)
 
 
 def compute_rtt_score(scores_dict):
@@ -38,23 +35,22 @@ def evaluate_results(predictions, references, metric, mode='sentence'):
     return eval_results
 
 
-def validate_translation(source, translation_tl, translation_fl):
+def validate_translation(source, translation_tl, translation_fl, lang_forward_trans):
     if source == translation_tl:
         # if source and translation are equal, it means that the translation
         # was not conducted. A random text is generated then to penalize
         # the translator
         translation_fl = get_random_text(len(source))
+    elif translation_tl == '<translation_missing>' or \
+         translation_fl == '<<translation_missing>':
+        # if the translation is missing, we penalize the translator
+        translation_fl = get_random_text(len(source))
     else:
-        result = identifier.identify_languages(translation_tl, k=1)
-        if result is not None and \
-           'languages' in result and \
-           result['languages'] is not None and \
-           len(result['languages']) > 0:
-            # if the language of the translation is not guarani, we assume the 
-            # translation was not conducted. A random text is generated then to 
-            # penalize the translator
-            if result['languages'][0] != 'grn':
-                translation_fl = get_random_text(len(source))
+        # if the language of the translation is not guarani, we assume the 
+        # translation was not conducted. A random text is generated then to 
+        # penalize the translator
+        if lang_forward_trans != 'grn':
+            translation_fl = get_random_text(len(source))
     return translation_fl
 
 
@@ -67,7 +63,8 @@ def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
     translation_dict[f'source_text_{from_lang}'] = source
     translation_dict[f'translated_{from_lang}_text'] = translation_fl
     translation_dict[f'translated_{to_lang}_text'] = translation_tl
-    translation_fl = validate_translation(source, translation_tl, translation_fl)
+    lang_forward_trans = translation_dict.get(f'translated_{to_lang}_language', '')
+    translation_fl = validate_translation(source, translation_tl, translation_fl, lang_forward_trans)
     # tokenize text
     source = ' '.join(tokenize(source))
     translation_fl = ' '.join(tokenize(translation_fl))
@@ -158,7 +155,7 @@ def get_bench_data(project_dir, lang):
  
 
 @click.command()
-@click.option('--res_dir', default='')
+@click.option('--res_dir', default='', help='Name of the directory containing the results (only the name, not the full path)')
 def main(res_dir):
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     metrics = load_metrics(['sacrebleu', 'chrf++'])

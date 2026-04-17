@@ -7,12 +7,16 @@ import requests
 import time
 import torch
 
+from corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
 from datetime import datetime
 from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
 from utils.utils import read_jsonl, write_jsonl
+
+
+identifier = LanguageIdentifier(glotlid=True, fasttext=True, openlid=True)
 
 
 load_dotenv()
@@ -212,6 +216,27 @@ def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang,
     return trans_results
 
 
+def get_lang_translation(translation):
+    result = identifier.identify_languages(translation, k=1)
+    if result is not None and \
+       'languages' in result and \
+       result['languages'] is not None and \
+       len(result['languages']) > 0:
+        return result['languages'][0]
+    else:
+        return ''
+
+
+def gemma4_postprocessing(sentences):
+    postprocess_sentences = []
+    for sentence in sentences:
+        if '.' in sentence:
+            postprocess_sentences.append(sentence.split('.')[0].strip())
+        else:
+            postprocess_sentences.append(sentence.strip())
+    return postprocess_sentences
+
+
 def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
                      to_lang, to_lang_iso, batch_size):
     model_variant_id = model_variant['huggingface_id']
@@ -220,12 +245,16 @@ def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_i
     # batch translate to language (e.g., guarani)
     forward_trans = do_batch_translation(model, tokenizer, sys_prompt, sentences, 
                                          from_lang, to_lang, batch_size)
+    if model_variant_id in ['google/gemma-4-26B-A4B-it', 'google/gemma-4-E4B-it']:
+        forward_trans = gemma4_postprocessing(forward_trans)
     assert len(forward_trans) == len(sentences), \
         f'The numer of forward translations ({len(forward_trans)}) is '\
         f'inconsistent with the number of sentences ({len(sentences)})'
     # batch translate back to language (e.g., spanish)
     backward_trans = do_batch_translation(model, tokenizer, sys_prompt, forward_trans, 
                                           to_lang, from_lang, batch_size)
+    if model_variant_id in ['google/gemma-4-26B-A4B-it', 'google/gemma-4-E4B-it']:
+        backward_trans = gemma4_postprocessing(backward_trans)
     assert len(backward_trans) == len(sentences), \
         f'The numer of backward translations ({len(backward_trans)}) is '\
         f'inconsistent with the number of sentences ({len(sentences)})'
@@ -240,12 +269,17 @@ def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_i
         'rtt_translation': []
     }
     for idx, record in enumerate(rtt_data):
+        # check language of the forward and backward translation
+        fwd_tran_lang = get_lang_translation(forward_trans[idx])
+        bkw_trans_lang = get_lang_translation(backward_trans[idx])
         rtt_model['rtt_translation'].append(
             {
                 'id': record['id'],
                 f'source_text_{from_lang_iso}': record['text'],
                 f'translated_{to_lang_iso}_text': forward_trans[idx],
-                f'translated_{from_lang_iso}_text': backward_trans[idx]
+                f'translated_{to_lang_iso}_language': fwd_tran_lang,
+                f'translated_{from_lang_iso}_text': backward_trans[idx],
+                f'translated_{from_lang_iso}_language': bkw_trans_lang
             }
         )
     return rtt_model
@@ -359,13 +393,18 @@ def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang,
                 get_task_prompt_en(forward_trans, to_lang, from_lang)
             )
             backward_trans = translate_qwen3_5(sys_prompt, task_prompt, client)
+        # get language translations
+        fwd_tran_lang = get_lang_translation(forward_trans)
+        bkw_tran_lang = get_lang_translation(backward_trans)
         # save translations
         rtt_model['rtt_translation'].append(
             {
                 'id': record['id'],
                 f'source_text_{from_lang_iso}': sentence,
                 f'translated_{to_lang_iso}_text': forward_trans,
-                f'translated_{from_lang_iso}_text': backward_trans
+                f'translated_{to_lang_iso}_language': fwd_tran_lang,
+                f'translated_{from_lang_iso}_text': backward_trans,
+                f'translated_{from_lang_iso}_language': bkw_tran_lang
             }
         )
     return rtt_model
@@ -441,11 +480,15 @@ def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso,
                 # perform backward sentences to `from_lang` (e.g., spanish)
                 task_prompt = sanitize_prompt(get_task_prompt_en(forward_trans, to_lang, from_lang))
                 backward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
+                fwd_tran_lang = get_lang_translation(forward_trans)
+                bkw_trans_lang = get_lang_translation(backward_trans)
                 trans_dict = {
                     'id': record['id'],
                     f'source_text_{from_lang_iso}': sentence,
                     f'translated_{to_lang_iso}_text': forward_trans,
-                    f'translated_{from_lang_iso}_text': backward_trans
+                    f'translated_{to_lang_iso}_language': fwd_tran_lang,
+                    f'translated_{from_lang_iso}_text': backward_trans,
+                    f'translated_{from_lang_iso}_language': bkw_trans_lang
                 }
                 write_jsonl(trans_file_path, [trans_dict], mode='a')
                 rtt_model['rtt_translation'].append(trans_dict)
