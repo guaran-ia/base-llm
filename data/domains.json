@@ -1,0 +1,352 @@
+[
+  {
+    "name": {
+      "es": "Artes_y_Entretenimiento",
+      "en": "Arts_and_Entertainment"
+    },
+    "description": "Contenido relacionado con música, cine, televisión, teatro, arte visual, cultura popular, celebridades y eventos de entretenimiento.",
+    "confusables": [
+      "Libros_y_Literatura",
+      "Noticias",
+      "Pasatiempos_y_Ocio",
+      "Juegos",
+      "Empleos_y_Educacion"
+    ]
+  },
+  {
+    "name": {
+      "es": "Autos_y_Vehiculos",
+      "en": "Autos_and_Vehicles"
+    },
+    "description": "Información sobre automóviles, motocicletas, transporte motorizado, mantenimiento vehicular, industria automotriz y novedades del sector.",
+    "confusables": [
+      "Deportes",
+      "Noticias",
+      "Negocios_e_Industria",
+      "Belleza_y_Fitness",
+      "Finanzas"
+    ]
+  },
+  {
+    "name": {
+      "es": "Belleza_y_Fitness",
+      "en": "Beauty_and_Fitness"
+    },
+    "description": "Temas relacionados con cuidado personal, cosmética, estética, ejercicio físico, rutinas de entrenamiento y bienestar corporal.",
+    "confusables": [
+      "Noticias",
+      "Salud",
+      "Deportes",
+      "Comida_y_Bebida",
+      "Hogar_y_Jardin"
+    ]
+  },
+  {
+    "name": {
+      "es": "Bienes_Raices",
+      "en": "Real_Estate"
+    },
+    "description": "Contenido sobre compra, venta y alquiler de propiedades, mercado inmobiliario, inversiones inmobiliarias y desarrollo urbano.",
+    "confusables": [
+      "Noticias",
+      "Finanzas",
+      "Compras",
+      "Ley_y_Gobierno",
+      "Hogar_y_Jardin"
+    ]
+  },
+  {
+    "name": {
+      "es": "Ciencia",
+      "en": "Science"
+    },
+    "description": "Contenido relacionado con investigaciones científicas, física, química, biología, tecnología aplicada y descubrimientos académicos.",
+    "confusables": [
+      "Noticias",
+      "Empleos_y_Educacion",
+      "Computadoras_y_Electronica",
+      "Negocios_e_Industria",
+      "Salud"
+    ]
+  },
+  {
+    "name": {
+      "es": "Comida_y_Bebida",
+      "en": "Food_and_Drink"
+    },
+    "description": "Información sobre gastronomía, recetas, cocina, restaurantes, bebidas, cultura culinaria y nutrición alimentaria.",
+    "confusables": [
+      "Hogar_y_Jardin",
+      "Noticias",
+      "Pasatiempos_y_Ocio",
+      "Artes_y_Entretenimiento",
+      "Libros_y_Literatura"
+    ]
+  },
+  {
+    "name": {
+      "es": "Compras",
+      "en": "Shopping"
+    },
+    "description": "Información sobre productos, comparativas, precios, decisiones de consumo, comercio minorista y comercio electrónico.",
+    "confusables": [
+      "Belleza_y_Fitness",
+      "Pasatiempos_y_Ocio",
+      "Comida_y_Bebida",
+      "Hogar_y_Jardin",
+      "Noticias"
+    ]
+  },
+  {
+    "name": {
+      "es": "Computadoras_y_Electronica",
+      "en": "Computers_and_Electronics"
+    },
+    "description": "Temas relacionados con hardware, software, programación, dispositivos electrónicos, sistemas informáticos y avances tecnológicos.",
+    "confusables": [
+      "Internet_y_Telecomunicaciones",
+      "Comunidades_En_Linea",
+      "Noticias",
+      "Negocios_e_Industria",
+      "Juegos"
+    ]
+  },
+  {
+    "name": {
+      "es": "Comunidades_En_Linea",
+      "en": "Online_Communities"
+    },
+    "description": "Contenido relacionado con redes sociales, foros, interacción digital, plataformas colaborativas y participación en línea.",
+    "confusables": [
+      "Internet_y_Telecomunicaciones",
+      "Juegos",
+      "Empleos_y_Educacion",
+      "Personas_y_Sociedad",
+      "Computadoras_y_Electronica"
+    ]
+  },
+  {
+    "name": {
+      "es": "Deportes",
+      "en": "Sports"
+    },
+    "description": "Contenido sobre actividades deportivas, competiciones, atletas, resultados, entrenamiento y eventos deportivos.",
+    "confusables": [
+      "Noticias",
+      "Temas_Sensibles",
+      "Juegos",
+      "Pasatiempos_y_Ocio",
+      "Artes_y_Entretenimiento"
+    ]
+  },
+  {
+    "name": {
+      "es": "Empleos_y_Educacion",
+      "en": "Jobs_and_Education"
+    },
+    "description": "Contenido relacionado con formación académica, carreras profesionales, oportunidades laborales, capacitación y desarrollo educativo.",
+    "confusables": [
+      "Noticias",
+      "Ley_y_Gobierno",
+      "Deportes",
+      "Artes_y_Entretenimiento",
+      "Salud"
+    ]
+  },
+  {
+    "name": {
+      "es": "Finanzas",
+      "en": "Finance"
+    },
+    "description": "Contenido sobre banca, inversiones, mercados financieros, impuestos, seguros, planificación financiera y economía monetaria.",
+    "confusables": [
+      "Noticias",
+      "Ley_y_Gobierno",
+      "Negocios_e_Industria",
+      "Bienes_Raices",
+      "Empleos_y_Educacion"
+    ]
+  },
+  {
+    "name": {
+      "es": "Hogar_y_Jardin",
+      "en": "Home_and_Garden"
+    },
+    "description": "Contenido sobre decoración, mantenimiento del hogar, jardinería, mejoras domésticas y diseño de espacios residenciales.",
+    "confusables": [
+      "Comida_y_Bebida",
+      "Pasatiempos_y_Ocio",
+      "Libros_y_Literatura",
+      "Artes_y_Entretenimiento",
+      "Mascotas_y_Animales"
+    ]
+  },
+  {
+    "name": {
+      "es": "Internet_y_Telecomunicaciones",
+      "en": "Internet_and_Telecom"
+    },
+    "description": "Información sobre servicios de internet, redes, telecomunicaciones, conectividad, infraestructura digital y comunicación en línea.",
+    "confusables": [
+      "Computadoras_y_Electronica",
+      "Negocios_e_Industria",
+      "Noticias",
+      "Ley_y_Gobierno",
+      "Comunidades_En_Linea"
+    ]
+  },
+  {
+    "name": {
+      "es": "Juegos",
+      "en": "Games"
+    },
+    "description": "Contenido sobre videojuegos, juegos de mesa, juegos en línea, mecánicas de juego, plataformas y comunidades gamer.",
+    "confusables": [
+      "Computadoras_y_Electronica",
+      "Artes_y_Entretenimiento",
+      "Internet_y_Telecomunicaciones",
+      "Noticias",
+      "Comunidades_En_Linea"
+    ]
+  },
+  {
+    "name": {
+      "es": "Ley_y_Gobierno",
+      "en": "Law_and_Government"
+    },
+    "description": "Temas sobre legislación, políticas públicas, administración estatal, sistemas jurídicos y procesos gubernamentales.",
+    "confusables": [
+      "Noticias",
+      "Personas_y_Sociedad",
+      "Finanzas",
+      "Empleos_y_Educacion",
+      "Salud"
+    ]
+  },
+  {
+    "name": {
+      "es": "Libros_y_Literatura",
+      "en": "Books_and_Literature"
+    },
+    "description": "Contenido sobre libros, novelas, poesía, autores, reseñas literarias, géneros narrativos y análisis de obras escritas.",
+    "confusables": [
+      "Artes_y_Entretenimiento",
+      "Noticias",
+      "Personas_y_Sociedad",
+      "Empleos_y_Educacion",
+      "Computadoras_y_Electronica"
+    ]
+  },
+  {
+    "name": {
+      "es": "Mascotas_y_Animales",
+      "en": "Pets_and_Animals"
+    },
+    "description": "Información sobre animales domésticos, cuidado de mascotas, comportamiento animal y fauna en general.",
+    "confusables": [
+      "Pasatiempos_y_Ocio",
+      "Libros_y_Literatura",
+      "Hogar_y_Jardin",
+      "Artes_y_Entretenimiento",
+      "Deportes"
+    ]
+  },
+  {
+    "name": {
+      "es": "Negocios_e_Industria",
+      "en": "Business_and_Industrial"
+    },
+    "description": "Información sobre empresas, emprendimientos, gestión corporativa, procesos industriales, producción, logística y economía empresarial.",
+    "confusables": [
+      "Noticias",
+      "Comida_y_Bebida",
+      "Hogar_y_Jardin",
+      "Finanzas",
+      "Autos_y_Vehiculos"
+    ]
+  },
+  {
+    "name": {
+      "es": "Noticias",
+      "en": "News"
+    },
+    "description": "Información actual sobre acontecimientos recientes, eventos políticos, económicos, sociales o internacionales reportados de manera informativa.",
+    "confusables": [
+      "Ley_y_Gobierno",
+      "Finanzas",
+      "Personas_y_Sociedad",
+      "Salud",
+      "Empleos_y_Educacion"
+    ]
+  },
+  {
+    "name": {
+      "es": "Pasatiempos_y_Ocio",
+      "en": "Hobbies_and_Leisure"
+    },
+    "description": "Actividades recreativas realizadas por entretenimiento personal como manualidades, coleccionismo, fotografía, bricolaje y otras aficiones.",
+    "confusables": [
+      "Juegos",
+      "Artes_y_Entretenimiento",
+      "Comida_y_Bebida",
+      "Viajes_y_Transporte",
+      "Belleza_y_Fitness"
+    ]
+  },
+  {
+    "name": {
+      "es": "Personas_y_Sociedad",
+      "en": "People_and_Society"
+    },
+    "description": "Temas sociales, cultura, relaciones humanas, tradiciones, demografía y comportamiento colectivo.",
+    "confusables": [
+      "Artes_y_Entretenimiento",
+      "Empleos_y_Educacion",
+      "Libros_y_Literatura",
+      "Noticias",
+      "Comunidades_En_Linea"
+    ]
+  },
+  {
+    "name": {
+      "es": "Salud",
+      "en": "Health"
+    },
+    "description": "Contenido relacionado con medicina, bienestar físico y mental, prevención de enfermedades, tratamientos y salud pública.",
+    "confusables": [
+      "Ciencia",
+      "Noticias",
+      "Belleza_y_Fitness",
+      "Libros_y_Literatura",
+      "Bienes_Raices"
+    ]
+  },
+  {
+    "name": {
+      "es": "Temas_Sensibles",
+      "en": "Sensitive_Subjects"
+    },
+    "description": "Contenido relacionado con conflictos, violencia, tragedias, desastres, temas delicados o situaciones socialmente sensibles.",
+    "confusables": [
+      "Noticias",
+      "Personas_y_Sociedad",
+      "Ley_y_Gobierno",
+      "Salud",
+      "Libros_y_Literatura"
+    ]
+  },
+  {
+    "name": {
+      "es": "Viajes_y_Transporte",
+      "en": "Travel_and_Transportation"
+    },
+    "description": "Información sobre turismo, destinos, transporte público y privado, planificación de viajes y experiencias de movilidad.",
+    "confusables": [
+      "Noticias",
+      "Pasatiempos_y_Ocio",
+      "Autos_y_Vehiculos",
+      "Artes_y_Entretenimiento",
+      "Temas_Sensibles"
+    ]
+  }
+]

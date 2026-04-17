@@ -1,0 +1,2 @@
+model_name,sacrebleu,chrf++,rtt_sacrebleu,rtt_chrf++
+grok-4-fast-non-reasoning,31.7023313852343,50.47328283315737,12.415653448959977,32.28542492411893

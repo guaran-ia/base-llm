@@ -1,0 +1,3 @@
+[submodule "src/corpus"]
+	path = src/corpus
+	url = https://github.com/guaran-ia/corpus.git
