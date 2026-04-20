@@ -102,5 +102,23 @@
                 "end_point": "https://guarania-maas.cognitiveservices.azure.com"
             }
         ]
+    },
+    {
+        "name": "capibara",
+        "variants": [
+            {
+                "name": "gemma-2-9b-it-SimPO-Jopara",
+                "huggingface_id": "Capibara-LLM/gemma-2-9b-it-SimPO-Jopara"
+            }
+        ]
+    },
+    {
+        "name": "princetop-nlp",
+        "variants": [
+            {
+                "name": "gemma-2-9b-it-SimPO",
+                "huggingface_id": "princeton-nlp/gemma-2-9b-it-SimPO"
+            }
+        ]
     }
 ]
