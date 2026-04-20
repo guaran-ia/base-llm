@@ -8,6 +8,7 @@ from sacrebleu.metrics.bleu import BLEU
 from sacrebleu.metrics.chrf import CHRF
 from src.utils.utils import clean_text
 from src.utils.utils import get_random_text
+from src.utils.utils import iso_to_detection_code
 from src.utils.utils import tokenize
 from src.utils.utils import read_jsonl
 from tqdm import tqdm
@@ -27,11 +28,47 @@ def compute_rtt_score(scores_dict):
     return rtt_score, rtt_score_general
 
 
+def compute_actual_translations(translations, field_name, expected_code):
+    actual = 0
+    for translation_dict in translations:
+        if translation_dict.get(field_name, '').lower() == expected_code:
+            actual += 1
+    return actual
+
+
+def compute_num_valid_translations(translations, lang_code):
+    valid = 0
+    for translation in translations:
+        if translation.get(f'valid_translated_{lang_code}', '') == 'yes':
+            valid += 1
+    return valid
+
+
+def compute_num_language_disagreement(translations, lang_code):
+    agreements = 0
+    iso_code = iso_to_detection_code(lang_code)
+    for translation in translations:
+        if translation.get(f'translated_{lang_code}_language', '') == iso_code and \
+           translation.get(f'valid_translated_{lang_code}', '') == 'yes':
+            agreements += 1
+    return len(translations) - agreements
+
+
+def normalize_corpus_references(references):
+    if not isinstance(references, list):
+        raise TypeError('corpus evaluation references must be a list of strings')
+    if all(isinstance(ref, str) for ref in references):
+        return [references]
+    if len(references) == 1 and isinstance(references[0], list) and all(isinstance(ref, str) for ref in references[0]):
+        return references
+    raise TypeError('corpus evaluation references must be either a list of strings or a list containing a single list of strings')
+
+
 def evaluate_results(predictions, references, metric, mode='sentence'):
     if mode == 'sentence':
         eval_results = metric['obj'].sentence_score(predictions, references)
     else:
-        eval_results = metric['obj'].corpus_score(predictions, references)
+        eval_results = metric['obj'].corpus_score(predictions, normalize_corpus_references(references))
     return eval_results
 
 
@@ -42,7 +79,7 @@ def validate_translation(source, translation_tl, translation_fl, lang_forward_tr
         # the translator
         translation_fl = get_random_text(len(source))
     elif translation_tl == '<translation_missing>' or \
-         translation_fl == '<<translation_missing>':
+         translation_fl == '<translation_missing>':
         # if the translation is missing, we penalize the translator
         translation_fl = get_random_text(len(source))
     else:
@@ -70,7 +107,7 @@ def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
     translation_fl = ' '.join(tokenize(translation_fl))
     # evaluate metrics
     for metric in metrics:
-        eval_result = evaluate_results(source, [translation_fl], metric)
+        eval_result = evaluate_results(translation_fl, [source], metric)
         if 'evaluation' not in translation_dict:
             translation_dict['evaluation'] = {}
         if eval_result:
@@ -102,7 +139,7 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
             translation_domain = bench_data[idx]
         # add to overall list of references and predictions
         predictions.append(translation)
-        references.append([source])
+        references.append(source)
         bleu_scores[translation_domain].append(translation_dict['evaluation']['sacrebleu'])
         chrf_scores[translation_domain].append(translation_dict['evaluation']['chrf++'])
         new_model_results['rtt_translation'].append(translation_dict)
@@ -115,6 +152,50 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
         if eval_result:
             new_model_results['evaluation'][metric['name']] = eval_result.score
             overall_eval[metric['name']] = eval_result.score
+    # compute the number of actual translations based on the detected language 
+    # in the translation output and the expected language code
+    expected_target_lang = iso_to_detection_code(to_lang)
+    expected_source_lang = iso_to_detection_code(from_lang)
+    actual_target_translations = compute_actual_translations(
+        translations_dict, f'translated_{to_lang}_language', expected_target_lang
+    )
+    actual_source_translations = compute_actual_translations(
+        translations_dict, f'translated_{from_lang}_language', expected_source_lang
+    )
+    new_model_results['evaluation'][f'actual_{to_lang}_translations'] = \
+        actual_target_translations
+    new_model_results['evaluation'][f'actual_{from_lang}_translations'] = \
+        actual_source_translations
+    overall_eval[f'actual_{to_lang}_translations'] = actual_target_translations
+    overall_eval[f'actual_{from_lang}_translations'] = actual_source_translations
+    # compute the number of valid translations
+    num_valid_target_translations = compute_num_valid_translations(
+        translations_dict, to_lang
+    )
+    num_valid_source_translations = compute_num_valid_translations(
+        translations_dict, from_lang
+    )
+    new_model_results['evaluation'][f'valid_{to_lang}_translations'] = \
+        num_valid_target_translations
+    new_model_results['evaluation'][f'valid_{from_lang}_translations'] = \
+        num_valid_source_translations
+    overall_eval[f'valid_{to_lang}_translations'] = num_valid_target_translations
+    overall_eval[f'valid_{from_lang}_translations'] = num_valid_source_translations
+    # compute the number of language disagreements between the detected language 
+    # and the valid translation flag
+    num_target_language_disagreement = compute_num_language_disagreement(
+        translations_dict, to_lang
+    )
+    num_source_language_disagreement = compute_num_language_disagreement(
+        translations_dict, from_lang
+    )
+    new_model_results['evaluation'][f'{to_lang}_language_disagreement'] = \
+        num_target_language_disagreement
+    new_model_results['evaluation'][f'{from_lang}_language_disagreement'] = \
+        num_source_language_disagreement
+    overall_eval[f'{to_lang}_language_disagreement'] = num_target_language_disagreement
+    overall_eval[f'{from_lang}_language_disagreement'] = num_source_language_disagreement
+    # compute RTT scores
     rtt_score_domains, rtt_score_general = compute_rtt_score(bleu_scores)
     new_model_results['evaluation']['rtt_sacrebleu'] = rtt_score_general
     new_model_results['evaluation']['rtt_sacrebleu_domains'] = rtt_score_domains
