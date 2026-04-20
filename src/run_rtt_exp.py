@@ -7,13 +7,13 @@ import requests
 import time
 import torch
 
-from corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
+from src.corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
 from datetime import datetime
 from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
-from utils.utils import read_jsonl, write_jsonl
+from src.utils.utils import read_jsonl, write_jsonl
 
 
 identifier = LanguageIdentifier(glotlid=True, fasttext=True, openlid=True)
