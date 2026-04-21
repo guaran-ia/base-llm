@@ -107,8 +107,8 @@
         "name": "capibara",
         "variants": [
             {
-                "name": "gemma-2-9b-it-SimPO-Jopara",
-                "huggingface_id": "Capibara-LLM/gemma-2-9b-it-SimPO-Jopara"
+                "name": "gemma-2-9b-it-SimPO-Jopara-V3.4",
+                "huggingface_id": "rubuntu/gemma-2-9b-it-SimPO-Jopara-V3.4"
             }
         ]
     },
