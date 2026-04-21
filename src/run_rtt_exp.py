@@ -32,26 +32,26 @@ def read_base_models(base_models_list_path):
         return json.load(f)
 
 
-def get_system_prompt(to_lang='guaraní', to_lang_iso='gn', 
-                      from_lang='español', from_lang_iso='es'):
+def get_system_prompt_es(to_lang='guaraní', from_lang='español'):
     return f"""
-        Eres un experto traductor de {from_lang} (iso 639-1: {from_lang_iso}) a 
-        {to_lang} (iso 639-1: {to_lang_iso}) y viceversa.
+        Eres un experto traductor de {from_lang} a {to_lang}.
     """.strip()
 
-def get_system_prompt_en(to_lang='guarani', to_lang_iso='gn', 
-                         from_lang='spanish', from_lang_iso='es'):
+def get_system_prompt_en(to_lang='guarani', from_lang='spanish'):
     return f"""
         You are an expert translator from {from_lang} to {to_lang}.
     """.strip()
 
 
-def get_task_prompt(text, from_lang='español', to_lang='guaraní'):
+def get_task_prompt_es(text, from_lang='español', to_lang='guaraní'):
+    from_lang = 'español' if from_lang == 'spanish' else from_lang
+    to_lang = 'español' if to_lang == 'spanish' else to_lang
     return f"""
-        Traduce de {from_lang} a {to_lang}. Solo devuelve la traducción, sin 
-        explicaciones."
+        Traduce de {from_lang} a {to_lang} el siguiente texto. Devuelve una sola 
+        linea conteniendo únicamente la traducción. No incluyas comentarios 
+        adicionales, ni explicaciones, descripciones, o pensamientos.
 
-        Texto: "{text}"
+        Texto: `{text}`
     """.strip()
 
 
@@ -140,19 +140,25 @@ def do_translation(model, tokenizer, sys_prompt, task_prompt):
 
 
 def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang, 
-                         to_lang, batch_size):
+                         to_lang, batch_size, model_variant):
     max_new_tokens = 50
     trans_results = []
     loop_desc = f'Translating in batches sentences to {to_lang}'
+    model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
     for i in tqdm(range(0, len(sentences), batch_size), desc=loop_desc):
         start_time = time.time()
         batch = sentences[i:i + batch_size]
         prompts = []
         for sentence in batch:
             # concatenate batch sentence to the task prompt
-            task_prompt = sanitize_prompt(
-                get_task_prompt_en(sentence, from_lang, to_lang)
-            )
+            if model_variant_name == 'gemma-2-9b-it-simpo-jopara-v3.4':
+                task_prompt = sanitize_prompt(
+                    get_task_prompt_es(sentence, from_lang, to_lang)
+                )
+            else:
+                task_prompt = sanitize_prompt(
+                    get_task_prompt_en(sentence, from_lang, to_lang)
+                )
             messages = [
                 {'role': 'system', 'content': sys_prompt},
                 {'role': 'user', 'content': task_prompt},
@@ -244,7 +250,7 @@ def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_i
     sentences = [record['text'] for record in rtt_data]
     # batch translate to language (e.g., guarani)
     forward_trans = do_batch_translation(model, tokenizer, sys_prompt, sentences, 
-                                         from_lang, to_lang, batch_size)
+                                         from_lang, to_lang, batch_size, model_variant)
     if model_variant_id in ['google/gemma-4-26B-A4B-it', 'google/gemma-4-E4B-it']:
         forward_trans = gemma4_postprocessing(forward_trans)
     assert len(forward_trans) == len(sentences), \
@@ -252,7 +258,7 @@ def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_i
         f'inconsistent with the number of sentences ({len(sentences)})'
     # batch translate back to language (e.g., spanish)
     backward_trans = do_batch_translation(model, tokenizer, sys_prompt, forward_trans, 
-                                          to_lang, from_lang, batch_size)
+                                          to_lang, from_lang, batch_size, model_variant)
     if model_variant_id in ['google/gemma-4-26B-A4B-it', 'google/gemma-4-E4B-it']:
         backward_trans = gemma4_postprocessing(backward_trans)
     assert len(backward_trans) == len(sentences), \
@@ -304,14 +310,14 @@ def do_run_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
     for record in tqdm(rtt_data, desc=f'Translating sentences with {model_variant_name}'):
         source_text = record['text']
         # translate to `to_lang` using the model
-        task_prompt = get_task_prompt(source_text, from_lang, to_lang)
+        task_prompt = get_task_prompt_en(source_text, from_lang, to_lang)
         trans_text_to_lang, duration = do_translation(
             model, tokenizer, sys_prompt, task_prompt
         )
         trans_duration.append(duration)
         trans_text_to_lang = trans_text_to_lang.replace('\n', ' ').strip()
         # translate back to `from_lang` using the model
-        task_prompt = get_task_prompt(trans_text_to_lang, to_lang, from_lang)
+        task_prompt = get_task_prompt_en(trans_text_to_lang, to_lang, from_lang)
         trans_text_from_lang, duration = do_translation(
             model, tokenizer, sys_prompt, task_prompt
         )
@@ -500,9 +506,6 @@ def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso,
 
 def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso, 
             from_lang, from_lang_iso, batch_size, models_to_exclude):
-    sys_prompt = sanitize_prompt(
-        get_system_prompt_en(to_lang, to_lang_iso, from_lang, from_lang_iso)
-    )
     for base_model in tqdm(list_base_models, desc=f'Running RTT'):
         for model_variant in base_model['variants']:
             if 'huggingface_id' in model_variant:
@@ -511,6 +514,10 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
                 model_variant_name = model_variant['model_id']
             if model_variant_name in models_to_exclude:
                 continue
+            if model_variant_name == 'gemma-2-9b-it-simpo-jopara-v3.4':
+                sys_prompt = sanitize_prompt(get_system_prompt_es())
+            else:
+                sys_prompt = sanitize_prompt(get_system_prompt_en(to_lang, from_lang))
             print(f'\n\nRunning RTT with model: {model_variant_name}...')
             if model_variant_name == 'qwen3.5-9b':
                 # Qwen 3.5 is treated differently since it is not invoked through
