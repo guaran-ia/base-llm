@@ -7,19 +7,59 @@ import requests
 import time
 import torch
 
-from src.corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
 from datetime import datetime
 from dotenv import load_dotenv
 from huggingface_hub import login
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
+from src.utils.translation_validator import validate_translation_language
 from src.utils.utils import read_jsonl, write_jsonl
 
+try:
+    from src.corpus.src.pipeline.language_identifier.language_identifier import LanguageIdentifier
+except ImportError:
+    LanguageIdentifier = None
 
-identifier = LanguageIdentifier(glotlid=True, fasttext=True, openlid=True)
+def get_language_identifier():
+    if LanguageIdentifier is None:
+        print(
+            'LanguageIdentifier is not available. RTT will continue without '
+            'language identification. To enable it, follow the '
+            'optional Language Identification setup in README.md.'
+        )
+        return None
+    return LanguageIdentifier(glotlid=True, fasttext=True, openlid=True)
+
+
+identifier = get_language_identifier()
 
 
 load_dotenv()
+
+
+def get_missing_azure_validation_keys():
+    required_keys = [
+        'AZURE_OPENAI_ENDPOINT',
+        'AZURE_OPENAI_API_VERSION',
+        'AZURE_OPENAI_DEPLOYMENT',
+    ]
+    return [key for key in required_keys if not os.getenv(key)]
+
+
+def annotate_validation_fields_as_missing(results_dir, from_lang_iso, to_lang_iso):
+    target_valid_key = f'valid_translated_{to_lang_iso}'
+    source_valid_key = f'valid_translated_{from_lang_iso}'
+    for filename in os.listdir(results_dir):
+        if not filename.endswith('.json'):
+            continue
+        file_path = os.path.join(results_dir, filename)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            model_results = json.load(f)
+        for translation in model_results.get('rtt_translation', []):
+            translation[target_valid_key] = 'azure_keys_missing'
+            translation[source_valid_key] = 'azure_keys_missing'
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(model_results, f, ensure_ascii=False, indent=4)
 
 
 def read_experiment_config(config_path):
@@ -223,6 +263,8 @@ def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang,
 
 
 def get_lang_translation(translation):
+    if identifier is None:
+        return 'lang_identifier_not_available'
     result = identifier.identify_languages(translation, k=1)
     if result is not None and \
        'languages' in result and \
@@ -276,8 +318,11 @@ def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_i
     }
     for idx, record in enumerate(rtt_data):
         # check language of the forward and backward translation
-        fwd_tran_lang = get_lang_translation(forward_trans[idx])
-        bkw_trans_lang = get_lang_translation(backward_trans[idx])
+        fwd_tran_lang = ''
+        bkw_trans_lang = ''
+        if identifier is not None:
+            fwd_tran_lang = get_lang_translation(forward_trans[idx])
+            bkw_trans_lang = get_lang_translation(backward_trans[idx])
         rtt_model['rtt_translation'].append(
             {
                 'id': record['id'],
@@ -400,8 +445,11 @@ def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang,
             )
             backward_trans = translate_qwen3_5(sys_prompt, task_prompt, client)
         # get language translations
-        fwd_tran_lang = get_lang_translation(forward_trans)
-        bkw_tran_lang = get_lang_translation(backward_trans)
+        fwd_tran_lang = ''
+        bkw_tran_lang = ''
+        if identifier is not None:
+            fwd_tran_lang = get_lang_translation(forward_trans)
+            bkw_tran_lang = get_lang_translation(backward_trans)
         # save translations
         rtt_model['rtt_translation'].append(
             {
@@ -486,8 +534,11 @@ def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso,
                 # perform backward sentences to `from_lang` (e.g., spanish)
                 task_prompt = sanitize_prompt(get_task_prompt_en(forward_trans, to_lang, from_lang))
                 backward_trans = translate_grok(sys_prompt, task_prompt, model_id, end_point)
-                fwd_tran_lang = get_lang_translation(forward_trans)
-                bkw_trans_lang = get_lang_translation(backward_trans)
+                fwd_tran_lang = ''
+                bkw_trans_lang = ''
+                if identifier is not None:
+                    fwd_tran_lang = get_lang_translation(forward_trans)
+                    bkw_trans_lang = get_lang_translation(backward_trans)
                 trans_dict = {
                     'id': record['id'],
                     f'source_text_{from_lang_iso}': sentence,
@@ -580,8 +631,21 @@ def main(exp_dir, batch_size):
     from_lang = exp_config['from_lang_en']
     from_lang_iso = exp_config['from_lang_iso']
     models_to_exclude = [m.lower() for m in exp_config['exclude']]
+    missing_azure_keys = get_missing_azure_validation_keys()
+    skip_validation = len(missing_azure_keys) > 0
+    if skip_validation:
+        print('Skipping translation validation because these environment '\
+              f'variables are missing: {", ".join(missing_azure_keys)}')
     run_rtt(rtt_data, list_base_models, output_dir_path, to_lang, to_lang_iso, 
             from_lang, from_lang_iso, batch_size, models_to_exclude)
+    if not skip_validation:
+        validate_translation_language(
+            os.path.basename(output_dir_path), project_dir, skip_existing=True
+        )
+    else:
+        annotate_validation_fields_as_missing(
+            output_dir_path, from_lang_iso, to_lang_iso
+        )
     
 
 if __name__ == '__main__':
