@@ -68,6 +68,30 @@ RTTScore is used to enable domain-conditioned evaluation and to better understan
 pip install -r requirements.txt
 ```
 
+## Optional: Language Identification
+
+RTT execution can include language identification metadata for each forward/backward
+translation. This is optional. If the module is not installed, RTT still runs and
+language-identification are not conducted.
+
+To install only the `language_identifier` module (without cloning the full `corpus`
+repository into this project), run:
+
+```bash
+rm -rf /tmp/corpus_langid_tmp
+git clone --depth 1 --filter=blob:none --sparse https://github.com/guaran-ia/corpus.git /tmp/corpus_langid_tmp
+git -C /tmp/corpus_langid_tmp sparse-checkout set src/pipeline/language_identifier
+mkdir -p src/corpus/src/pipeline
+cp -R /tmp/corpus_langid_tmp/src/pipeline/language_identifier src/corpus/src/pipeline/
+rm -rf /tmp/corpus_langid_tmp
+```
+
+Verification:
+
+```bash
+ls src/corpus/src/pipeline/language_identifier
+```
+
 ## Running RTT experiments
 
 This section shows the exact commands to run the round-trip translation (RTT) pipeline end-to-end.
