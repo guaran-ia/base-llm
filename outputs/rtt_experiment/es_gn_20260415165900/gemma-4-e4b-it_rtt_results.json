@@ -534,7 +534,7 @@
             "translated_es_language": "grn",
             "evaluation": {
                 "sacrebleu": 0.0,
-                "chrf++": 5.942949560346605
+                "chrf++": 2.191566322751352
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -548,7 +548,7 @@
             "translated_es_language": "grn",
             "evaluation": {
                 "sacrebleu": 0.0,
-                "chrf++": 6.3597137861379665
+                "chrf++": 2.988046144053351
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -1611,8 +1611,8 @@
             "translated_es_text": "El rizador ñemombu avei oñembyaty oñe'ỹi py'aguapy",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 14.320952289897704,
-                "chrf++": 25.023123568973144
+                "sacrebleu": 0.0,
+                "chrf++": 2.1420769041455996
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -5294,7 +5294,7 @@
             "translated_es_language": "grn",
             "evaluation": {
                 "sacrebleu": 0.0,
-                "chrf++": 3.22468324180726
+                "chrf++": 2.763308830095073
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -9465,8 +9465,8 @@
             "translated_es_text": "Peteĩ mba'e oikóva'ỹre ñe'ẽhára ojapytaháhúa oñembyaty kóva'ỹre internet oñembohapy'i hag̃ua chupeĩ re",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 2.139538333930869,
-                "chrf++": 10.913159772961988
+                "sacrebleu": 0.0,
+                "chrf++": 2.9942947070368833
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -12462,7 +12462,7 @@
             "translated_es_language": "grn",
             "evaluation": {
                 "sacrebleu": 0.0,
-                "chrf++": 3.913944865338796
+                "chrf++": 3.0997865690544506
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -15961,8 +15961,8 @@
             "translated_es_text": "Cheta mba'e oñembohasa ndaikatuporaty ñandejára diabetes pe mba'ejapóva mba'aiky retã'apype yvága oñe'ẽ térã kuéra o",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 1.5436644068195333,
-                "chrf++": 10.95114232285668
+                "sacrebleu": 0.0,
+                "chrf++": 2.505571418576593
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -15975,8 +15975,8 @@
             "translated_es_text": "Los partos atendidos por profesionales capacitados en hospitales ñembyaty'ỹvo'ỹva yvota ha ñe'ẽmbyaty oñe'ẽrãmova ñe'ẽmbyaty yvy",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 51.665671158113454,
-                "chrf++": 63.899181387108115
+                "sacrebleu": 0.0,
+                "chrf++": 3.4029308993665977
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -17509,19 +17509,19 @@
         }
     ],
     "evaluation": {
-        "sacrebleu": 3.534908642580769,
-        "chrf++": 17.436833123225433,
+        "sacrebleu": 3.3167706346050005,
+        "chrf++": 17.1787597041745,
         "actual_gn_translations": 1216,
         "actual_es_translations": 1202,
         "valid_gn_translations": 35,
         "valid_es_translations": 996,
         "gn_language_disagreement": 1215,
         "es_language_disagreement": 266,
-        "rtt_sacrebleu": 5.252075197014594,
+        "rtt_sacrebleu": 5.196339336063584,
         "rtt_sacrebleu_domains": {
             "artes_y_entretenimiento": 7.282701306425114,
             "autos_y_vehiculos": 6.645884688476439,
-            "belleza_y_fitness": 6.199818103496299,
+            "belleza_y_fitness": 5.913399057698345,
             "bienes_raices": 5.0422817444830805,
             "ciencia": 8.162929870385938,
             "comida_y_bebida": 5.392182113899838,
@@ -17532,7 +17532,7 @@
             "empleos_y_educacion": 4.58815220936829,
             "finanzas": 5.215785036474389,
             "hogar_y_jardin": 5.088873383171652,
-            "internet_y_telecomunicaciones": 4.029288504870377,
+            "internet_y_telecomunicaciones": 3.986497738191759,
             "juegos": 4.56882314956988,
             "ley_y_gobierno": 7.811582440364623,
             "libros_y_literatura": 5.315535029359322,
@@ -17541,35 +17541,35 @@
             "noticias": 4.282710550118386,
             "pasatiempos_y_ocio": 3.6892599917288336,
             "personas_y_sociedad": 2.5992680693558072,
-            "salud": 3.5923703095370216,
+            "salud": 2.5281835982383623,
             "temas_sensibles": 3.5965292245877674,
             "viajes_y_transporte": 6.066733191782702
         },
-        "rtt_chrf++": 18.18615823482246,
+        "rtt_chrf++": 18.099645981454103,
         "rtt_chrf++_domains": {
-            "artes_y_entretenimiento": 20.687691734434114,
+            "artes_y_entretenimiento": 20.545230716840514,
             "autos_y_vehiculos": 20.66135270432624,
-            "belleza_y_fitness": 18.58381558734378,
+            "belleza_y_fitness": 18.126194654047225,
             "bienes_raices": 18.43108998774583,
             "ciencia": 22.68834881862435,
             "comida_y_bebida": 18.177130232681538,
             "compras": 17.142853571044917,
-            "computadoras_y_electronica": 21.25931190886241,
+            "computadoras_y_electronica": 21.25008442062817,
             "comunidades_en_linea": 20.52767801027374,
             "deportes": 21.40268019343406,
             "empleos_y_educacion": 16.862735553874657,
             "finanzas": 16.699436918269278,
             "hogar_y_jardin": 16.432477239126733,
-            "internet_y_telecomunicaciones": 17.517049843508342,
+            "internet_y_telecomunicaciones": 17.358672542189836,
             "juegos": 16.9644090400604,
             "ley_y_gobierno": 21.29677968877614,
             "libros_y_literatura": 19.422646011460508,
-            "mascotas_y_animales": 15.739784467690356,
+            "mascotas_y_animales": 15.723501301764667,
             "negocios_e_industria": 16.678892582036223,
             "noticias": 18.365951047108457,
             "pasatiempos_y_ocio": 15.53006315024484,
             "personas_y_sociedad": 12.895987747568746,
-            "salud": 14.919802816604854,
+            "salud": 13.540966388764422,
             "temas_sensibles": 15.316050746912714,
             "viajes_y_transporte": 20.449936268548342
         }

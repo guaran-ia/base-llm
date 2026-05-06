@@ -4089,8 +4089,8 @@
             "translated_es_text": "La dieta mediterránea ojehegua ojepuru ha'eicha ñe'ẽme ojéva aceite de oliva, pescados ha ñande pyahu",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 22.204765977268845,
-                "chrf++": 47.60213992089384
+                "sacrebleu": 0.0,
+                "chrf++": 2.527427297504108
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -4467,8 +4467,8 @@
             "translated_es_text": "Opa virtual de la página web omboguasu términos de cantidad, color y características haicha omboguasime hague porãme",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 24.005404395850434,
-                "chrf++": 43.655024171207266
+                "sacrebleu": 0.0,
+                "chrf++": 2.6055851629442666
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -7757,8 +7757,8 @@
             "translated_es_text": "Oĩva ha'ehu sysémiko favorece el crecimiento patrimonial",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 43.01250851313262,
-                "chrf++": 63.86347283802668
+                "sacrebleu": 0.0,
+                "chrf++": 2.385659777192509
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -11355,8 +11355,8 @@
             "translated_es_text": "Vicente Aleixandre oikovevé poesía de la generación del 27",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 52.4735797760732,
-                "chrf++": 75.05928095955781
+                "sacrebleu": 0.0,
+                "chrf++": 3.14863901458872
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -17509,33 +17509,33 @@
         }
     ],
     "evaluation": {
-        "sacrebleu": 4.661680441787058,
-        "chrf++": 21.80428399927029,
+        "sacrebleu": 4.518444307384275,
+        "chrf++": 21.57575024135168,
         "actual_gn_translations": 1208,
         "actual_es_translations": 1204,
         "valid_gn_translations": 135,
         "valid_es_translations": 1058,
         "gn_language_disagreement": 1115,
         "es_language_disagreement": 198,
-        "rtt_sacrebleu": 6.755115384549286,
+        "rtt_sacrebleu": 6.641758377619426,
         "rtt_sacrebleu_domains": {
             "artes_y_entretenimiento": 8.004702263261096,
             "autos_y_vehiculos": 7.677813100127053,
             "belleza_y_fitness": 6.26810967138024,
             "bienes_raices": 5.033592899961511,
             "ciencia": 10.64074227201099,
-            "comida_y_bebida": 7.97750214860873,
-            "compras": 6.52242531798433,
+            "comida_y_bebida": 7.533406829063353,
+            "compras": 6.042317230067322,
             "computadoras_y_electronica": 8.240537922837728,
             "comunidades_en_linea": 5.421100626957517,
             "deportes": 7.427028711080097,
             "empleos_y_educacion": 7.538719209611966,
-            "finanzas": 6.305492518378259,
+            "finanzas": 5.445242348115606,
             "hogar_y_jardin": 5.1917092364887365,
             "internet_y_telecomunicaciones": 5.301452336053708,
             "juegos": 3.7805982793057153,
             "ley_y_gobierno": 8.052434726916308,
-            "libros_y_literatura": 13.493075586405311,
+            "libros_y_literatura": 12.44360399088385,
             "mascotas_y_animales": 4.8686253952443455,
             "negocios_e_industria": 5.640776149670405,
             "noticias": 7.103865739021769,
@@ -17545,25 +17545,25 @@
             "temas_sensibles": 5.917203007468551,
             "viajes_y_transporte": 4.860310303054944
         },
-        "rtt_chrf++": 21.889748454677985,
+        "rtt_chrf++": 21.714138369368015,
         "rtt_chrf++_domains": {
             "artes_y_entretenimiento": 26.573763285145304,
             "autos_y_vehiculos": 21.22901125588034,
             "belleza_y_fitness": 18.930392833576533,
             "bienes_raices": 19.695975152427877,
             "ciencia": 24.607581916730442,
-            "comida_y_bebida": 25.920578667754686,
-            "compras": 21.321909912299585,
+            "comida_y_bebida": 25.019084415286894,
+            "compras": 20.500921132134327,
             "computadoras_y_electronica": 25.327275672109625,
             "comunidades_en_linea": 18.71101184138908,
             "deportes": 23.364251184820674,
             "empleos_y_educacion": 25.752022476445045,
-            "finanzas": 20.18243719026776,
+            "finanzas": 18.952880929051076,
             "hogar_y_jardin": 17.21341626768846,
             "internet_y_telecomunicaciones": 21.712253167850417,
             "juegos": 18.15537433636009,
             "ley_y_gobierno": 24.512620242509527,
-            "libros_y_literatura": 32.08614363342147,
+            "libros_y_literatura": 30.64793079452209,
             "mascotas_y_animales": 17.710619382116548,
             "negocios_e_industria": 19.53733620171204,
             "noticias": 22.69780582240769,

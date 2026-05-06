@@ -3012,7 +3012,7 @@
             "translated_es_language": "grn",
             "evaluation": {
                 "sacrebleu": 0.0,
-                "chrf++": 3.125
+                "chrf++": 2.7822626654770573
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -17509,8 +17509,8 @@
         }
     ],
     "evaluation": {
-        "sacrebleu": 7.834847390944887,
-        "chrf++": 22.652734358478067,
+        "sacrebleu": 7.814109320260222,
+        "chrf++": 22.63808196942575,
         "actual_gn_translations": 1152,
         "actual_es_translations": 1012,
         "valid_gn_translations": 14,
@@ -17545,13 +17545,13 @@
             "temas_sensibles": 17.228415674641955,
             "viajes_y_transporte": 12.778165464717167
         },
-        "rtt_chrf++": 29.70336166281639,
+        "rtt_chrf++": 29.703087472948773,
         "rtt_chrf++_domains": {
             "artes_y_entretenimiento": 33.42245968978944,
             "autos_y_vehiculos": 28.150685788809447,
             "belleza_y_fitness": 31.397999268141376,
             "bienes_raices": 25.719101457618784,
-            "ciencia": 33.88590402449226,
+            "ciencia": 33.879049277801805,
             "comida_y_bebida": 34.82247926591464,
             "compras": 25.070441157152203,
             "computadoras_y_electronica": 25.876185110104046,

@@ -4201,8 +4201,8 @@
             "translated_es_text": "Oñemboty, pehendápe comino ha cardamomo, oikovaite la cocina india típica rehegua oñembotavoi",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 14.230634818318762,
-                "chrf++": 36.03067368279736
+                "sacrebleu": 0.0,
+                "chrf++": 2.696546377506414
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -7659,8 +7659,8 @@
             "translated_es_text": "Oñembo'e ha aula magna oîva oñembo'e oficial ojejapo títulos universitarios oñembo'e promoción oñeñandu gua'erai",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 4.83193071984246,
-                "chrf++": 40.787300152251795
+                "sacrebleu": 0.0,
+                "chrf++": 2.8398892857337428
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -7897,8 +7897,8 @@
             "translated_es_text": "O rentabilidad oikova'ãi pe profil de riesgo-pe",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 8.515289178380433,
-                "chrf++": 33.68149831022198
+                "sacrebleu": 0.0,
+                "chrf++": 3.4058420480566545
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -16283,8 +16283,8 @@
             "translated_es_text": "El kói extrema oñembyaévo miles ojejaite anualmente",
             "translated_es_language": "grn",
             "evaluation": {
-                "sacrebleu": 6.979367151952678,
-                "chrf++": 35.06177477092978
+                "sacrebleu": 0.0,
+                "chrf++": 3.1660800506674747
             },
             "valid_translated_gn": "no",
             "valid_translated_es": "no"
@@ -17509,28 +17509,28 @@
         }
     ],
     "evaluation": {
-        "sacrebleu": 2.007787030272756,
-        "chrf++": 19.783226971132496,
+        "sacrebleu": 1.997020591248336,
+        "chrf++": 19.688194222289674,
         "actual_gn_translations": 1238,
         "actual_es_translations": 1216,
         "valid_gn_translations": 165,
         "valid_es_translations": 960,
         "gn_language_disagreement": 1086,
         "es_language_disagreement": 292,
-        "rtt_sacrebleu": 10.870868586097718,
+        "rtt_sacrebleu": 10.84322280860292,
         "rtt_sacrebleu_domains": {
             "artes_y_entretenimiento": 16.04124620032212,
             "autos_y_vehiculos": 10.903182859961687,
             "belleza_y_fitness": 9.922010535629814,
             "bienes_raices": 13.974395806119519,
             "ciencia": 16.948293482557343,
-            "comida_y_bebida": 14.31822645725374,
+            "comida_y_bebida": 14.033613760887365,
             "compras": 9.841948690206967,
             "computadoras_y_electronica": 13.88940378997575,
             "comunidades_en_linea": 9.607870057010457,
             "deportes": 10.933270900830443,
-            "empleos_y_educacion": 8.824589173189068,
-            "finanzas": 10.08578794046945,
+            "empleos_y_educacion": 8.727950558792218,
+            "finanzas": 9.91548215690184,
             "hogar_y_jardin": 8.258433252286395,
             "internet_y_telecomunicaciones": 14.027239130546931,
             "juegos": 7.662956862789507,
@@ -17542,23 +17542,23 @@
             "pasatiempos_y_ocio": 4.750828298849863,
             "personas_y_sociedad": 5.8207792147187964,
             "salud": 11.781523315221545,
-            "temas_sensibles": 5.301579092143556,
+            "temas_sensibles": 5.161991749104502,
             "viajes_y_transporte": 14.342718482804024
         },
-        "rtt_chrf++": 31.90299872193049,
+        "rtt_chrf++": 31.796236410607104,
         "rtt_chrf++_domains": {
             "artes_y_entretenimiento": 40.6357301038289,
             "autos_y_vehiculos": 33.54049620176716,
             "belleza_y_fitness": 31.12165627712451,
             "bienes_raices": 35.4964853498959,
             "ciencia": 44.80126015134593,
-            "comida_y_bebida": 35.32495725039589,
+            "comida_y_bebida": 34.658274704290065,
             "compras": 28.48049857291005,
             "computadoras_y_electronica": 35.653362199625576,
             "comunidades_en_linea": 28.93957627855585,
             "deportes": 33.55755573582489,
-            "empleos_y_educacion": 29.100645498317,
-            "finanzas": 31.605386719304228,
+            "empleos_y_educacion": 28.34169728098664,
+            "finanzas": 30.999873594060922,
             "hogar_y_jardin": 29.840293818263085,
             "internet_y_telecomunicaciones": 38.527054527047696,
             "juegos": 29.196117887940954,
@@ -17570,7 +17570,7 @@
             "pasatiempos_y_ocio": 22.550093362101308,
             "personas_y_sociedad": 21.35731520782248,
             "salud": 34.133869684445855,
-            "temas_sensibles": 21.83746856790551,
+            "temas_sensibles": 21.199554673500266,
             "viajes_y_transporte": 34.861991139642356
         }
     }

@@ -11237,16 +11237,16 @@
         },
         {
             "id": 803,
-            "source_text_es": "Analiza la estructura narrativa de 'Cien años de soledad'",
-            "translated_gn_text": "Analísase o estructura narrativa de 'Cien añõs de soledad'",
+            "source_text_es": "Analiza la estructura narrativa de 'Cien años de soledad",
+            "translated_gn_text": "Analísase o estructura narrativa de 'Cien añõs de soledad",
             "translated_gn_language": "ast",
-            "translated_es_text": "Se analiza la estructura narrativa de 'Cien años de soledad'",
+            "translated_es_text": "Se analiza la estructura narrativa de 'Cien años de soledad",
             "translated_es_language": "spa",
             "valid_translated_gn": "no",
             "valid_translated_es": "yes",
             "evaluation": {
                 "sacrebleu": 0.0,
-                "chrf++": 3.4164271613915305
+                "chrf++": 3.4577735621313845
             }
         },
         {
@@ -17509,8 +17509,8 @@
         }
     ],
     "evaluation": {
-        "sacrebleu": 7.89011007510268,
-        "chrf++": 28.572370694108884,
+        "sacrebleu": 7.890586549480312,
+        "chrf++": 28.572794555005466,
         "actual_gn_translations": 1236,
         "actual_es_translations": 1245,
         "valid_gn_translations": 157,
@@ -17545,7 +17545,7 @@
             "temas_sensibles": 5.561637251485552,
             "viajes_y_transporte": 10.682879997592797
         },
-        "rtt_chrf++": 29.150018376838037,
+        "rtt_chrf++": 29.150051453958632,
         "rtt_chrf++_domains": {
             "artes_y_entretenimiento": 33.78881022233043,
             "autos_y_vehiculos": 30.531106853506568,
@@ -17563,7 +17563,7 @@
             "internet_y_telecomunicaciones": 33.9438594191298,
             "juegos": 27.47844262572785,
             "ley_y_gobierno": 37.127511864909245,
-            "libros_y_literatura": 27.98542401491414,
+            "libros_y_literatura": 27.986250942928937,
             "mascotas_y_animales": 22.58680543808641,
             "negocios_e_industria": 27.70071405274543,
             "noticias": 22.496155189468297,
