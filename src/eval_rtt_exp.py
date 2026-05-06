@@ -78,6 +78,11 @@ def validate_translation(source, translation_tl, translation_fl, lang_forward_tr
         # was not conducted. A random text is generated then to penalize
         # the translator
         translation_fl = get_random_text(len(source))
+    elif translation_tl == translation_fl:
+        # if the forward and backward translations are equal, it means that
+        # the translation was not conducted. A random text is generated then
+        # to penalize the translator
+        translation_fl = get_random_text(len(source))
     elif translation_tl == '<translation_missing>' or \
          translation_fl == '<translation_missing>':
         # if the translation is missing, we penalize the translator
