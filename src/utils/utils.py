@@ -1,12 +1,14 @@
+import ast
 import json
 import os
 import re
-import sys
-from typing import Any, Dict, Iterator, List, Optional
-
 import spacy
-from lorem_text import lorem
+import sys
+
+from dotenv import load_dotenv
 from nltk.tokenize import TweetTokenizer
+from tqdm import tqdm
+from typing import Any, Dict, Iterator, List, Optional
 
 
 # ---------------------------------------------------------------------
@@ -19,6 +21,16 @@ _nlp.max_length = 10_000_000
 
 
 _tokenizer = TweetTokenizer(preserve_case=False)
+
+
+LANGUAGE_ISO_TO_DETECTION_CODE = {
+    'es': 'spa',
+    'gn': 'grn',
+    'en': 'eng'
+}
+
+
+load_dotenv()
 
 
 def clean_text(text: str):
@@ -47,7 +59,21 @@ def tokenize(text: str):
 
 
 def get_random_text(num_words: int):
-    return lorem.words(num_words)
+    """Generate deterministic penalty text for invalid translations.
+
+    This avoids non-deterministic `lorem` output so evaluation scores are
+    stable across repeated reruns.
+    """
+    if num_words <= 0:
+        return ''
+    return ' '.join(['penalty'] * num_words)
+
+
+def iso_to_detection_code(iso_code: str) -> str:
+    """Map an ISO language code to the expected language-identifier code."""
+    if not iso_code:
+        return ''
+    return LANGUAGE_ISO_TO_DETECTION_CODE.get(iso_code.lower(), iso_code.lower())
 
 
 def read_jsonl(dataset_filepath):
@@ -151,6 +177,21 @@ def write_json(path: str, data: Any, mode='w') -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, mode, encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
+
+def get_rtt_config(result_dir_name: str, project_dir: Optional[str] = None) -> Dict[str, Any]:
+    """Load the RTT experiment config for the given result directory.
+
+    If the passed result directory contains a timestamp suffix, this function
+    maps the directory name to the base experiment config folder.
+    """
+    config_dir = result_dir_name
+    match = re.match(r'^(en_gn|es_gn)(?:_.*)?$', result_dir_name)
+    if match:
+        config_dir = match.group(1)
+
+    config_path = os.path.join(project_dir, 'data', 'rtt_experiments', config_dir, 'config.json') #type: ignore
+    return read_json(config_path)
 
 
 def _get_language_identifier():
