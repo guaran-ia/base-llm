@@ -21,6 +21,12 @@ except ImportError:
     LanguageIdentifier = None
 
 def get_language_identifier():
+    """Create a language identifier instance when module is available.
+
+    Returns:
+        LanguageIdentifier | None: Identifier instance, or ``None`` when optional
+        module is not installed.
+    """
     if LanguageIdentifier is None:
         print(
             'LanguageIdentifier is not available. RTT will continue without '
@@ -38,6 +44,11 @@ load_dotenv()
 
 
 def get_missing_azure_validation_keys():
+    """Return missing Azure OpenAI keys required for translation validation.
+
+    Returns:
+        list[str]: Missing environment variable names.
+    """
     required_keys = [
         'AZURE_OPENAI_ENDPOINT',
         'AZURE_OPENAI_API_VERSION',
@@ -47,6 +58,13 @@ def get_missing_azure_validation_keys():
 
 
 def annotate_validation_fields_as_missing(results_dir, from_lang_iso, to_lang_iso):
+    """Annotate saved RTT files when Azure validation is unavailable.
+
+    Args:
+        results_dir: Directory containing per-model RTT JSON files.
+        from_lang_iso: Source language ISO code.
+        to_lang_iso: Target language ISO code.
+    """
     target_valid_key = f'valid_translated_{to_lang_iso}'
     source_valid_key = f'valid_translated_{from_lang_iso}'
     for filename in os.listdir(results_dir):
@@ -63,27 +81,55 @@ def annotate_validation_fields_as_missing(results_dir, from_lang_iso, to_lang_is
 
 
 def read_experiment_config(config_path):
+    """Read an experiment configuration file.
+
+    Args:
+        config_path: Path to experiment config JSON.
+
+    Returns:
+        dict: Parsed configuration dictionary.
+    """
     with open(config_path, 'r') as f:
         return json.load(f)
 
 
 def read_base_models(base_models_list_path):
+    """Read the base models configuration.
+
+    Args:
+        base_models_list_path: Path to base models JSON file.
+
+    Returns:
+        list[dict]: Base model descriptors.
+    """
     with open(base_models_list_path, 'r') as f:
         return json.load(f)
 
 
 def get_system_prompt_es(to_lang='guaraní', from_lang='español'):
+    """Build the Spanish system prompt for translation."""
     return f"""
         Eres un experto traductor de {from_lang} a {to_lang}.
     """.strip()
 
 def get_system_prompt_en(to_lang='guarani', from_lang='spanish'):
+    """Build the English system prompt for translation."""
     return f"""
         You are an expert translator from {from_lang} to {to_lang}.
     """.strip()
 
 
 def get_task_prompt_es(text, from_lang='español', to_lang='guaraní'):
+    """Build a Spanish translation task prompt.
+
+    Args:
+        text: Input sentence.
+        from_lang: Source language name.
+        to_lang: Target language name.
+
+    Returns:
+        str: Prompt text.
+    """
     from_lang = 'español' if from_lang == 'spanish' else from_lang
     to_lang = 'español' if to_lang == 'spanish' else to_lang
     return f"""
@@ -96,6 +142,16 @@ def get_task_prompt_es(text, from_lang='español', to_lang='guaraní'):
 
 
 def get_task_prompt_en(text, from_lang='spanish', to_lang='guarani'):
+    """Build an English translation task prompt.
+
+    Args:
+        text: Input sentence.
+        from_lang: Source language name.
+        to_lang: Target language name.
+
+    Returns:
+        str: Prompt text.
+    """
     return f"""
         Translate from {from_lang} to {to_lang} the following text. Output exactly 
         one line with the translation ONLY. No further comments, explanation, 
@@ -106,6 +162,7 @@ def get_task_prompt_en(text, from_lang='spanish', to_lang='guarani'):
 
 
 def get_batch_task_prompt(from_lang='español', to_lang='guaraní'):
+    """Build a Spanish batch translation prompt."""
     return f"""
         Traduce los siguientes textos del {from_lang} al {to_lang}, manteniendo 
         el significado del texto original. Los textos a traducir se presentan a 
@@ -117,16 +174,33 @@ def get_batch_task_prompt(from_lang='español', to_lang='guaraní'):
 
 
 def get_text_prompt(text, from_lang, to_lang):
+    """Build an auxiliary text translation prompt."""
     return f"""
         El texto en {from_lang} a traducir a {to_lang} es: `{text}`
     """.strip()
 
 
 def sanitize_prompt(prompt_text):
+    """Normalize prompt whitespace to a single-line format.
+
+    Args:
+        prompt_text: Raw prompt string.
+
+    Returns:
+        str: Sanitized prompt string.
+    """
     return ' '.join([pt for pt in prompt_text.replace('\n', ' ').split(' ') if pt])
 
 
 def load_model(model_id):
+    """Load tokenizer and causal LM for inference.
+
+    Args:
+        model_id: Hugging Face model identifier.
+
+    Returns:
+        tuple: Loaded ``(model, tokenizer)``.
+    """
     # define device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # load model and tokenizer
@@ -148,6 +222,17 @@ def load_model(model_id):
 
 
 def do_translation(model, tokenizer, sys_prompt, task_prompt):
+    """Run single-sentence translation with a local model.
+
+    Args:
+        model: Loaded causal language model.
+        tokenizer: Model tokenizer.
+        sys_prompt: System prompt text.
+        task_prompt: User task prompt text.
+
+    Returns:
+        tuple[str, float]: Translation text and runtime in seconds.
+    """
     start_time = time.time()
     messages = [
         {'role': 'system', 'content': sys_prompt},
@@ -181,6 +266,21 @@ def do_translation(model, tokenizer, sys_prompt, task_prompt):
 
 def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang, 
                          to_lang, batch_size, model_variant):
+    """Run batched translation for a list of sentences.
+
+    Args:
+        model: Loaded causal language model.
+        tokenizer: Model tokenizer.
+        sys_prompt: System prompt text.
+        sentences: Input sentences.
+        from_lang: Source language label.
+        to_lang: Target language label.
+        batch_size: Number of sentences per batch.
+        model_variant: Model variant configuration dictionary.
+
+    Returns:
+        list[str]: Translated sentences in input order.
+    """
     max_new_tokens = 50
     trans_results = []
     loop_desc = f'Translating in batches sentences to {to_lang}'
@@ -263,6 +363,15 @@ def do_batch_translation(model, tokenizer, sys_prompt, sentences, from_lang,
 
 
 def get_lang_translation(translation):
+    """Detect language code for a translated sentence.
+
+    Args:
+        translation: Translation text.
+
+    Returns:
+        str: Top predicted language code, empty string, or
+        ``lang_identifier_not_available`` when optional module is absent.
+    """
     if identifier is None:
         return 'lang_identifier_not_available'
     result = identifier.identify_languages(translation, k=1)
@@ -276,6 +385,14 @@ def get_lang_translation(translation):
 
 
 def gemma4_postprocessing(sentences):
+    """Trim Gemma 4 outputs to first sentence-like segment.
+
+    Args:
+        sentences: Model output sentences.
+
+    Returns:
+        list[str]: Post-processed outputs.
+    """
     postprocess_sentences = []
     for sentence in sentences:
         if '.' in sentence:
@@ -287,6 +404,21 @@ def gemma4_postprocessing(sentences):
 
 def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
                      to_lang, to_lang_iso, batch_size):
+    """Run RTT using batch inference for local Hugging Face models.
+
+    Args:
+        rtt_data: RTT benchmark records.
+        model_variant: Model variant configuration.
+        sys_prompt: System prompt text.
+        from_lang: Source language name.
+        from_lang_iso: Source language ISO code.
+        to_lang: Target language name.
+        to_lang_iso: Target language ISO code.
+        batch_size: Translation batch size.
+
+    Returns:
+        dict: RTT result payload for one model.
+    """
     model_variant_id = model_variant['huggingface_id']
     model, tokenizer = load_model(model_variant_id)
     sentences = [record['text'] for record in rtt_data]
@@ -338,6 +470,20 @@ def do_run_batch_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_i
 
 def do_run_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
                to_lang, to_lang_iso):
+    """Run RTT sentence-by-sentence for local Hugging Face models.
+
+    Args:
+        rtt_data: RTT benchmark records.
+        model_variant: Model variant configuration.
+        sys_prompt: System prompt text.
+        from_lang: Source language name.
+        from_lang_iso: Source language ISO code.
+        to_lang: Target language name.
+        to_lang_iso: Target language ISO code.
+
+    Returns:
+        dict: RTT result payload for one model.
+    """
     trans_duration = []
     model_variant_id = model_variant['huggingface_id']
     model_variant_name = model_variant['huggingface_id'].split('/')[-1].lower()
@@ -380,12 +526,29 @@ def do_run_rtt(rtt_data, model_variant, sys_prompt, from_lang, from_lang_iso,
 
 
 def save_results(results, model_variant_name, output_dir):
+    """Persist a model RTT result JSON file.
+
+    Args:
+        results: RTT result payload.
+        model_variant_name: Output filename prefix.
+        output_dir: Directory where results are stored.
+    """
     # save the results in output_dir
     with open(os.path.join(output_dir, f'{model_variant_name}_rtt_results.json'), 'w') as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
 
 
 def translate_qwen3_5(sys_prompt, task_prompt, client):
+    """Translate text with remotely hosted Qwen 3.5 via OpenAI-compatible API.
+
+    Args:
+        sys_prompt: System prompt text.
+        task_prompt: User task prompt text.
+        client: OpenAI client instance.
+
+    Returns:
+        str: Model response content or empty string.
+    """
     messages = [
         {'role': 'system', 'content': sys_prompt},
         {'role': 'user', 'content': task_prompt},
@@ -412,6 +575,20 @@ def translate_qwen3_5(sys_prompt, task_prompt, client):
 
 def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang, 
                        from_lang_iso, to_lang, to_lang_iso):
+    """Run RTT for Qwen 3.5 hosted through OpenAI-compatible endpoint.
+
+    Args:
+        rtt_data: RTT benchmark records.
+        model_variant: Model name to report.
+        sys_prompt: System prompt text.
+        from_lang: Source language name.
+        from_lang_iso: Source language ISO code.
+        to_lang: Target language name.
+        to_lang_iso: Target language ISO code.
+
+    Returns:
+        dict: RTT result payload for one model.
+    """
     # set qwen requirements from environment variables
     openai.api_key=os.getenv('OPENAI_API_KEY')
     openai.base_url=os.getenv('OPENAI_BASE_URL')
@@ -465,6 +642,17 @@ def do_run_rtt_qwen3_5(rtt_data, model_variant, sys_prompt, from_lang,
 
 
 def translate_grok(sys_prompt, task_prompt, model_id, end_point):
+    """Translate text using Grok endpoint with retry loop.
+
+    Args:
+        sys_prompt: System prompt text.
+        task_prompt: User task prompt text.
+        model_id: Model deployment id.
+        end_point: HTTP endpoint for chat completions.
+
+    Returns:
+        str: Translation text from model response.
+    """
     headers = {
         'Authorization': f'Bearer {os.getenv("AZURE_API_KEY")}',
         'Content-Type': 'application/json'
@@ -491,6 +679,7 @@ def translate_grok(sys_prompt, task_prompt, model_id, end_point):
 
 
 def get_prompt_grok(from_lang, to_lang, sentences):
+    """Build a batched translation prompt format for Grok."""
     return f"""
         Translate the following sentences from {from_lang} to {to_lang}. Respond 
         strictly in this format: [\"translation1\", \"translation2\", ...]. No 
@@ -503,6 +692,22 @@ def get_prompt_grok(from_lang, to_lang, sentences):
 
 def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso, 
                     to_lang, to_lang_iso, end_point, output_dir):
+    """Run RTT for Grok model through Azure-hosted endpoint.
+
+    Args:
+        rtt_data: RTT benchmark records.
+        model_id: Model deployment id.
+        sys_prompt: System prompt text.
+        from_lang: Source language name.
+        from_lang_iso: Source language ISO code.
+        to_lang: Target language name.
+        to_lang_iso: Target language ISO code.
+        end_point: HTTP endpoint for completions.
+        output_dir: Output directory used for temporary checkpoint file.
+
+    Returns:
+        dict: RTT result payload for one model.
+    """
     
     # read grok translation file, if exist
     trans_file_path = os.path.join(output_dir, 'tmp_grok_translations.jsonl')
@@ -557,6 +762,19 @@ def do_run_rtt_grok(rtt_data, model_id, sys_prompt, from_lang, from_lang_iso,
 
 def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso, 
             from_lang, from_lang_iso, batch_size, models_to_exclude):
+    """Run RTT for all configured models and persist outputs.
+
+    Args:
+        rtt_data: RTT benchmark records.
+        list_base_models: Base model and variants configuration.
+        output_dir: Directory where per-model outputs are saved.
+        to_lang: Target language name.
+        to_lang_iso: Target language ISO code.
+        from_lang: Source language name.
+        from_lang_iso: Source language ISO code.
+        batch_size: Batch size for local-model execution.
+        models_to_exclude: Lowercased model variant names to skip.
+    """
     for base_model in tqdm(list_base_models, desc=f'Running RTT'):
         for model_variant in base_model['variants']:
             if 'huggingface_id' in model_variant:
@@ -603,6 +821,12 @@ def run_rtt(rtt_data, list_base_models, output_dir, to_lang, to_lang_iso,
 @click.option('--exp_dir', default='es_gn')
 @click.option('--batch_size', default=64)
 def main(exp_dir, batch_size):
+    """CLI entry point to execute RTT experiments.
+
+    Args:
+        exp_dir: Experiment config directory under ``data/rtt_experiments``.
+        batch_size: Batch size for local-model execution.
+    """
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     config_path = os.path.join(project_dir, 'data', 'rtt_experiments', exp_dir, 'config.json')
     # 0. load environment variables

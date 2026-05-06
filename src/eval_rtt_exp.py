@@ -16,6 +16,14 @@ from tqdm import tqdm
 
 
 def compute_rtt_score(scores_dict):
+    """Compute per-domain RTT score and macro average.
+
+    Args:
+        scores_dict: Mapping of domain name to a list of metric scores.
+
+    Returns:
+        tuple[dict[str, float], float]: Domain-level averages and global RTT score.
+    """
     rtt_score = {}
     domain_score = []
     for domain, scores in scores_dict.items():
@@ -29,6 +37,16 @@ def compute_rtt_score(scores_dict):
 
 
 def compute_actual_translations(translations, field_name, expected_code):
+    """Count translations whose detected language matches the expected code.
+
+    Args:
+        translations: List of translation result dictionaries.
+        field_name: Language field to inspect, e.g. ``translated_gn_language``.
+        expected_code: Expected language detection code.
+
+    Returns:
+        int: Number of matching translations.
+    """
     actual = 0
     for translation_dict in translations:
         if translation_dict.get(field_name, '').lower() == expected_code:
@@ -37,6 +55,15 @@ def compute_actual_translations(translations, field_name, expected_code):
 
 
 def compute_num_valid_translations(translations, lang_code):
+    """Count translations flagged as valid for a language.
+
+    Args:
+        translations: List of translation result dictionaries.
+        lang_code: ISO language code used in ``valid_translated_<lang>``.
+
+    Returns:
+        int: Number of entries with value ``yes``.
+    """
     valid = 0
     for translation in translations:
         if translation.get(f'valid_translated_{lang_code}', '') == 'yes':
@@ -45,6 +72,15 @@ def compute_num_valid_translations(translations, lang_code):
 
 
 def compute_num_language_disagreement(translations, lang_code):
+    """Count disagreements between detected language and validity flag.
+
+    Args:
+        translations: List of translation result dictionaries.
+        lang_code: ISO language code used in translation fields.
+
+    Returns:
+        int: Number of disagreement cases.
+    """
     agreements = 0
     iso_code = iso_to_detection_code(lang_code)
     for translation in translations:
@@ -55,6 +91,17 @@ def compute_num_language_disagreement(translations, lang_code):
 
 
 def normalize_corpus_references(references):
+    """Normalize references to SacreBLEU corpus format.
+
+    Args:
+        references: Either ``list[str]`` or ``list[list[str]]``.
+
+    Returns:
+        list[list[str]]: Normalized reference structure.
+
+    Raises:
+        TypeError: If the input format is invalid.
+    """
     if not isinstance(references, list):
         raise TypeError('corpus evaluation references must be a list of strings')
     if all(isinstance(ref, str) for ref in references):
@@ -65,6 +112,17 @@ def normalize_corpus_references(references):
 
 
 def evaluate_results(predictions, references, metric, mode='sentence'):
+    """Evaluate a prediction using sentence or corpus mode.
+
+    Args:
+        predictions: Prediction string (sentence mode) or list of strings (corpus mode).
+        references: Reference list compatible with SacreBLEU/chrF++.
+        metric: Metric config dictionary containing ``obj`` and ``name``.
+        mode: Evaluation mode, ``sentence`` or ``corpus``.
+
+    Returns:
+        Any: Metric score object returned by SacreBLEU.
+    """
     if mode == 'sentence':
         eval_results = metric['obj'].sentence_score(predictions, references)
     else:
@@ -73,6 +131,17 @@ def evaluate_results(predictions, references, metric, mode='sentence'):
 
 
 def validate_translation(source, translation_tl, translation_fl, lang_forward_trans):
+    """Apply RTT validation penalties to suspicious translations.
+
+    Args:
+        source: Original source sentence.
+        translation_tl: Forward translation sentence.
+        translation_fl: Backward translation sentence.
+        lang_forward_trans: Detected language code for forward translation.
+
+    Returns:
+        str: Backward translation or randomized penalty text.
+    """
     if source == translation_tl:
         # if source and translation are equal, it means that the translation
         # was not conducted. A random text is generated then to penalize
@@ -97,6 +166,17 @@ def validate_translation(source, translation_tl, translation_fl, lang_forward_tr
 
 
 def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
+    """Evaluate one RTT translation pair at sentence level.
+
+    Args:
+        translation_dict: RTT translation record.
+        from_lang: Source ISO code.
+        to_lang: Target ISO code.
+        metrics: List of metric descriptors.
+
+    Returns:
+        tuple[dict, str, str]: Updated translation record, tokenized source, and tokenized prediction.
+    """
     # clean text
     source = clean_text(translation_dict[f'source_text_{from_lang}'])
     translation_fl = clean_text(translation_dict[f'translated_{from_lang}_text'])
@@ -121,6 +201,18 @@ def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
 
 
 def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
+    """Run full evaluation for a single model result file.
+
+    Args:
+        result_file_path: Path to model RTT JSON results.
+        from_lang: Source ISO code.
+        to_lang: Target ISO code.
+        metrics: List of metric descriptors.
+        bench_data: Mapping from sentence id to domain.
+
+    Returns:
+        dict: Aggregated metrics row for overall CSV output.
+    """
     predictions = []
     references = []
     new_model_results = {}
@@ -217,6 +309,14 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
     
 
 def load_metrics(metric_names):
+    """Instantiate metric objects from metric names.
+
+    Args:
+        metric_names: Metric names, e.g. ``["sacrebleu", "chrf++"]``.
+
+    Returns:
+        list[dict]: Metric descriptors with ``name`` and ``obj``.
+    """
     metrics = []
     for metric_name in metric_names:
         if metric_name == 'sacrebleu':
@@ -231,6 +331,15 @@ def load_metrics(metric_names):
 
 
 def get_bench_data(project_dir, lang):
+    """Load benchmark domain mapping for a language dataset.
+
+    Args:
+        project_dir: Project root directory.
+        lang: Source language ISO code.
+
+    Returns:
+        dict[int, str]: Mapping from record id to domain.
+    """
     if lang == 'es':
         bench_dataset_file_path = os.path.join(project_dir, 'data', 'RTTBench-Mono-ES.jsonl')
     else:
@@ -243,6 +352,11 @@ def get_bench_data(project_dir, lang):
 @click.command()
 @click.option('--res_dir', default='', help='Name of the directory containing the results (only the name, not the full path)')
 def main(res_dir):
+    """CLI entry point for RTT evaluation.
+
+    Args:
+        res_dir: Name of RTT output directory under ``outputs/rtt_experiment``.
+    """
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     metrics = load_metrics(['sacrebleu', 'chrf++'])
     if not res_dir:
