@@ -6,6 +6,8 @@ import pandas as pd
 from collections import defaultdict
 from sacrebleu.metrics.bleu import BLEU
 from sacrebleu.metrics.chrf import CHRF
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 from src.utils.utils import clean_text
 from src.utils.utils import get_random_text
 from src.utils.utils import iso_to_detection_code
@@ -13,6 +15,33 @@ from src.utils.utils import tokenize
 from src.utils.utils import read_jsonl
 from tqdm import tqdm
 
+
+COSINE_MODEL_NAME = 'hackathon-pln-es/paraphrase-spanish-distilroberta'
+
+
+def compute_cosine_similarity_score(model, source, translation):
+    """Compute cosine similarity between source and RTT translation."""
+    try:
+        embeddings = model.encode(
+            [source, translation],
+            convert_to_numpy=True
+        )
+    except Exception as e:
+        raise RuntimeError(
+            'Failed to compute embeddings for cosine similarity.'
+        ) from e
+
+    try:
+        return float(
+            cosine_similarity(
+                [embeddings[0]],
+                [embeddings[1]]
+            )[0][0]
+        )
+    except Exception as e:
+        raise RuntimeError(
+            'Failed to compute cosine similarity score.'
+        ) from e
 
 
 def compute_rtt_score(scores_dict):
@@ -165,7 +194,7 @@ def validate_translation(source, translation_tl, translation_fl, lang_forward_tr
     return translation_fl
 
 
-def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
+def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics, cosine_model):
     """Evaluate one RTT translation pair at sentence level.
 
     Args:
@@ -173,6 +202,7 @@ def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
         from_lang: Source ISO code.
         to_lang: Target ISO code.
         metrics: List of metric descriptors.
+        cosine_model: SentenceTransformer model for cosine similarity.
 
     Returns:
         tuple[dict, str, str]: Updated translation record, tokenized source, and tokenized prediction.
@@ -197,10 +227,17 @@ def run_pair_evaluation(translation_dict, from_lang, to_lang, metrics):
             translation_dict['evaluation'] = {}
         if eval_result:
             translation_dict['evaluation'][metric['name']] = eval_result.score
+
+    translation_dict['evaluation']['cosine_similarity'] = compute_cosine_similarity_score(
+        cosine_model,
+        source,
+        translation_fl
+    )
+
     return translation_dict, source, translation_fl
 
 
-def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
+def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data, cosine_model):
     """Run full evaluation for a single model result file.
 
     Args:
@@ -209,6 +246,7 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
         to_lang: Target ISO code.
         metrics: List of metric descriptors.
         bench_data: Mapping from sentence id to domain.
+        cosine_model: SentenceTransformer model for cosine similarity.
 
     Returns:
         dict: Aggregated metrics row for overall CSV output.
@@ -218,6 +256,7 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
     new_model_results = {}
     bleu_scores = defaultdict(list)
     chrf_scores = defaultdict(list)
+    cosine_scores = defaultdict(list)
     with open(result_file_path, 'r') as f:
         model_results = json.load(f)
     new_model_results['model'] = model_results['model']
@@ -228,7 +267,7 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
     # run evaluation of pair translations
     for idx, translation_dict in enumerate(tqdm(translations_dict, desc='Evaluating pair translations...'), start=1):
         translation_dict, source, translation = run_pair_evaluation(
-            translation_dict, from_lang, to_lang, metrics
+            translation_dict, from_lang, to_lang, metrics, cosine_model
         )
         if 'id' in translation_dict:
             translation_domain = bench_data[translation_dict['id']]
@@ -239,6 +278,7 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
         references.append(source)
         bleu_scores[translation_domain].append(translation_dict['evaluation']['sacrebleu'])
         chrf_scores[translation_domain].append(translation_dict['evaluation']['chrf++'])
+        cosine_scores[translation_domain].append(translation_dict['evaluation']['cosine_similarity'])
         new_model_results['rtt_translation'].append(translation_dict)
     # run overall evaluation
     print('Conducting overall evaluation...')
@@ -301,6 +341,10 @@ def run_evaluation(result_file_path, from_lang, to_lang, metrics, bench_data):
     new_model_results['evaluation']['rtt_chrf++'] = rtt_score_general
     new_model_results['evaluation']['rtt_chrf++_domains'] = rtt_score_domains
     overall_eval['rtt_chrf++'] = rtt_score_general
+    rtt_score_domains, rtt_score_general = compute_rtt_score(cosine_scores)
+    new_model_results['evaluation']['rtt_cosine_similarity'] = rtt_score_general
+    new_model_results['evaluation']['rtt_cosine_similarity_domains'] = rtt_score_domains
+    overall_eval['rtt_cosine_similarity'] = rtt_score_general
     # save results
     print('Saving results...')
     with open(result_file_path, 'w') as f:
@@ -359,6 +403,17 @@ def main(res_dir):
     """
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     metrics = load_metrics(['sacrebleu', 'chrf++'])
+    print(f'Loading cosine similarity model: {COSINE_MODEL_NAME}')
+
+    try:
+        cosine_model = SentenceTransformer(COSINE_MODEL_NAME)
+    except Exception as e:
+        raise RuntimeError(
+            f'Failed to load cosine similarity model: {COSINE_MODEL_NAME}'
+        ) from e
+
+    print('Cosine similarity model loaded successfully.')
+    
     if not res_dir:
         print('Name of the directory containing the results should be included '\
               'as parameter (only the name)')
@@ -377,7 +432,7 @@ def main(res_dir):
         model_name = model_result_file.split('_')[0]
         print(f'\n\nEvaluation results of the model: {model_name}')
         model_eval_results = run_evaluation(
-            result_file_path, from_lang, to_lang, metrics, bench_data
+            result_file_path, from_lang, to_lang, metrics, bench_data, cosine_model
         )
         eval_results.append(model_eval_results)
     eval_results_df = pd.DataFrame(eval_results)
