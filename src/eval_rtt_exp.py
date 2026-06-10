@@ -403,6 +403,12 @@ def main(res_dir):
     """
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     metrics = load_metrics(['sacrebleu', 'chrf++'])
+    
+    if not res_dir:
+        print('Name of the directory containing the results should be included '\
+              'as parameter (only the name)')
+        return
+    
     print(f'Loading cosine similarity model: {COSINE_MODEL_NAME}')
 
     try:
@@ -413,11 +419,6 @@ def main(res_dir):
         ) from e
 
     print('Cosine similarity model loaded successfully.')
-    
-    if not res_dir:
-        print('Name of the directory containing the results should be included '\
-              'as parameter (only the name)')
-        return
     from_lang = res_dir.split('_')[0]
     to_lang = res_dir.split('_')[1]
     bench_data = get_bench_data(project_dir, from_lang)
