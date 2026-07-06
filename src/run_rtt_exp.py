@@ -828,7 +828,7 @@ def main(exp_dir, batch_size):
         batch_size: Batch size for local-model execution.
     """
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    config_path = os.path.join(project_dir, 'data', 'rtt_experiments', exp_dir, 'config.json')
+    config_path = os.path.join(project_dir, 'exp', 'rtt_experiments', exp_dir, 'config.json')
     # 0. load environment variables
     load_dotenv(os.path.join(project_dir, 'src', '.env'))
     # 1. login to HuggingFace Hub so we can access gated models, like gemma-3
