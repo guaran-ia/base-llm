@@ -1,0 +1,64 @@
+[
+    {
+       "name":"gemma-3", 
+       "variants": [
+            {
+               "name":"4b-it",
+               "huggingface_id":"google/gemma-3-4b-it"
+            },
+            {
+               "name":"12b-it",
+               "huggingface_id":"google/gemma-3-12b-it"
+            }
+        ]
+    },
+    {
+        "name": "apertus",
+        "variants": [
+            {
+                "name": "8b-it",
+                "huggingface_id": "swiss-ai/Apertus-8B-Instruct-2509"
+            }
+        ]
+    },
+    {
+        "name": "qwen3",
+        "variants": [
+            {
+                "name": "4b-it",
+                "huggingface_id": "Qwen/Qwen3-4B-Instruct-2507"
+            }
+        ]
+    },
+    {
+        "name": "llama-3.1",
+        "variants": [
+            {
+                "name": "8b-it",
+                "huggingface_id": "meta-llama/Meta-Llama-3.1-8B-Instruct"
+            }
+        ]
+    },
+    {
+        "name": "minitron",
+        "variants": [
+            {
+                "name": "4b-it",
+                "huggingface_id": "nvidia/Nemotron-Mini-4B-Instruct"
+            },
+            {
+                "name": "8b-it",
+                "huggingface_id": "nvidia/Mistral-NeMo-Minitron-8B-Instruct"
+            }
+        ]
+    },
+    {
+        "name": "mistral",
+        "variants": [
+            {
+                "name": "7b-it",
+                "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3"
+            }
+        ]
+    }
+]

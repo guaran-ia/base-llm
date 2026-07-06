@@ -1,0 +1,12 @@
+{
+    "rtt_data_path": "data/RTTBench-Mono-ES.jsonl",
+    "base_models_list_path": "data/rtt_experiments/es_gn/base_models.json",
+    "output_dir": "outputs/rtt_experiment/es_gn",
+    "from_lang_es": "español",
+    "from_lang_en": "spanish",
+    "from_lang_iso": "es",
+    "to_lang_es": "guarani",
+    "to_lang_en": "guarani",
+    "to_lang_iso": "gn",
+    "exclude": []
+}
