@@ -39,6 +39,18 @@ def resolve_path(path: str, project_dir: str = PROJECT_DIR) -> str:
     return os.path.join(project_dir, path)
 
 
+def project_relative_path(path: str, project_dir: str = PROJECT_DIR) -> str:
+    """Return a project-relative path for logs when the path is under the project."""
+    abs_project_dir = os.path.abspath(project_dir)
+    abs_path = os.path.abspath(path)
+    try:
+        if os.path.commonpath([abs_project_dir, abs_path]) == abs_project_dir:
+            return os.path.relpath(abs_path, abs_project_dir)
+    except ValueError:
+        pass
+    return path
+
+
 def read_json(path: str) -> Any:
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -503,10 +515,10 @@ def run_evaluation(
     metadata = {
         'timestamp': timestamp,
         'protocol': 'zero-shot-global-mmlu-lite-guarani',
-        'config_path': config_path,
-        'dataset_path': dataset_path,
-        'base_models_path': base_models_path,
-        'output_dir': run_dir,
+        'config_path': project_relative_path(config_path),
+        'dataset_path': project_relative_path(dataset_path),
+        'base_models_path': project_relative_path(base_models_path),
+        'output_dir': project_relative_path(run_dir),
         'batch_size': batch_size,
         'max_samples': max_samples,
         'max_new_tokens': max_new_tokens,
@@ -541,7 +553,7 @@ def run_evaluation(
                 'model_name': model_name,
                 'huggingface_id': model_config['huggingface_id'],
                 'status': 'ok',
-                'predictions_path': predictions_path,
+                'predictions_path': project_relative_path(predictions_path),
                 'skipped_rows_count': len(skipped_rows),
                 'duration_seconds': time.time() - started_at,
             })
@@ -566,7 +578,7 @@ def run_evaluation(
 
     overall_path = os.path.join(run_dir, f'overall_evaluation_{timestamp}.csv')
     write_overall_csv(overall_path, summaries)
-    metadata['overall_evaluation_path'] = overall_path
+    metadata['overall_evaluation_path'] = project_relative_path(overall_path)
     write_json(os.path.join(run_dir, 'run_metadata.json'), metadata)
     return run_dir
 

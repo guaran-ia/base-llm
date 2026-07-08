@@ -1,4 +1,5 @@
 import math
+import json
 import os
 import tempfile
 import unittest
@@ -10,7 +11,9 @@ from src.run_mmlu_lite_eval import (
     flatten_model_variants,
     parse_answer,
     parse_excludes,
+    project_relative_path,
     read_experiment_config,
+    run_cli,
     split_valid_rows,
 )
 
@@ -123,6 +126,64 @@ class MmluLiteEvalTest(unittest.TestCase):
 
             with self.assertRaises(ValueError):
                 read_experiment_config(config_path)
+
+    def test_project_relative_path_formats_project_paths(self):
+        project_dir = '/tmp/project'
+
+        self.assertEqual(
+            project_relative_path('/tmp/project/data/file.jsonl', project_dir),
+            os.path.join('data', 'file.jsonl'),
+        )
+        self.assertEqual(
+            project_relative_path('/tmp/other/file.jsonl', project_dir),
+            '/tmp/other/file.jsonl',
+        )
+
+    def test_run_metadata_uses_project_relative_paths(self):
+        with tempfile.TemporaryDirectory(dir=os.getcwd()) as tmp_dir:
+            dataset_path = os.path.join(tmp_dir, 'dataset.jsonl')
+            base_models_path = os.path.join(tmp_dir, 'base_models.json')
+            config_path = os.path.join(tmp_dir, 'config.json')
+            output_dir = os.path.join(tmp_dir, 'outputs')
+
+            with open(dataset_path, 'w', encoding='utf-8') as f:
+                f.write(json.dumps({
+                    'sample_id': 'ok/1',
+                    'question_gn': 'Mbaepa?',
+                    'option_a_gn': 'Petei',
+                    'option_b_gn': 'Mokoi',
+                    'option_c_gn': 'Mbohapy',
+                    'option_d_gn': 'Irundy',
+                    'answer': 'A',
+                }) + '\n')
+            with open(base_models_path, 'w', encoding='utf-8') as f:
+                json.dump([{
+                    'name': 'empty',
+                    'variants': [],
+                }], f)
+            with open(config_path, 'w', encoding='utf-8') as f:
+                json.dump({
+                    'dataset': dataset_path,
+                    'base_models': base_models_path,
+                    'exclude': [],
+                    'max_new_tokens': 8,
+                    'prompt_language': 'gn',
+                }, f)
+
+            run_dir = run_cli(
+                config=config_path,
+                output_dir=output_dir,
+                batch_size=1,
+                max_samples=None,
+            )
+            with open(os.path.join(run_dir, 'run_metadata.json'), encoding='utf-8') as f:
+                metadata = json.load(f)
+
+            self.assertFalse(os.path.isabs(metadata['config_path']))
+            self.assertFalse(os.path.isabs(metadata['dataset_path']))
+            self.assertFalse(os.path.isabs(metadata['base_models_path']))
+            self.assertFalse(os.path.isabs(metadata['output_dir']))
+            self.assertFalse(os.path.isabs(metadata['overall_evaluation_path']))
 
     def test_build_prompt_includes_question_options_and_answer_contract(self):
         prompt = build_prompt(
