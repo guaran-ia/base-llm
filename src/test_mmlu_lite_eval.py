@@ -9,6 +9,7 @@ from src.run_mmlu_lite_eval import (
     build_prompt,
     filter_models,
     flatten_model_variants,
+    generate_batch,
     parse_answer,
     parse_excludes,
     project_relative_path,
@@ -19,6 +20,57 @@ from src.run_mmlu_lite_eval import (
 
 
 class MmluLiteEvalTest(unittest.TestCase):
+    def test_generate_batch_uses_clean_deterministic_generation_config(self):
+        import torch
+
+        class TokenBatch(dict):
+            def to(self, device):
+                return self
+
+        class FakeTokenizer:
+            eos_token_id = 2
+            pad_token_id = 0
+            unk_token_id = -1
+
+            def apply_chat_template(self, messages, tokenize=False, add_generation_prompt=True):
+                return messages[-1]['content']
+
+            def __call__(self, prompts, return_tensors, padding, truncation):
+                return TokenBatch({
+                    'input_ids': torch.tensor([[10, 11], [12, 13]]),
+                    'attention_mask': torch.tensor([[1, 1], [1, 1]]),
+                })
+
+            def convert_tokens_to_ids(self, token):
+                return None
+
+            def decode(self, tokens, skip_special_tokens=True):
+                return 'A'
+
+        class FakeModel:
+            device = 'cpu'
+
+            def __init__(self):
+                self.generation_config = object()
+                self.captured_generation_config = None
+
+            def generate(self, **kwargs):
+                self.captured_generation_config = kwargs['generation_config']
+                return torch.tensor([[10, 11, 101], [12, 13, 102]])
+
+        model = FakeModel()
+        tokenizer = FakeTokenizer()
+
+        outputs = generate_batch(model, tokenizer, ['prompt 1', 'prompt 2'], max_new_tokens=8)
+
+        generation_config = model.captured_generation_config
+        self.assertEqual(outputs, ['A', 'A'])
+        self.assertEqual(generation_config.max_new_tokens, 8)
+        self.assertFalse(generation_config.do_sample)
+        self.assertIsNone(generation_config.max_length)
+        self.assertIsNone(generation_config.top_p)
+        self.assertIsNone(generation_config.top_k)
+
     def test_split_valid_rows_skips_invalid_options(self):
         rows = [
             {

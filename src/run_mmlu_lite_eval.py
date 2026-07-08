@@ -10,6 +10,7 @@ import torch
 
 from collections import defaultdict
 from datetime import datetime
+from transformers import GenerationConfig
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 
@@ -310,8 +311,6 @@ def load_hf_model(model_id: str) -> Tuple[Any, Any]:
 
 def generate_batch(model: Any, tokenizer: Any, prompts: List[str], max_new_tokens: int) -> List[str]:
     """Generate model outputs for one batch of prompts."""
-    import torch
-
     rendered_prompts = [apply_chat_template(tokenizer, prompt) for prompt in prompts]
     inputs = tokenizer(
         rendered_prompts,
@@ -322,7 +321,6 @@ def generate_batch(model: Any, tokenizer: Any, prompts: List[str], max_new_token
 
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.eos_token_id
-    model.generation_config.pad_token_id = tokenizer.pad_token_id
 
     stop_tokens = [
         tokenizer.eos_token_id,
@@ -332,14 +330,17 @@ def generate_batch(model: Any, tokenizer: Any, prompts: List[str], max_new_token
         tokenizer.convert_tokens_to_ids('</s>'),
     ]
     stop_tokens = [token for token in stop_tokens if token is not None and token != tokenizer.unk_token_id]
+    generation_config = GenerationConfig(
+        max_new_tokens=max_new_tokens,
+        do_sample=False,
+        pad_token_id=tokenizer.pad_token_id,
+        eos_token_id=stop_tokens if stop_tokens else tokenizer.eos_token_id,
+    )
 
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-            pad_token_id=tokenizer.pad_token_id,
-            eos_token_id=stop_tokens if stop_tokens else tokenizer.eos_token_id,
+            generation_config=generation_config,
         )
 
     decoded_outputs = []
