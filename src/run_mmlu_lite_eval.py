@@ -23,6 +23,13 @@ DEFAULT_CONFIG = os.path.join('exp', 'global_mmlu_lite', 'config.json')
 DEFAULT_OUTPUT_DIR = os.path.join('outputs', 'global_mmlu_lite')
 VALID_ANSWERS = {'A', 'B', 'C', 'D'}
 PROMPT_LANGUAGES = {'gn', 'es', 'en'}
+QUESTION_FIELDS = ('question', 'question_gn')
+OPTION_FIELDS = {
+    'a': ('option_a', 'option_a_gn'),
+    'b': ('option_b', 'option_b_gn'),
+    'c': ('option_c', 'option_c_gn'),
+    'd': ('option_d', 'option_d_gn'),
+}
 
 
 def resolve_path(path: str, project_dir: str = PROJECT_DIR) -> str:
@@ -80,19 +87,37 @@ def is_invalid_option(value: Any) -> bool:
     return not stripped or stripped.lower() == 'nan'
 
 
+def first_present_value(row: Dict[str, Any], field_names: Iterable[str]) -> Any:
+    """Return the first present field value from a row."""
+    for field_name in field_names:
+        if field_name in row:
+            return row[field_name]
+    return None
+
+
+def get_question(row: Dict[str, Any]) -> Any:
+    """Return the question text from supported Global MMLU-Lite schemas."""
+    return first_present_value(row, QUESTION_FIELDS)
+
+
+def get_option(row: Dict[str, Any], letter: str) -> Any:
+    """Return an option value from supported Global MMLU-Lite schemas."""
+    return first_present_value(row, OPTION_FIELDS[letter.lower()])
+
+
 def validate_mmlu_row(row: Dict[str, Any]) -> Tuple[bool, List[str]]:
     """Validate the fields needed for four-option MMLU-style evaluation."""
     errors = []
     if not row.get('sample_id'):
         errors.append('missing sample_id')
-    if not isinstance(row.get('question'), str) or not row['question'].strip():
+    question = get_question(row)
+    if not isinstance(question, str) or not question.strip():
         errors.append('missing question')
     if row.get('answer') not in VALID_ANSWERS:
         errors.append('invalid answer')
     for letter in 'abcd':
-        key = f'option_{letter}'
-        if is_invalid_option(row.get(key)):
-            errors.append(f'invalid {key}')
+        if is_invalid_option(get_option(row, letter)):
+            errors.append(f'invalid option_{letter}')
     return len(errors) == 0, errors
 
 
@@ -190,11 +215,11 @@ def build_prompt(row: Dict[str, Any], prompt_language: str = 'gn') -> str:
 
     return (
         f'{instruction}\n\n'
-        f'{question_label}: {row["question"].strip()}\n\n'
-        f'A. {row["option_a"].strip()}\n'
-        f'B. {row["option_b"].strip()}\n'
-        f'C. {row["option_c"].strip()}\n'
-        f'D. {row["option_d"].strip()}\n\n'
+        f'{question_label}: {get_question(row).strip()}\n\n'
+        f'A. {get_option(row, "a").strip()}\n'
+        f'B. {get_option(row, "b").strip()}\n'
+        f'C. {get_option(row, "c").strip()}\n'
+        f'D. {get_option(row, "d").strip()}\n\n'
         f'{answer_label}:'
     )
 
@@ -365,11 +390,11 @@ def build_prediction_rows(rows: List[Dict[str, Any]], raw_outputs: List[str]) ->
             'sample_id': row['sample_id'],
             'subject': row.get('subject'),
             'subject_category': row.get('subject_category'),
-            'question': row['question'],
-            'option_a': row['option_a'],
-            'option_b': row['option_b'],
-            'option_c': row['option_c'],
-            'option_d': row['option_d'],
+            'question': get_question(row),
+            'option_a': get_option(row, 'a'),
+            'option_b': get_option(row, 'b'),
+            'option_c': get_option(row, 'c'),
+            'option_d': get_option(row, 'd'),
             'gold_answer': gold,
             'prediction': prediction,
             'is_correct': prediction == gold,

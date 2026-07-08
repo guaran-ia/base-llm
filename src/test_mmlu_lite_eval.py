@@ -44,6 +44,24 @@ class MmluLiteEvalTest(unittest.TestCase):
         self.assertEqual(skipped_rows[0]['sample_id'], 'bad/1')
         self.assertIn('invalid option_d', skipped_rows[0]['errors'])
 
+    def test_split_valid_rows_accepts_gn_suffixed_fields(self):
+        rows = [
+            {
+                'sample_id': 'ok/gn',
+                'question_gn': 'Mbaepa?',
+                'option_a_gn': 'Petei',
+                'option_b_gn': 'Mokoi',
+                'option_c_gn': 'Mbohapy',
+                'option_d_gn': 'Irundy',
+                'answer': 'A',
+            },
+        ]
+
+        valid_rows, skipped_rows = split_valid_rows(rows)
+
+        self.assertEqual(len(valid_rows), 1)
+        self.assertEqual(skipped_rows, [])
+
     def test_flatten_model_variants_requires_hf_ids(self):
         base_models = [
             {
@@ -143,6 +161,22 @@ class MmluLiteEvalTest(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             build_prompt(row, 'pt')
+
+    def test_build_prompt_supports_gn_suffixed_dataset_fields(self):
+        prompt = build_prompt(
+            {
+                'question_gn': 'Mbaepa ipohyive?',
+                'option_a_gn': 'A opc',
+                'option_b_gn': 'B opc',
+                'option_c_gn': 'C opc',
+                'option_d_gn': 'D opc',
+            }
+        )
+
+        self.assertIn('Porandu: Mbaepa ipohyive?', prompt)
+        self.assertIn('A. A opc', prompt)
+        self.assertIn('D. D opc', prompt)
+
 
     def test_parse_answer(self):
         cases = {
