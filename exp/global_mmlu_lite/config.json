@@ -1,5 +1,5 @@
 {
-    "dataset": "data/global_mmlu_lite_gn_test.jsonl",
+    "dataset": "data/gmlgnt.jsonl",
     "base_models": "exp/global_mmlu_lite/base_models.json",
     "exclude": [],
     "max_new_tokens": 8,
