@@ -337,11 +337,16 @@ def generate_batch(model: Any, tokenizer: Any, prompts: List[str], max_new_token
         eos_token_id=stop_tokens if stop_tokens else tokenizer.eos_token_id,
     )
 
-    with torch.no_grad():
-        outputs = model.generate(
-            **inputs,
-            generation_config=generation_config,
-        )
+    original_model_max_length = getattr(model.generation_config, 'max_length', None)
+    try:
+        model.generation_config.max_length = None
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                generation_config=generation_config,
+            )
+    finally:
+        model.generation_config.max_length = original_model_max_length
 
     decoded_outputs = []
     input_len = inputs['input_ids'].shape[1]

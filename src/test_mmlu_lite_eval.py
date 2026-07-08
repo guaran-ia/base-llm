@@ -51,11 +51,13 @@ class MmluLiteEvalTest(unittest.TestCase):
             device = 'cpu'
 
             def __init__(self):
-                self.generation_config = object()
+                self.generation_config = type('FakeGenerationConfig', (), {'max_length': 8192})()
                 self.captured_generation_config = None
+                self.model_max_length_during_generate = None
 
             def generate(self, **kwargs):
                 self.captured_generation_config = kwargs['generation_config']
+                self.model_max_length_during_generate = self.generation_config.max_length
                 return torch.tensor([[10, 11, 101], [12, 13, 102]])
 
         model = FakeModel()
@@ -70,6 +72,8 @@ class MmluLiteEvalTest(unittest.TestCase):
         self.assertIsNone(generation_config.max_length)
         self.assertIsNone(generation_config.top_p)
         self.assertIsNone(generation_config.top_k)
+        self.assertIsNone(model.model_max_length_during_generate)
+        self.assertEqual(model.generation_config.max_length, 8192)
 
     def test_split_valid_rows_skips_invalid_options(self):
         rows = [
