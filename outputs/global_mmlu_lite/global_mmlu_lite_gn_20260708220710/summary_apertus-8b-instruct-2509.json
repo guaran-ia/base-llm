@@ -1,0 +1,13 @@
+{
+    "total": 0,
+    "correct": 0,
+    "accuracy": 0.0,
+    "accuracy_by_subject_category": {},
+    "accuracy_by_subject": {},
+    "model_name": "apertus-8b-instruct-2509",
+    "huggingface_id": "swiss-ai/Apertus-8B-Instruct-2509",
+    "status": "ok",
+    "predictions_path": "/disk/base-llm/outputs/global_mmlu_lite_gn_20260708220710/predictions_apertus-8b-instruct-2509.jsonl",
+    "skipped_rows_count": 400,
+    "duration_seconds": 67.81321692466736
+}

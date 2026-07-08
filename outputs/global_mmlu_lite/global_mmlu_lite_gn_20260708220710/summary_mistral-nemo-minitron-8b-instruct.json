@@ -1,0 +1,13 @@
+{
+    "total": 0,
+    "correct": 0,
+    "accuracy": 0.0,
+    "accuracy_by_subject_category": {},
+    "accuracy_by_subject": {},
+    "model_name": "mistral-nemo-minitron-8b-instruct",
+    "huggingface_id": "nvidia/Mistral-NeMo-Minitron-8B-Instruct",
+    "status": "ok",
+    "predictions_path": "/disk/base-llm/outputs/global_mmlu_lite_gn_20260708220710/predictions_mistral-nemo-minitron-8b-instruct.jsonl",
+    "skipped_rows_count": 400,
+    "duration_seconds": 70.01068305969238
+}
