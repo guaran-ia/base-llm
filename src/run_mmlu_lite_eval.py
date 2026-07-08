@@ -20,7 +20,7 @@ if PROJECT_DIR not in sys.path:
 
 
 DEFAULT_CONFIG = os.path.join('exp', 'global_mmlu_lite', 'config.json')
-DEFAULT_OUTPUT_DIR = os.path.join('outputs', 'global_mmlu_lite_gn')
+DEFAULT_OUTPUT_DIR = os.path.join('outputs', 'global_mmlu_lite')
 VALID_ANSWERS = {'A', 'B', 'C', 'D'}
 PROMPT_LANGUAGES = {'gn', 'es', 'en'}
 
@@ -463,7 +463,7 @@ def run_evaluation(
     prompt_language: str,
 ) -> str:
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-    run_dir = f'{output_dir}_{timestamp}'
+    run_dir = os.path.join(output_dir, f'gn_{timestamp}') 
     os.makedirs(run_dir, exist_ok=True)
 
     rows = read_jsonl(dataset_path)
