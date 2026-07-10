@@ -511,7 +511,7 @@ def run_evaluation(
     prompt_language: str,
 ) -> str:
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-    run_dir = os.path.join(output_dir, f'gn_{timestamp}') 
+    run_dir = os.path.join(output_dir, f'{prompt_language}_{timestamp}') 
     os.makedirs(run_dir, exist_ok=True)
 
     rows = read_jsonl(dataset_path)
