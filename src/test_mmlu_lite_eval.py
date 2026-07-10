@@ -1,5 +1,6 @@
 import math
 import json
+import csv
 import os
 import tempfile
 import unittest
@@ -16,6 +17,7 @@ from src.run_mmlu_lite_eval import (
     read_experiment_config,
     run_cli,
     split_valid_rows,
+    write_overall_csv,
 )
 
 
@@ -302,6 +304,9 @@ class MmluLiteEvalTest(unittest.TestCase):
             'La respuesta correcta es C.': 'C',
             'Mbohovái: D': 'D',
             'Option B': 'B',
+            'Cthought Thinking Process': 'C',
+            'D thinking process: primero reviso': 'D',
+            'AReasoning: first identify the option': 'A',
             'No se': None,
             '': None,
             None: None,
@@ -317,25 +322,54 @@ class MmluLiteEvalTest(unittest.TestCase):
                     'subject_category': 'STEM',
                     'subject': 'physics',
                     'is_correct': True,
+                    'prediction': 'C',
                 },
                 {
                     'subject_category': 'STEM',
                     'subject': 'physics',
                     'is_correct': False,
+                    'prediction': None,
                 },
                 {
                     'subject_category': 'Humanities',
                     'subject': 'history',
                     'is_correct': True,
+                    'prediction': 'A',
                 },
             ]
         )
 
         self.assertEqual(summary['total'], 3)
         self.assertEqual(summary['correct'], 2)
+        self.assertEqual(summary['null_predictions'], 1)
         self.assertAlmostEqual(summary['accuracy'], 2 / 3)
         self.assertEqual(summary['accuracy_by_subject_category']['STEM']['total'], 2)
         self.assertAlmostEqual(summary['accuracy_by_subject']['physics']['accuracy'], 0.5)
+
+    def test_write_overall_csv_includes_null_predictions(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            output_path = os.path.join(tmp_dir, 'overall.csv')
+
+            write_overall_csv(
+                output_path,
+                [
+                    {
+                        'model_name': 'model-a',
+                        'huggingface_id': 'org/model-a',
+                        'status': 'ok',
+                        'total': 3,
+                        'correct': 2,
+                        'null_predictions': 1,
+                        'accuracy': 2 / 3,
+                        'accuracy_by_subject_category': {},
+                    },
+                ],
+            )
+
+            with open(output_path, encoding='utf-8', newline='') as f:
+                rows = list(csv.DictReader(f))
+
+            self.assertEqual(rows[0]['null_predictions'], '1')
 
 
 if __name__ == '__main__':

@@ -258,6 +258,7 @@ def parse_answer(text: Optional[str]) -> Optional[str]:
     patterns = [
         r'(?:answer|respuesta|mbohov[aá]i)\s*(?:correcta|hekopete)?\s*(?:es|ha\'?e|:)?\s*[\(\[]?([ABCD])[\)\].,:;]?',
         r'(?:option|opci[oó]n)\s*[\(\[]?([ABCD])[\)\].,:;]?',
+        r'^\s*([ABCD])\s*(?:thought|thinking\s+process|thinking|reasoning)\b',
         r'\b([ABCD])\b',
     ]
     for pattern in patterns:
@@ -365,6 +366,7 @@ def aggregate_results(predictions: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Compute overall, category, and subject accuracies."""
     total = len(predictions)
     correct = sum(1 for row in predictions if row['is_correct'])
+    null_predictions = sum(1 for row in predictions if row.get('prediction') is None)
     by_category = defaultdict(lambda: {'total': 0, 'correct': 0})
     by_subject = defaultdict(lambda: {'total': 0, 'correct': 0})
 
@@ -380,6 +382,7 @@ def aggregate_results(predictions: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         'total': total,
         'correct': correct,
+        'null_predictions': null_predictions,
         'accuracy': correct / total if total else 0.0,
         'accuracy_by_subject_category': format_group_scores(by_category),
         'accuracy_by_subject': format_group_scores(by_subject),
@@ -467,6 +470,7 @@ def write_overall_csv(path: str, summaries: List[Dict[str, Any]]) -> None:
         'status',
         'total',
         'correct',
+        'null_predictions',
         'accuracy',
         'error',
     ] + [f'accuracy_category_{sanitize_filename(category)}' for category in category_names]
@@ -483,6 +487,7 @@ def write_overall_csv(path: str, summaries: List[Dict[str, Any]]) -> None:
                 'status': summary.get('status'),
                 'total': summary.get('total', 0),
                 'correct': summary.get('correct', 0),
+                'null_predictions': summary.get('null_predictions', 0),
                 'accuracy': summary.get('accuracy', 0.0),
                 'error': summary.get('error', ''),
             })
@@ -570,6 +575,7 @@ def run_evaluation(
                 'status': 'error',
                 'total': 0,
                 'correct': 0,
+                'null_predictions': 0,
                 'accuracy': 0.0,
                 'error': str(exc),
                 'skipped_rows_count': len(skipped_rows),
