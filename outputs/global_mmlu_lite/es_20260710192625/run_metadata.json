@@ -1,0 +1,107 @@
+{
+    "timestamp": "20260710192625",
+    "protocol": "zero-shot-global-mmlu-lite-guarani",
+    "config_path": "exp/global_mmlu_lite/config_es.json",
+    "dataset_path": "data/gmlgnt.jsonl",
+    "base_models_path": "exp/global_mmlu_lite/base_models.json",
+    "output_dir": "outputs/global_mmlu_lite/es_20260710192625",
+    "batch_size": 16,
+    "max_samples": null,
+    "max_new_tokens": 8,
+    "prompt_language": "es",
+    "invalid_option_policy": "skip",
+    "input_rows": 400,
+    "evaluated_rows": 400,
+    "skipped_rows": [],
+    "excluded_models": [],
+    "selected_models": [
+        {
+            "group_name": "gemma-4",
+            "variant_name": "e4b-it",
+            "huggingface_id": "google/gemma-4-E4B-it",
+            "model_name": "gemma-4-e4b-it"
+        },
+        {
+            "group_name": "gemma-4",
+            "variant_name": "26b-a4b-it",
+            "huggingface_id": "google/gemma-4-26B-A4B-it",
+            "model_name": "gemma-4-26b-a4b-it"
+        },
+        {
+            "group_name": "gemma-3",
+            "variant_name": "4b-it",
+            "huggingface_id": "google/gemma-3-4b-it",
+            "model_name": "gemma-3-4b-it"
+        },
+        {
+            "group_name": "gemma-3",
+            "variant_name": "12b-it",
+            "huggingface_id": "google/gemma-3-12b-it",
+            "model_name": "gemma-3-12b-it"
+        },
+        {
+            "group_name": "apertus",
+            "variant_name": "8b-it",
+            "huggingface_id": "swiss-ai/Apertus-8B-Instruct-2509",
+            "model_name": "apertus-8b-instruct-2509"
+        },
+        {
+            "group_name": "qwen3",
+            "variant_name": "4b-it",
+            "huggingface_id": "Qwen/Qwen3-4B-Instruct-2507",
+            "model_name": "qwen3-4b-instruct-2507"
+        },
+        {
+            "group_name": "llama-3.1",
+            "variant_name": "8b-it",
+            "huggingface_id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+            "model_name": "meta-llama-3.1-8b-instruct"
+        },
+        {
+            "group_name": "minitron",
+            "variant_name": "4b-it",
+            "huggingface_id": "nvidia/Nemotron-Mini-4B-Instruct",
+            "model_name": "nemotron-mini-4b-instruct"
+        },
+        {
+            "group_name": "minitron",
+            "variant_name": "8b-it",
+            "huggingface_id": "nvidia/Mistral-NeMo-Minitron-8B-Instruct",
+            "model_name": "mistral-nemo-minitron-8b-instruct"
+        },
+        {
+            "group_name": "mistral",
+            "variant_name": "7b-it",
+            "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3",
+            "model_name": "mistral-7b-instruct-v0.3"
+        },
+        {
+            "group_name": "capibara",
+            "variant_name": "gemma-2-9b-it-SimPO-Jopara-V3.4",
+            "huggingface_id": "rubuntu/gemma-2-9b-it-SimPO-Jopara-V3.4",
+            "model_name": "gemma-2-9b-it-simpo-jopara-v3.4"
+        },
+        {
+            "group_name": "princetop-nlp",
+            "variant_name": "gemma-2-9b-it-SimPO",
+            "huggingface_id": "princeton-nlp/gemma-2-9b-it-SimPO",
+            "model_name": "gemma-2-9b-it-simpo"
+        }
+    ],
+    "model_errors": [],
+    "completed_models": [
+        "gemma-4-e4b-it",
+        "gemma-4-26b-a4b-it",
+        "gemma-3-4b-it",
+        "gemma-3-12b-it",
+        "apertus-8b-instruct-2509",
+        "qwen3-4b-instruct-2507",
+        "meta-llama-3.1-8b-instruct",
+        "nemotron-mini-4b-instruct",
+        "mistral-nemo-minitron-8b-instruct",
+        "mistral-7b-instruct-v0.3",
+        "gemma-2-9b-it-simpo-jopara-v3.4",
+        "gemma-2-9b-it-simpo"
+    ],
+    "overall_evaluation_path": "outputs/global_mmlu_lite/es_20260710192625/overall_evaluation_20260710192625.csv"
+}
