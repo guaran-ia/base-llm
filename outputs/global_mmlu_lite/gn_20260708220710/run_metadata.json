@@ -1,0 +1,5708 @@
+{
+    "timestamp": "20260708220710",
+    "protocol": "zero-shot-global-mmlu-lite-guarani",
+    "config_path": "/disk/base-llm/exp/global_mmlu_lite/config.json",
+    "dataset_path": "/disk/base-llm/data/gmlgnt.jsonl",
+    "base_models_path": "/disk/base-llm/exp/global_mmlu_lite/base_models.json",
+    "output_dir": "/disk/base-llm/outputs/global_mmlu_lite_gn_20260708220710",
+    "batch_size": 16,
+    "max_samples": null,
+    "max_new_tokens": 8,
+    "prompt_language": "gn",
+    "invalid_option_policy": "skip",
+    "input_rows": 400,
+    "evaluated_rows": 0,
+    "skipped_rows": [
+        {
+            "line": 1,
+            "sample_id": "astronomy/test/58",
+            "subject": "astronomy",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 2,
+            "sample_id": "astronomy/test/107",
+            "subject": "astronomy",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 3,
+            "sample_id": "business_ethics/test/10",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 4,
+            "sample_id": "business_ethics/test/14",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 5,
+            "sample_id": "business_ethics/test/25",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 6,
+            "sample_id": "business_ethics/test/27",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 7,
+            "sample_id": "business_ethics/test/44",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 8,
+            "sample_id": "business_ethics/test/52",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 9,
+            "sample_id": "business_ethics/test/54",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 10,
+            "sample_id": "business_ethics/test/57",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 11,
+            "sample_id": "business_ethics/test/65",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 12,
+            "sample_id": "business_ethics/test/72",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 13,
+            "sample_id": "business_ethics/test/74",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 14,
+            "sample_id": "business_ethics/test/75",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 15,
+            "sample_id": "business_ethics/test/83",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 16,
+            "sample_id": "business_ethics/test/85",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 17,
+            "sample_id": "business_ethics/test/86",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 18,
+            "sample_id": "business_ethics/test/98",
+            "subject": "business_ethics",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 19,
+            "sample_id": "college_biology/test/80",
+            "subject": "college_biology",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 20,
+            "sample_id": "college_biology/test/138",
+            "subject": "college_biology",
+            "subject_category": "STEM",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 21,
+            "sample_id": "college_chemistry/test/20",
+            "subject": "college_chemistry",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 22,
+            "sample_id": "college_chemistry/test/22",
+            "subject": "college_chemistry",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 23,
+            "sample_id": "college_mathematics/test/6",
+            "subject": "college_mathematics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 24,
+            "sample_id": "college_mathematics/test/48",
+            "subject": "college_mathematics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 25,
+            "sample_id": "college_medicine/test/124",
+            "subject": "college_medicine",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 26,
+            "sample_id": "college_medicine/test/143",
+            "subject": "college_medicine",
+            "subject_category": "Medical",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 27,
+            "sample_id": "electrical_engineering/test/22",
+            "subject": "electrical_engineering",
+            "subject_category": "STEM",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 28,
+            "sample_id": "electrical_engineering/test/73",
+            "subject": "electrical_engineering",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 29,
+            "sample_id": "electrical_engineering/test/78",
+            "subject": "electrical_engineering",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 30,
+            "sample_id": "electrical_engineering/test/108",
+            "subject": "electrical_engineering",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 31,
+            "sample_id": "elementary_mathematics/test/8",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 32,
+            "sample_id": "elementary_mathematics/test/18",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 33,
+            "sample_id": "elementary_mathematics/test/99",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 34,
+            "sample_id": "elementary_mathematics/test/126",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 35,
+            "sample_id": "elementary_mathematics/test/132",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 36,
+            "sample_id": "elementary_mathematics/test/267",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 37,
+            "sample_id": "elementary_mathematics/test/298",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 38,
+            "sample_id": "elementary_mathematics/test/326",
+            "subject": "elementary_mathematics",
+            "subject_category": "STEM",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 39,
+            "sample_id": "global_facts/test/7",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 40,
+            "sample_id": "global_facts/test/9",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 41,
+            "sample_id": "global_facts/test/11",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 42,
+            "sample_id": "global_facts/test/13",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 43,
+            "sample_id": "global_facts/test/14",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 44,
+            "sample_id": "global_facts/test/24",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 45,
+            "sample_id": "global_facts/test/57",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 46,
+            "sample_id": "global_facts/test/59",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 47,
+            "sample_id": "global_facts/test/60",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 48,
+            "sample_id": "global_facts/test/70",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 49,
+            "sample_id": "global_facts/test/75",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 50,
+            "sample_id": "global_facts/test/77",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 51,
+            "sample_id": "global_facts/test/95",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 52,
+            "sample_id": "global_facts/test/96",
+            "subject": "global_facts",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 53,
+            "sample_id": "high_school_chemistry/test/82",
+            "subject": "high_school_chemistry",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 54,
+            "sample_id": "high_school_chemistry/test/98",
+            "subject": "high_school_chemistry",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 55,
+            "sample_id": "high_school_computer_science/test/17",
+            "subject": "high_school_computer_science",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 56,
+            "sample_id": "high_school_computer_science/test/54",
+            "subject": "high_school_computer_science",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 57,
+            "sample_id": "high_school_european_history/test/9",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 58,
+            "sample_id": "high_school_european_history/test/11",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 59,
+            "sample_id": "high_school_european_history/test/30",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 60,
+            "sample_id": "high_school_european_history/test/37",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 61,
+            "sample_id": "high_school_european_history/test/43",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 62,
+            "sample_id": "high_school_european_history/test/55",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 63,
+            "sample_id": "high_school_european_history/test/66",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 64,
+            "sample_id": "high_school_european_history/test/93",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 65,
+            "sample_id": "high_school_european_history/test/122",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 66,
+            "sample_id": "high_school_european_history/test/138",
+            "subject": "high_school_european_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 67,
+            "sample_id": "high_school_geography/test/27",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 68,
+            "sample_id": "high_school_geography/test/60",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 69,
+            "sample_id": "high_school_geography/test/61",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 70,
+            "sample_id": "high_school_geography/test/92",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 71,
+            "sample_id": "high_school_geography/test/98",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 72,
+            "sample_id": "high_school_geography/test/102",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 73,
+            "sample_id": "high_school_geography/test/124",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 74,
+            "sample_id": "high_school_geography/test/125",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 75,
+            "sample_id": "high_school_geography/test/145",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 76,
+            "sample_id": "high_school_geography/test/148",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 77,
+            "sample_id": "high_school_geography/test/150",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 78,
+            "sample_id": "high_school_geography/test/152",
+            "subject": "high_school_geography",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 79,
+            "sample_id": "high_school_government_and_politics/test/81",
+            "subject": "high_school_government_and_politics",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 80,
+            "sample_id": "high_school_government_and_politics/test/131",
+            "subject": "high_school_government_and_politics",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 81,
+            "sample_id": "high_school_government_and_politics/test/159",
+            "subject": "high_school_government_and_politics",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 82,
+            "sample_id": "high_school_government_and_politics/test/173",
+            "subject": "high_school_government_and_politics",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 83,
+            "sample_id": "high_school_macroeconomics/test/17",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 84,
+            "sample_id": "high_school_macroeconomics/test/18",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 85,
+            "sample_id": "high_school_macroeconomics/test/43",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 86,
+            "sample_id": "high_school_macroeconomics/test/133",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 87,
+            "sample_id": "high_school_macroeconomics/test/185",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 88,
+            "sample_id": "high_school_macroeconomics/test/210",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 89,
+            "sample_id": "high_school_macroeconomics/test/266",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 90,
+            "sample_id": "high_school_macroeconomics/test/298",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 91,
+            "sample_id": "high_school_macroeconomics/test/313",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 92,
+            "sample_id": "high_school_macroeconomics/test/365",
+            "subject": "high_school_macroeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 93,
+            "sample_id": "high_school_mathematics/test/122",
+            "subject": "high_school_mathematics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 94,
+            "sample_id": "high_school_mathematics/test/145",
+            "subject": "high_school_mathematics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 95,
+            "sample_id": "high_school_microeconomics/test/139",
+            "subject": "high_school_microeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 96,
+            "sample_id": "high_school_microeconomics/test/169",
+            "subject": "high_school_microeconomics",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 97,
+            "sample_id": "high_school_physics/test/10",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 98,
+            "sample_id": "high_school_physics/test/12",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 99,
+            "sample_id": "high_school_physics/test/16",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 100,
+            "sample_id": "high_school_physics/test/55",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 101,
+            "sample_id": "high_school_physics/test/72",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 102,
+            "sample_id": "high_school_physics/test/79",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 103,
+            "sample_id": "high_school_physics/test/85",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 104,
+            "sample_id": "high_school_physics/test/88",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 105,
+            "sample_id": "high_school_physics/test/105",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 106,
+            "sample_id": "high_school_physics/test/119",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 107,
+            "sample_id": "high_school_physics/test/140",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 108,
+            "sample_id": "high_school_physics/test/147",
+            "subject": "high_school_physics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 109,
+            "sample_id": "high_school_psychology/test/82",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 110,
+            "sample_id": "high_school_psychology/test/168",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 111,
+            "sample_id": "high_school_psychology/test/238",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 112,
+            "sample_id": "high_school_psychology/test/281",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 113,
+            "sample_id": "high_school_psychology/test/309",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 114,
+            "sample_id": "high_school_psychology/test/314",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 115,
+            "sample_id": "high_school_psychology/test/404",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 116,
+            "sample_id": "high_school_psychology/test/419",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 117,
+            "sample_id": "high_school_psychology/test/496",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 118,
+            "sample_id": "high_school_psychology/test/501",
+            "subject": "high_school_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 119,
+            "sample_id": "high_school_statistics/test/15",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 120,
+            "sample_id": "high_school_statistics/test/25",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 121,
+            "sample_id": "high_school_statistics/test/33",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 122,
+            "sample_id": "high_school_statistics/test/63",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 123,
+            "sample_id": "high_school_statistics/test/107",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 124,
+            "sample_id": "high_school_statistics/test/124",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 125,
+            "sample_id": "high_school_statistics/test/158",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 126,
+            "sample_id": "high_school_statistics/test/191",
+            "subject": "high_school_statistics",
+            "subject_category": "STEM",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 127,
+            "sample_id": "high_school_us_history/test/8",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 128,
+            "sample_id": "high_school_us_history/test/10",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 129,
+            "sample_id": "high_school_us_history/test/13",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 130,
+            "sample_id": "high_school_us_history/test/17",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 131,
+            "sample_id": "high_school_us_history/test/88",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 132,
+            "sample_id": "high_school_us_history/test/89",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 133,
+            "sample_id": "high_school_us_history/test/115",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 134,
+            "sample_id": "high_school_us_history/test/123",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 135,
+            "sample_id": "high_school_us_history/test/130",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 136,
+            "sample_id": "high_school_us_history/test/187",
+            "subject": "high_school_us_history",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 137,
+            "sample_id": "high_school_world_history/test/33",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 138,
+            "sample_id": "high_school_world_history/test/58",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 139,
+            "sample_id": "high_school_world_history/test/67",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 140,
+            "sample_id": "high_school_world_history/test/87",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 141,
+            "sample_id": "high_school_world_history/test/93",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 142,
+            "sample_id": "high_school_world_history/test/115",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 143,
+            "sample_id": "high_school_world_history/test/145",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 144,
+            "sample_id": "high_school_world_history/test/157",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 145,
+            "sample_id": "high_school_world_history/test/187",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 146,
+            "sample_id": "high_school_world_history/test/225",
+            "subject": "high_school_world_history",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 147,
+            "sample_id": "human_aging/test/21",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 148,
+            "sample_id": "human_aging/test/26",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 149,
+            "sample_id": "human_aging/test/56",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 150,
+            "sample_id": "human_aging/test/59",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 151,
+            "sample_id": "human_aging/test/107",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 152,
+            "sample_id": "human_aging/test/114",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 153,
+            "sample_id": "human_aging/test/121",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 154,
+            "sample_id": "human_aging/test/123",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 155,
+            "sample_id": "human_aging/test/148",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 156,
+            "sample_id": "human_aging/test/155",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 157,
+            "sample_id": "human_aging/test/167",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 158,
+            "sample_id": "human_aging/test/173",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 159,
+            "sample_id": "human_aging/test/181",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 160,
+            "sample_id": "human_aging/test/186",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 161,
+            "sample_id": "human_aging/test/196",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 162,
+            "sample_id": "human_aging/test/201",
+            "subject": "human_aging",
+            "subject_category": "Medical",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 163,
+            "sample_id": "human_sexuality/test/9",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 164,
+            "sample_id": "human_sexuality/test/13",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 165,
+            "sample_id": "human_sexuality/test/23",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 166,
+            "sample_id": "human_sexuality/test/24",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 167,
+            "sample_id": "human_sexuality/test/74",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 168,
+            "sample_id": "human_sexuality/test/101",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 169,
+            "sample_id": "human_sexuality/test/104",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 170,
+            "sample_id": "human_sexuality/test/106",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 171,
+            "sample_id": "human_sexuality/test/107",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 172,
+            "sample_id": "human_sexuality/test/128",
+            "subject": "human_sexuality",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 173,
+            "sample_id": "international_law/test/7",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 174,
+            "sample_id": "international_law/test/17",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 175,
+            "sample_id": "international_law/test/19",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 176,
+            "sample_id": "international_law/test/42",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 177,
+            "sample_id": "international_law/test/50",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 178,
+            "sample_id": "international_law/test/51",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 179,
+            "sample_id": "international_law/test/63",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 180,
+            "sample_id": "international_law/test/76",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 181,
+            "sample_id": "international_law/test/100",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 182,
+            "sample_id": "international_law/test/110",
+            "subject": "international_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 183,
+            "sample_id": "jurisprudence/test/7",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 184,
+            "sample_id": "jurisprudence/test/10",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 185,
+            "sample_id": "jurisprudence/test/33",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 186,
+            "sample_id": "jurisprudence/test/40",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 187,
+            "sample_id": "jurisprudence/test/42",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 188,
+            "sample_id": "jurisprudence/test/62",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 189,
+            "sample_id": "jurisprudence/test/69",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 190,
+            "sample_id": "jurisprudence/test/73",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 191,
+            "sample_id": "jurisprudence/test/81",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 192,
+            "sample_id": "jurisprudence/test/101",
+            "subject": "jurisprudence",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 193,
+            "sample_id": "logical_fallacies/test/23",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 194,
+            "sample_id": "logical_fallacies/test/32",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 195,
+            "sample_id": "logical_fallacies/test/34",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 196,
+            "sample_id": "logical_fallacies/test/53",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 197,
+            "sample_id": "logical_fallacies/test/68",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 198,
+            "sample_id": "logical_fallacies/test/90",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 199,
+            "sample_id": "logical_fallacies/test/130",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 200,
+            "sample_id": "logical_fallacies/test/134",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 201,
+            "sample_id": "logical_fallacies/test/138",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 202,
+            "sample_id": "logical_fallacies/test/156",
+            "subject": "logical_fallacies",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 203,
+            "sample_id": "management/test/5",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 204,
+            "sample_id": "management/test/6",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 205,
+            "sample_id": "management/test/7",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 206,
+            "sample_id": "management/test/9",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 207,
+            "sample_id": "management/test/11",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 208,
+            "sample_id": "management/test/12",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 209,
+            "sample_id": "management/test/26",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 210,
+            "sample_id": "management/test/49",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 211,
+            "sample_id": "management/test/52",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 212,
+            "sample_id": "management/test/59",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 213,
+            "sample_id": "management/test/63",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 214,
+            "sample_id": "management/test/70",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 215,
+            "sample_id": "management/test/79",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 216,
+            "sample_id": "management/test/86",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 217,
+            "sample_id": "management/test/96",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 218,
+            "sample_id": "management/test/98",
+            "subject": "management",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 219,
+            "sample_id": "marketing/test/4",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 220,
+            "sample_id": "marketing/test/33",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 221,
+            "sample_id": "marketing/test/34",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 222,
+            "sample_id": "marketing/test/65",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 223,
+            "sample_id": "marketing/test/99",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 224,
+            "sample_id": "marketing/test/132",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 225,
+            "sample_id": "marketing/test/141",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 226,
+            "sample_id": "marketing/test/149",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 227,
+            "sample_id": "marketing/test/173",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 228,
+            "sample_id": "marketing/test/184",
+            "subject": "marketing",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 229,
+            "sample_id": "miscellaneous/test/3",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 230,
+            "sample_id": "miscellaneous/test/15",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 231,
+            "sample_id": "miscellaneous/test/26",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 232,
+            "sample_id": "miscellaneous/test/39",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 233,
+            "sample_id": "miscellaneous/test/45",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 234,
+            "sample_id": "miscellaneous/test/51",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 235,
+            "sample_id": "miscellaneous/test/92",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 236,
+            "sample_id": "miscellaneous/test/173",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 237,
+            "sample_id": "miscellaneous/test/174",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 238,
+            "sample_id": "miscellaneous/test/210",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 239,
+            "sample_id": "miscellaneous/test/217",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 240,
+            "sample_id": "miscellaneous/test/219",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 241,
+            "sample_id": "miscellaneous/test/268",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 242,
+            "sample_id": "miscellaneous/test/269",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 243,
+            "sample_id": "miscellaneous/test/271",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 244,
+            "sample_id": "miscellaneous/test/287",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 245,
+            "sample_id": "miscellaneous/test/309",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 246,
+            "sample_id": "miscellaneous/test/322",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 247,
+            "sample_id": "miscellaneous/test/367",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 248,
+            "sample_id": "miscellaneous/test/430",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 249,
+            "sample_id": "miscellaneous/test/460",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 250,
+            "sample_id": "miscellaneous/test/469",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 251,
+            "sample_id": "miscellaneous/test/473",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 252,
+            "sample_id": "miscellaneous/test/498",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 253,
+            "sample_id": "miscellaneous/test/504",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 254,
+            "sample_id": "miscellaneous/test/550",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 255,
+            "sample_id": "miscellaneous/test/570",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 256,
+            "sample_id": "miscellaneous/test/577",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 257,
+            "sample_id": "miscellaneous/test/579",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 258,
+            "sample_id": "miscellaneous/test/602",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 259,
+            "sample_id": "miscellaneous/test/612",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 260,
+            "sample_id": "miscellaneous/test/624",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 261,
+            "sample_id": "miscellaneous/test/627",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 262,
+            "sample_id": "miscellaneous/test/629",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 263,
+            "sample_id": "miscellaneous/test/641",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 264,
+            "sample_id": "miscellaneous/test/647",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 265,
+            "sample_id": "miscellaneous/test/648",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 266,
+            "sample_id": "miscellaneous/test/662",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 267,
+            "sample_id": "miscellaneous/test/668",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 268,
+            "sample_id": "miscellaneous/test/708",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 269,
+            "sample_id": "miscellaneous/test/755",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 270,
+            "sample_id": "miscellaneous/test/760",
+            "subject": "miscellaneous",
+            "subject_category": "Other",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 271,
+            "sample_id": "moral_disputes/test/14",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 272,
+            "sample_id": "moral_disputes/test/30",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 273,
+            "sample_id": "moral_disputes/test/48",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 274,
+            "sample_id": "moral_disputes/test/60",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 275,
+            "sample_id": "moral_disputes/test/153",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 276,
+            "sample_id": "moral_disputes/test/162",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 277,
+            "sample_id": "moral_disputes/test/182",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 278,
+            "sample_id": "moral_disputes/test/221",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 279,
+            "sample_id": "moral_disputes/test/285",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 280,
+            "sample_id": "moral_disputes/test/321",
+            "subject": "moral_disputes",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 281,
+            "sample_id": "nutrition/test/14",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 282,
+            "sample_id": "nutrition/test/19",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 283,
+            "sample_id": "nutrition/test/88",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 284,
+            "sample_id": "nutrition/test/140",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 285,
+            "sample_id": "nutrition/test/209",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 286,
+            "sample_id": "nutrition/test/223",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 287,
+            "sample_id": "nutrition/test/243",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 288,
+            "sample_id": "nutrition/test/252",
+            "subject": "nutrition",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 289,
+            "sample_id": "philosophy/test/26",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 290,
+            "sample_id": "philosophy/test/42",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 291,
+            "sample_id": "philosophy/test/45",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 292,
+            "sample_id": "philosophy/test/128",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 293,
+            "sample_id": "philosophy/test/138",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 294,
+            "sample_id": "philosophy/test/139",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 295,
+            "sample_id": "philosophy/test/163",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 296,
+            "sample_id": "philosophy/test/194",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 297,
+            "sample_id": "philosophy/test/263",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 298,
+            "sample_id": "philosophy/test/277",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 299,
+            "sample_id": "philosophy/test/290",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 300,
+            "sample_id": "philosophy/test/305",
+            "subject": "philosophy",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 301,
+            "sample_id": "prehistory/test/63",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 302,
+            "sample_id": "prehistory/test/80",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 303,
+            "sample_id": "prehistory/test/182",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 304,
+            "sample_id": "prehistory/test/187",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 305,
+            "sample_id": "prehistory/test/195",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 306,
+            "sample_id": "prehistory/test/211",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 307,
+            "sample_id": "prehistory/test/255",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 308,
+            "sample_id": "prehistory/test/261",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 309,
+            "sample_id": "prehistory/test/265",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 310,
+            "sample_id": "prehistory/test/285",
+            "subject": "prehistory",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 311,
+            "sample_id": "professional_accounting/test/18",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 312,
+            "sample_id": "professional_accounting/test/24",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 313,
+            "sample_id": "professional_accounting/test/36",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 314,
+            "sample_id": "professional_accounting/test/84",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 315,
+            "sample_id": "professional_accounting/test/106",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 316,
+            "sample_id": "professional_accounting/test/127",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 317,
+            "sample_id": "professional_accounting/test/142",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 318,
+            "sample_id": "professional_accounting/test/151",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 319,
+            "sample_id": "professional_accounting/test/156",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 320,
+            "sample_id": "professional_accounting/test/168",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 321,
+            "sample_id": "professional_accounting/test/175",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 322,
+            "sample_id": "professional_accounting/test/198",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 323,
+            "sample_id": "professional_accounting/test/216",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 324,
+            "sample_id": "professional_accounting/test/224",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 325,
+            "sample_id": "professional_accounting/test/228",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 326,
+            "sample_id": "professional_accounting/test/265",
+            "subject": "professional_accounting",
+            "subject_category": "Business",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 327,
+            "sample_id": "professional_law/test/36",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 328,
+            "sample_id": "professional_law/test/108",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 329,
+            "sample_id": "professional_law/test/273",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 330,
+            "sample_id": "professional_law/test/352",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 331,
+            "sample_id": "professional_law/test/494",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 332,
+            "sample_id": "professional_law/test/527",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 333,
+            "sample_id": "professional_law/test/1096",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 334,
+            "sample_id": "professional_law/test/1131",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 335,
+            "sample_id": "professional_law/test/1204",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 336,
+            "sample_id": "professional_law/test/1255",
+            "subject": "professional_law",
+            "subject_category": "Humanities",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 337,
+            "sample_id": "professional_medicine/test/146",
+            "subject": "professional_medicine",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 338,
+            "sample_id": "professional_medicine/test/254",
+            "subject": "professional_medicine",
+            "subject_category": "Medical",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 339,
+            "sample_id": "professional_psychology/test/41",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 340,
+            "sample_id": "professional_psychology/test/134",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 341,
+            "sample_id": "professional_psychology/test/170",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 342,
+            "sample_id": "professional_psychology/test/179",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 343,
+            "sample_id": "professional_psychology/test/224",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 344,
+            "sample_id": "professional_psychology/test/260",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 345,
+            "sample_id": "professional_psychology/test/313",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 346,
+            "sample_id": "professional_psychology/test/427",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 347,
+            "sample_id": "professional_psychology/test/475",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 348,
+            "sample_id": "professional_psychology/test/536",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 349,
+            "sample_id": "professional_psychology/test/565",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 350,
+            "sample_id": "professional_psychology/test/579",
+            "subject": "professional_psychology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 351,
+            "sample_id": "public_relations/test/3",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 352,
+            "sample_id": "public_relations/test/9",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 353,
+            "sample_id": "public_relations/test/15",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 354,
+            "sample_id": "public_relations/test/16",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 355,
+            "sample_id": "public_relations/test/18",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 356,
+            "sample_id": "public_relations/test/62",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 357,
+            "sample_id": "public_relations/test/69",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 358,
+            "sample_id": "public_relations/test/84",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 359,
+            "sample_id": "public_relations/test/96",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 360,
+            "sample_id": "public_relations/test/103",
+            "subject": "public_relations",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 361,
+            "sample_id": "security_studies/test/36",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 362,
+            "sample_id": "security_studies/test/37",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 363,
+            "sample_id": "security_studies/test/73",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 364,
+            "sample_id": "security_studies/test/86",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 365,
+            "sample_id": "security_studies/test/110",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 366,
+            "sample_id": "security_studies/test/133",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 367,
+            "sample_id": "security_studies/test/145",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 368,
+            "sample_id": "security_studies/test/151",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 369,
+            "sample_id": "security_studies/test/198",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 370,
+            "sample_id": "security_studies/test/221",
+            "subject": "security_studies",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 371,
+            "sample_id": "sociology/test/45",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 372,
+            "sample_id": "sociology/test/52",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 373,
+            "sample_id": "sociology/test/102",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 374,
+            "sample_id": "sociology/test/118",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 375,
+            "sample_id": "sociology/test/126",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 376,
+            "sample_id": "sociology/test/127",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 377,
+            "sample_id": "sociology/test/145",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 378,
+            "sample_id": "sociology/test/159",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 379,
+            "sample_id": "sociology/test/160",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 380,
+            "sample_id": "sociology/test/168",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 381,
+            "sample_id": "sociology/test/173",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 382,
+            "sample_id": "sociology/test/183",
+            "subject": "sociology",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 383,
+            "sample_id": "us_foreign_policy/test/5",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 384,
+            "sample_id": "us_foreign_policy/test/21",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 385,
+            "sample_id": "us_foreign_policy/test/31",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 386,
+            "sample_id": "us_foreign_policy/test/40",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 387,
+            "sample_id": "us_foreign_policy/test/46",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 388,
+            "sample_id": "us_foreign_policy/test/52",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 389,
+            "sample_id": "us_foreign_policy/test/62",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 390,
+            "sample_id": "us_foreign_policy/test/83",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 391,
+            "sample_id": "us_foreign_policy/test/87",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "C",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 392,
+            "sample_id": "us_foreign_policy/test/98",
+            "subject": "us_foreign_policy",
+            "subject_category": "Social Sciences",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 393,
+            "sample_id": "virology/test/72",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 394,
+            "sample_id": "virology/test/91",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 395,
+            "sample_id": "virology/test/99",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 396,
+            "sample_id": "virology/test/106",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 397,
+            "sample_id": "virology/test/122",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 398,
+            "sample_id": "virology/test/135",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "B",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 399,
+            "sample_id": "virology/test/142",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "D",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        },
+        {
+            "line": 400,
+            "sample_id": "virology/test/145",
+            "subject": "virology",
+            "subject_category": "Medical",
+            "answer": "A",
+            "errors": [
+                "missing question",
+                "invalid option_a",
+                "invalid option_b",
+                "invalid option_c",
+                "invalid option_d"
+            ]
+        }
+    ],
+    "excluded_models": [],
+    "selected_models": [
+        {
+            "group_name": "gemma-4",
+            "variant_name": "e4b-it",
+            "huggingface_id": "google/gemma-4-E4B-it",
+            "model_name": "gemma-4-e4b-it"
+        },
+        {
+            "group_name": "gemma-4",
+            "variant_name": "26b-a4b-it",
+            "huggingface_id": "google/gemma-4-26B-A4B-it",
+            "model_name": "gemma-4-26b-a4b-it"
+        },
+        {
+            "group_name": "gemma-3",
+            "variant_name": "4b-it",
+            "huggingface_id": "google/gemma-3-4b-it",
+            "model_name": "gemma-3-4b-it"
+        },
+        {
+            "group_name": "gemma-3",
+            "variant_name": "12b-it",
+            "huggingface_id": "google/gemma-3-12b-it",
+            "model_name": "gemma-3-12b-it"
+        },
+        {
+            "group_name": "apertus",
+            "variant_name": "8b-it",
+            "huggingface_id": "swiss-ai/Apertus-8B-Instruct-2509",
+            "model_name": "apertus-8b-instruct-2509"
+        },
+        {
+            "group_name": "qwen3",
+            "variant_name": "4b-it",
+            "huggingface_id": "Qwen/Qwen3-4B-Instruct-2507",
+            "model_name": "qwen3-4b-instruct-2507"
+        },
+        {
+            "group_name": "llama-3.1",
+            "variant_name": "8b-it",
+            "huggingface_id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+            "model_name": "meta-llama-3.1-8b-instruct"
+        },
+        {
+            "group_name": "minitron",
+            "variant_name": "4b-it",
+            "huggingface_id": "nvidia/Nemotron-Mini-4B-Instruct",
+            "model_name": "nemotron-mini-4b-instruct"
+        },
+        {
+            "group_name": "minitron",
+            "variant_name": "8b-it",
+            "huggingface_id": "nvidia/Mistral-NeMo-Minitron-8B-Instruct",
+            "model_name": "mistral-nemo-minitron-8b-instruct"
+        },
+        {
+            "group_name": "mistral",
+            "variant_name": "7b-it",
+            "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3",
+            "model_name": "mistral-7b-instruct-v0.3"
+        },
+        {
+            "group_name": "capibara",
+            "variant_name": "gemma-2-9b-it-SimPO-Jopara-V3.4",
+            "huggingface_id": "rubuntu/gemma-2-9b-it-SimPO-Jopara-V3.4",
+            "model_name": "gemma-2-9b-it-simpo-jopara-v3.4"
+        },
+        {
+            "group_name": "princetop-nlp",
+            "variant_name": "gemma-2-9b-it-SimPO",
+            "huggingface_id": "princeton-nlp/gemma-2-9b-it-SimPO",
+            "model_name": "gemma-2-9b-it-simpo"
+        }
+    ],
+    "model_errors": [],
+    "completed_models": [
+        "gemma-4-e4b-it",
+        "gemma-4-26b-a4b-it",
+        "gemma-3-4b-it",
+        "gemma-3-12b-it",
+        "apertus-8b-instruct-2509",
+        "qwen3-4b-instruct-2507",
+        "meta-llama-3.1-8b-instruct",
+        "nemotron-mini-4b-instruct",
+        "mistral-nemo-minitron-8b-instruct",
+        "mistral-7b-instruct-v0.3",
+        "gemma-2-9b-it-simpo-jopara-v3.4",
+        "gemma-2-9b-it-simpo"
+    ],
+    "overall_evaluation_path": "/disk/base-llm/outputs/global_mmlu_lite_gn_20260708220710/overall_evaluation_20260708220710.csv"
+}

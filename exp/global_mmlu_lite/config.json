@@ -1,0 +1,7 @@
+{
+    "dataset": "data/gmlgnt.jsonl",
+    "base_models": "exp/global_mmlu_lite/base_models.json",
+    "exclude": [],
+    "max_new_tokens": 8,
+    "prompt_language": "gn"
+}
