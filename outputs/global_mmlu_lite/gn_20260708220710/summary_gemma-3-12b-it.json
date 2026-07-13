@@ -1,0 +1,13 @@
+{
+    "total": 0,
+    "correct": 0,
+    "accuracy": 0.0,
+    "accuracy_by_subject_category": {},
+    "accuracy_by_subject": {},
+    "model_name": "gemma-3-12b-it",
+    "huggingface_id": "google/gemma-3-12b-it",
+    "status": "ok",
+    "predictions_path": "/disk/base-llm/outputs/global_mmlu_lite_gn_20260708220710/predictions_gemma-3-12b-it.jsonl",
+    "skipped_rows_count": 400,
+    "duration_seconds": 103.83074569702148
+}
