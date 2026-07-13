@@ -518,7 +518,7 @@ def run_cli(
 @click.option('--include-path', default=DEFAULT_INCLUDE_PATH, show_default=True)
 @click.option('--output-dir', default=DEFAULT_OUTPUT_DIR, show_default=True)
 @click.option('--model-backend', default='hf', show_default=True)
-@click.option('--device', default='mps', show_default=True)
+@click.option('--device', default='cuda:0', show_default=True)
 @click.option('--batch-size', default=1, show_default=True, type=int)
 @click.option('--dtype', default='float16', show_default=True)
 @click.option('--limit', default=None, help='Optional integer count or fraction for testing.')
