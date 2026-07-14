@@ -8,6 +8,13 @@ The experiment uses a round-trip translation (RTT) strategy: Spanish sentences
 are translated to Guarani, then translated back to Spanish. Results are evaluated 
 by comparing the original Spanish sentence with the back-translated Spanish sentence.
 
+The repository also includes Global MMLU-Lite evaluation utilities for Guarani:
+- a plain Hugging Face generation-based runner implemented in this project;
+- `lm-evaluation-harness` task definitions for likelihood-based and generative
+  evaluation;
+- reporting support for semantic similarity through cosine similarity in the RTT
+  evaluator.
+
 ## Dataset
 
 The experiments are conducted on a synthetic Spanish dataset of 1,250 sentences 
@@ -15,6 +22,7 @@ across 25 domains such as Arts, Literature, Business, and Technology.
 
 Dataset:
 - `data/RTTBench-Mono-ES.jsonl` — 1,250 synthetic Spanish sentences used for Spanish→Guarani→Spanish RTT.
+- `data/gmlgnt.jsonl` — Guarani Global MMLU-Lite examples used by the plain and `lm-eval` evaluation pipelines.
 
 ## Models tested
 
@@ -55,6 +63,7 @@ RTTScore is used to enable domain-conditioned evaluation and to better understan
 
 - `src/` — scripts and utility code used for dataset preparation, experiment execution, and evaluation.
 - `data/` — input datasets and experiment configuration files.
+- `exp/` — experiment configuration files, including RTT, plain Global MMLU-Lite, and `lm-eval` task/model configs.
 - `outputs/` — generated model outputs, translations, and evaluation reports.
 - `data/rtt_experiments/es_gn/base_models.json` — model list for the Guarani evaluation.
 
@@ -174,8 +183,167 @@ Evaluation updates each `*_rtt_results.json` with metrics and creates:
 The evaluation script computes:
 - sentence-level and corpus-level **SacreBLEU**
 - sentence-level and corpus-level **chrF++**
+- sentence-level **cosine similarity** with a sentence-transformer embedding model
 - RTT-style domain averages (`rtt_sacrebleu`, `rtt_chrf++`)
 - translation validity/accounting fields (actual/valid translations and language disagreements)
+
+The cosine similarity model used by the evaluator is configured in
+`src/eval_rtt_exp.py` as `hackathon-pln-es/paraphrase-spanish-distilroberta`.
+Make sure `sentence-transformers` is installed in the active environment before
+running RTT evaluation:
+
+```bash
+pip install sentence-transformers
+```
+
+## Running Global MMLU-Lite experiments
+
+Global MMLU-Lite experiments evaluate multiple-choice question answering in
+Guarani using `data/gmlgnt.jsonl`.
+
+There are two supported paths:
+- the plain project runner in `src/run_mmlu_lite_eval.py`, which asks models to
+  generate an answer and parses the generated text;
+- the `lm-evaluation-harness` runner in `src/run_lm_eval_exp.py`, which can run
+  both likelihood-based and generative `lm-eval` task variants.
+
+### 1. Plain Global MMLU-Lite runner
+
+The plain runner uses the configuration files in `exp/global_mmlu_lite/`:
+
+- `exp/global_mmlu_lite/config.json` — Guarani prompt
+- `exp/global_mmlu_lite/config_en.json` — English prompt
+- `exp/global_mmlu_lite/config_es.json` — Spanish prompt
+- `exp/global_mmlu_lite/base_models.json` — Hugging Face model list
+
+Run the default Guarani prompt evaluation:
+
+```bash
+python src/run_mmlu_lite_eval.py \
+  --config exp/global_mmlu_lite/config.json \
+  --output-dir outputs/global_mmlu_lite \
+  --batch-size 16
+```
+
+Run a small smoke test:
+
+```bash
+python src/run_mmlu_lite_eval.py \
+  --config exp/global_mmlu_lite/config.json \
+  --output-dir outputs/global_mmlu_lite_smoke \
+  --batch-size 1 \
+  --max-samples 10
+```
+
+Outputs are written to a timestamped directory under the selected output
+directory. Per-model prediction files and summary files are created there.
+
+### 2. `lm-eval` setup
+
+The `lm-eval` tasks live in:
+
+- `exp/lm_eval/gn_global_mmlu_lite/gn_global_mmlu_lite.yaml`
+- `exp/lm_eval/gn_global_mmlu_lite_generate/gn_global_mmlu_lite_generate.yaml`
+- `exp/lm_eval/base_models.json`
+
+Install the local harness with Hugging Face support if it is not already
+installed in the active environment:
+
+```bash
+pip install -e "./lm-evaluation-harness[hf]"
+```
+
+Gemma 4 requires a recent `transformers` version. If the environment was created
+from an older `requirements.txt`, upgrade Transformers before running Gemma 4:
+
+```bash
+pip install -U "transformers>=5.13.1" accelerate
+```
+
+Validate that the tasks are discoverable:
+
+```bash
+lm_eval validate --include_path exp/lm_eval --tasks gn_global_mmlu_lite
+lm_eval validate --include_path exp/lm_eval --tasks gn_global_mmlu_lite_generate
+```
+
+### 3. Likelihood-based `lm-eval` task
+
+The task `gn_global_mmlu_lite` uses `output_type: multiple_choice`. It scores the
+likelihood of answer labels `A`, `B`, `C`, and `D`; it does not generate text.
+
+For this protocol, do not apply chat templates by default because some
+instruction-tuned models show strong answer-label priors after chat formatting:
+
+```bash
+python -m src.run_lm_eval_exp \
+  --task gn_global_mmlu_lite \
+  --run-name gn_global_mmlu_lite_likelihood \
+  --no-apply-chat-template \
+  --dtype bfloat16 \
+  --bootstrap-iters 10000
+```
+
+Run one model only:
+
+```bash
+python -m src.run_lm_eval_exp \
+  --task gn_global_mmlu_lite \
+  --run-name diagnostic_gemma4_likelihood \
+  --only google/gemma-4-E4B-it \
+  --no-apply-chat-template \
+  --dtype bfloat16 \
+  --limit 50 \
+  --bootstrap-iters 0
+```
+
+### 4. Generative `lm-eval` task
+
+The task `gn_global_mmlu_lite_generate` uses `output_type: generate_until`. It
+asks the model to generate a single answer letter and uses
+`exp/lm_eval/gn_global_mmlu_lite_generate/utils.py` to parse outputs such as
+`A`, `(B)`, `Answer: C`, or `Mbohovái: D`.
+
+Because this task generates answers rather than scoring label likelihoods, using
+the chat template is usually appropriate for instruction-tuned models:
+
+```bash
+python -m src.run_lm_eval_exp \
+  --task gn_global_mmlu_lite_generate \
+  --run-name gn_global_mmlu_lite_generate \
+  --apply-chat-template \
+  --dtype bfloat16 \
+  --bootstrap-iters 10000
+```
+
+Run a small diagnostic:
+
+```bash
+python -m src.run_lm_eval_exp \
+  --task gn_global_mmlu_lite_generate \
+  --run-name diagnostic_gemma4_generate \
+  --only google/gemma-4-E4B-it \
+  --apply-chat-template \
+  --dtype bfloat16 \
+  --limit 20 \
+  --bootstrap-iters 0
+```
+
+The `lm-eval` runner writes one directory per model and maintains:
+- `run_metadata.json`
+- `summary.csv`
+- `summary.jsonl`
+- per-model `results.json`
+- per-model `summary.json`
+
+Use `--skip-existing` with a fixed `--run-name` to resume an interrupted run:
+
+```bash
+python -m src.run_lm_eval_exp \
+  --task gn_global_mmlu_lite_generate \
+  --run-name gn_global_mmlu_lite_generate \
+  --skip-existing
+```
 
 ## Dependencies
 
