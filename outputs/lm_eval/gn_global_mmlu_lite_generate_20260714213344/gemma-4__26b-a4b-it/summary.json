@@ -1,0 +1,16 @@
+{
+    "group_name": "gemma-4",
+    "variant_name": "26b-a4b-it",
+    "huggingface_id": "google/gemma-4-26B-A4B-it",
+    "model_name": "gemma-4-26b-a4b-it",
+    "run_name": "gemma-4__26b-a4b-it",
+    "task": "gn_global_mmlu_lite_generate",
+    "status": "ok",
+    "started_at": "2026-07-14T21:36:33",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/gemma-4__26b-a4b-it",
+    "acc": 0.42,
+    "stderr": 0.024708830724853692,
+    "finished_at": "2026-07-14T21:39:34",
+    "duration_seconds": 181.02559781074524,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/gemma-4__26b-a4b-it/results.json"
+}

@@ -1,0 +1,16 @@
+{
+    "group_name": "mistral",
+    "variant_name": "7b-it",
+    "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3",
+    "model_name": "mistral-7b-instruct-v0.3",
+    "run_name": "mistral__7b-it",
+    "task": "gn_global_mmlu_lite_generate",
+    "status": "ok",
+    "started_at": "2026-07-14T21:49:49",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/mistral__7b-it",
+    "acc": 0.18,
+    "stderr": 0.01923342954415762,
+    "finished_at": "2026-07-14T21:50:44",
+    "duration_seconds": 54.38068151473999,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/mistral__7b-it/results.json"
+}
