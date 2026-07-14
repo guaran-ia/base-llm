@@ -1,24 +1,25 @@
-# Round-Trip Translation Experiments: The Case of Guarani
+# Guarani LLM Evaluation
 
-This repository contains the scripts, data, and evaluation code for 
-benchmarking open-weight base and commercial LLMs on their ability to communicate 
-in Guarani.
+This repository contains scripts, data, task definitions, and evaluation code for
+benchmarking open-weight and commercial LLMs on Guarani-language capabilities.
+It supports both translation-oriented and question-answering evaluations.
 
-The experiment uses a round-trip translation (RTT) strategy: Spanish sentences 
-are translated to Guarani, then translated back to Spanish. Results are evaluated 
-by comparing the original Spanish sentence with the back-translated Spanish sentence.
+The current evaluation workflows are:
+- **Round-trip translation (RTT):** Spanish or English source sentences are
+  translated to Guarani and then translated back to the source language. Results
+  are evaluated with lexical, character-level, domain-level, and semantic
+  similarity metrics.
+- **Global MMLU-Lite in Guarani:** models answer multiple-choice questions from a
+  Guarani Global MMLU-Lite dataset. The repository supports both a plain
+  generation-based runner and `lm-evaluation-harness` task variants.
+- **`lm-eval` task development:** task configs are included for likelihood-based
+  multiple-choice scoring and generative answer parsing.
 
-The repository also includes Global MMLU-Lite evaluation utilities for Guarani:
-- a plain Hugging Face generation-based runner implemented in this project;
-- `lm-evaluation-harness` task definitions for likelihood-based and generative
-  evaluation;
-- reporting support for semantic similarity through cosine similarity in the RTT
-  evaluator.
+## Datasets
 
-## Dataset
-
-The experiments are conducted on a synthetic Spanish dataset of 1,250 sentences 
-across 25 domains such as Arts, Literature, Business, and Technology.
+The RTT experiments are conducted on synthetic source-language datasets across
+25 domains such as Arts, Literature, Business, and Technology. Global MMLU-Lite
+experiments use a Guarani multiple-choice question-answering dataset.
 
 Dataset:
 - `data/RTTBench-Mono-ES.jsonl` — 1,250 synthetic Spanish sentences used for Spanish→Guarani→Spanish RTT.
@@ -40,7 +41,7 @@ Tested models include:
 - Grok: `grok-4-fast-non-reasoning`
 - GPT: `gpt-4o-mini`
 
-## Experiment design
+## RTT Experiment Design
 
 The RTT workflow is:
 1. Translate Spanish source sentences to Guarani.
@@ -49,7 +50,7 @@ The RTT workflow is:
 
 This design measures how well models preserve meaning and fluency across the Spanish↔Guarani translation round trip.
 
-## Evaluation metrics
+## RTT Evaluation Metrics
 
 Evaluation is based on commonly used translation quality metrics and RTT-specific scoring:
 
