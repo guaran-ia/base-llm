@@ -1,0 +1,27 @@
+task: gn_global_mmlu_lite_generate
+dataset_path: json
+dataset_name: null
+dataset_kwargs:
+  data_files:
+    test: data/gmlgnt.jsonl
+test_split: test
+output_type: generate_until
+doc_to_text: "Eiporavo mbohovái hekopete. Emyengovia peteĩ tai añoite: A, B, C térã D. Ani remyesakã.\n\n{{question.strip()}}\nA. {{option_a}}\nB. {{option_b}}\nC. {{option_c}}\nD. {{option_d}}\n\nMbohovái:"
+doc_to_target: answer
+process_results: !function utils.process_results
+generation_kwargs:
+  until:
+    - "\n"
+    - "."
+    - "</s>"
+    - "<|eot_id|>"
+    - "<|im_end|>"
+    - "<end_of_turn>"
+    - "<turn|>"
+  max_gen_toks: 8
+  do_sample: false
+  temperature: 0.0
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
