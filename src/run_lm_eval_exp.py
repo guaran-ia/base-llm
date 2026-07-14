@@ -9,6 +9,8 @@ import time
 import traceback
 
 from datetime import datetime
+from lm_eval import evaluator
+from lm_eval.tasks import TaskManager
 from typing import Any, Dict, Iterable, List, Optional
 
 
@@ -248,9 +250,6 @@ def run_one_model(
     enable_thinking: Optional[bool],
     bootstrap_iters: int,
 ) -> Dict[str, Any]:
-    from lm_eval import evaluator
-    from lm_eval.tasks import TaskManager
-
     model_output_dir = os.path.join(run_dir, model_config['run_name'])
     results_path = os.path.join(model_output_dir, 'results.json')
     summary_path = os.path.join(model_output_dir, 'summary.json')
