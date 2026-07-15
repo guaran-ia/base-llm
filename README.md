@@ -41,25 +41,6 @@ Tested models include:
 - Grok: `grok-4-fast-non-reasoning`
 - GPT: `gpt-4o-mini`
 
-## RTT Experiment Design
-
-The RTT workflow is:
-1. Translate Spanish source sentences to Guarani.
-2. Translate generated Guarani translations back to Spanish.
-3. Compare original Spanish sentences with back-translated Spanish sentences.
-
-This design measures how well models preserve meaning and fluency across the Spanish↔Guarani translation round trip.
-
-## RTT Evaluation Metrics
-
-Evaluation is based on commonly used translation quality metrics and RTT-specific scoring:
-
-- BLEU
-- chrF++
-- RTTScore (from Zamir et al., [https://arxiv.org/pdf/2601.10804](https://arxiv.org/pdf/2601.10804))
-
-RTTScore is used to enable domain-conditioned evaluation and to better understand how models generalize across domains.
-
 ## Repository structure
 
 - `src/` — scripts and utility code used for dataset preparation, experiment execution, and evaluation.
@@ -78,7 +59,30 @@ RTTScore is used to enable domain-conditioned evaluation and to better understan
 pip install -r requirements.txt
 ```
 
-## Optional: Language Identification
+The cosine similarity model used by the evaluator is configured in
+`src/eval_rtt_exp.py` as `hackathon-pln-es/paraphrase-spanish-distilroberta`.
+Make sure `sentence-transformers` is installed in the active environment before
+running RTT evaluation:
+
+```bash
+pip install sentence-transformers
+```
+
+Install the local harness with Hugging Face support if it is not already
+installed in the active environment:
+
+```bash
+pip install -e "./lm-evaluation-harness[hf]"
+```
+
+Gemma 4 requires a recent `transformers` version. If the environment was created
+from an older `requirements.txt`, upgrade Transformers before running Gemma 4:
+
+```bash
+pip install -U "transformers>=5.13.1" accelerate
+```
+
+### Optional: Language Identification
 
 RTT execution can include language identification metadata for each forward/backward
 translation. This is optional. If the module is not installed, RTT still runs and
@@ -101,6 +105,47 @@ Verification:
 ```bash
 ls src/corpus/src/pipeline/language_identifier
 ```
+
+## Dependencies
+
+Primary dependencies are listed in `requirements.txt`, including:
+- `click`
+- `fasttext`
+- `huggingface_hub`
+- `nltk`
+- `numpy`
+- `openai`
+- `pandas`
+- `python-dotenv`
+- `sacrebleu`
+- `spacy`
+- `torch`
+- `tqdm`
+- `transformers`
+- `lorem-text`
+- `matplotlib`
+- `sentence-transformers`
+
+---
+
+## RTT Experiments
+
+The RTT workflow is:
+1. Translate Spanish source sentences to Guarani.
+2. Translate generated Guarani translations back to Spanish.
+3. Compare original Spanish sentences with back-translated Spanish sentences.
+
+This design measures how well models preserve meaning and fluency across the Spanish↔Guarani translation round trip.
+
+## Metrics
+
+Evaluation is based on commonly used translation quality metrics and RTT-specific scoring:
+
+- BLEU
+- chrF++
+- RTTScore (from Zamir et al., [https://arxiv.org/pdf/2601.10804](https://arxiv.org/pdf/2601.10804))
+
+RTTScore is used to enable domain-conditioned evaluation and to better understand how models generalize across domains.
 
 ## Running RTT experiments
 
@@ -188,16 +233,25 @@ The evaluation script computes:
 - RTT-style domain averages (`rtt_sacrebleu`, `rtt_chrf++`)
 - translation validity/accounting fields (actual/valid translations and language disagreements)
 
-The cosine similarity model used by the evaluator is configured in
-`src/eval_rtt_exp.py` as `hackathon-pln-es/paraphrase-spanish-distilroberta`.
-Make sure `sentence-transformers` is installed in the active environment before
-running RTT evaluation:
+### 6. RTT Analysis
 
-```bash
-pip install sentence-transformers
-```
+A notebook with the analyses is available at the `analysis` directory.
 
-## Running Global MMLU-Lite experiments
+### Notes
+
+- The Spanish dataset was generated with **Azure OpenAI GPT-4.1**.
+- The experiments aim to reveal how translation quality varies across domains and 
+how well models can generalize the Spanish↔Guarani RTT task.
+- Outputs and evaluation reports are saved under `outputs/`.
+
+### Blog Article
+
+A medium [blog article](https://jorgesaldivar.medium.com/how-well-do-todays-ai-models-handle-guarani-169b575a48a3) 
+was published to present the study and discuss the findigs.
+
+---
+
+## Global MMLU-Lite experiments
 
 Global MMLU-Lite experiments evaluate multiple-choice question answering in
 Guarani using `data/gmlgnt.jsonl`.
@@ -246,20 +300,6 @@ The `lm-eval` tasks live in:
 - `exp/lm_eval/gn_global_mmlu_lite/gn_global_mmlu_lite.yaml`
 - `exp/lm_eval/gn_global_mmlu_lite_generate/gn_global_mmlu_lite_generate.yaml`
 - `exp/lm_eval/base_models.json`
-
-Install the local harness with Hugging Face support if it is not already
-installed in the active environment:
-
-```bash
-pip install -e "./lm-evaluation-harness[hf]"
-```
-
-Gemma 4 requires a recent `transformers` version. If the environment was created
-from an older `requirements.txt`, upgrade Transformers before running Gemma 4:
-
-```bash
-pip install -U "transformers>=5.13.1" accelerate
-```
 
 Validate that the tasks are discoverable:
 
@@ -345,39 +385,3 @@ python -m src.run_lm_eval_exp \
   --run-name gn_global_mmlu_lite_generate \
   --skip-existing
 ```
-
-## Dependencies
-
-Primary dependencies are listed in `requirements.txt`, including:
-- `click`
-- `fasttext`
-- `huggingface_hub`
-- `nltk`
-- `numpy`
-- `openai`
-- `pandas`
-- `python-dotenv`
-- `sacrebleu`
-- `spacy`
-- `torch`
-- `tqdm`
-- `transformers`
-- `lorem-text`
-- `matplotlib`
-- `sentence-transformers`
-
-## Notes
-
-- The Spanish dataset was generated with **Azure OpenAI GPT-4.1**.
-- The experiments aim to reveal how translation quality varies across domains and 
-how well models can generalize the Spanish↔Guarani RTT task.
-- Outputs and evaluation reports are saved under `outputs/`.
-
-## Analysis
-
-A notebook with the analyses is available at the `analysis` directory.
-
-## Article
-
-A medium [blog article](https://jorgesaldivar.medium.com/how-well-do-todays-ai-models-handle-guarani-169b575a48a3) 
-was published to present the study and discuss the findigs.
