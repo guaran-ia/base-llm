@@ -47,7 +47,6 @@ Tested models include:
 - `data/` — input datasets and experiment configuration files.
 - `exp/` — experiment configuration files, including RTT, plain Global MMLU-Lite, and `lm-eval` task/model configs.
 - `outputs/` — generated model outputs, translations, and evaluation reports.
-- `data/rtt_experiments/es_gn/base_models.json` — model list for the Guarani evaluation.
 
 ## Installation
 
@@ -137,7 +136,7 @@ The RTT workflow is:
 
 This design measures how well models preserve meaning and fluency across the Spanish↔Guarani translation round trip.
 
-## Metrics
+### Metrics
 
 Evaluation is based on commonly used translation quality metrics and RTT-specific scoring:
 
@@ -147,11 +146,11 @@ Evaluation is based on commonly used translation quality metrics and RTT-specifi
 
 RTTScore is used to enable domain-conditioned evaluation and to better understand how models generalize across domains.
 
-## Running RTT experiments
+### Running RTT experiments
 
 This section shows the exact commands to run the round-trip translation (RTT) pipeline end-to-end.
 
-### 1. Configure credentials
+#### 1. Configure credentials
 
 `src/run_rtt_exp.py` loads environment variables from `src/.env`.
 Rename `src/.env.sample` to `src/.env` and add the keys needed by the models 
@@ -172,7 +171,7 @@ Notes:
 - `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_DEPLOYMENT` are used to invoke 
 **Azure OpenAI 5.4**, which is employed for translation validation
 
-### 2. Set up experiment configuration
+#### 2. Set up experiment configuration
 
 Configs live in:
 - `data/rtt_experiments/es_gn/config.json` (Spanish→Guarani→Spanish)
@@ -184,7 +183,7 @@ Each config points to:
 - `output_dir`: path to the directory where the experiment outputs should be recorded, e.g., `outputs/rtt_experiment/es_gn`
 - `exclude`: list of model variants to be excluded from the running, e.g., `gemma-4-E4B-it`, `gemma-4-26B-A4B-it`
 
-### 3. Run RTT generation
+#### 3. Run RTT generation
 
 Spanish↔Guarani:
 
@@ -206,7 +205,7 @@ Notes:
   `outputs/rtt_experiment/es_gn_YYYYMMDDHHMMSS/`
 - Per-model outputs are saved as `*_rtt_results.json`.
 
-### 4. Run evaluation
+#### 4. Run evaluation
 
 After generation finishes, evaluate one result directory:
 
@@ -224,7 +223,7 @@ Evaluation updates each `*_rtt_results.json` with metrics and creates:
 - `--res_dir`: name of the directory inside `output_dir` (see configuration file) containing the RTT results 
 - `overall_evaluation_<res_dir>.csv`
 
-### 5. Metrics produced
+#### 5. Metrics produced
 
 The evaluation script computes:
 - sentence-level and corpus-level **SacreBLEU**
@@ -233,7 +232,7 @@ The evaluation script computes:
 - RTT-style domain averages (`rtt_sacrebleu`, `rtt_chrf++`)
 - translation validity/accounting fields (actual/valid translations and language disagreements)
 
-### 6. RTT Analysis
+### Analysis
 
 A notebook with the analyses is available at the `analysis` directory.
 
