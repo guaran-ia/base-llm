@@ -127,7 +127,7 @@ Primary dependencies are listed in `requirements.txt`, including:
 
 ---
 
-## RTT Experiments
+## RTT experiments
 
 The RTT workflow is:
 1. Translate Spanish source sentences to Guarani.
