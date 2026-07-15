@@ -1,0 +1,17 @@
+{
+    "group_name": "capibara",
+    "variant_name": "gemma-2-9b-it-SimPO-Jopara-V3.4",
+    "huggingface_id": "rubuntu/gemma-2-9b-it-SimPO-Jopara-V3.4",
+    "model_name": "gemma-2-9b-it-simpo-jopara-v3.4",
+    "run_name": "capibara__gemma-2-9b-it-simpo-jopara-v3.4",
+    "task": "gn_global_mmlu_lite_generate",
+    "status": "ok",
+    "started_at": "2026-07-15T17:59:36",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260715174104/capibara__gemma-2-9b-it-simpo-jopara-v3.4",
+    "acc": 0.465,
+    "stderr": 0.02496990669989585,
+    "finished_at": "2026-07-15T18:01:25",
+    "duration_seconds": 109.00630903244019,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260715174104/capibara__gemma-2-9b-it-simpo-jopara-v3.4/results.json",
+    "null_answers": 5
+}

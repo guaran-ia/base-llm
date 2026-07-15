@@ -1,0 +1,17 @@
+{
+    "group_name": "minitron",
+    "variant_name": "8b-it",
+    "huggingface_id": "nvidia/Mistral-NeMo-Minitron-8B-Instruct",
+    "model_name": "mistral-nemo-minitron-8b-instruct",
+    "run_name": "minitron__8b-it",
+    "task": "gn_global_mmlu_lite_generate",
+    "status": "ok",
+    "started_at": "2026-07-15T17:56:38",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260715174104/minitron__8b-it",
+    "acc": 0.3125,
+    "stderr": 0.023204644228784484,
+    "finished_at": "2026-07-15T17:58:12",
+    "duration_seconds": 94.49931406974792,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260715174104/minitron__8b-it/results.json",
+    "null_answers": 0
+}

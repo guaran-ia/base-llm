@@ -1,0 +1,16 @@
+{
+    "group_name": "minitron",
+    "variant_name": "4b-it",
+    "huggingface_id": "nvidia/Nemotron-Mini-4B-Instruct",
+    "model_name": "nemotron-mini-4b-instruct",
+    "run_name": "minitron__4b-it",
+    "task": "gn_global_mmlu_lite",
+    "status": "ok",
+    "started_at": "2026-07-14T20:37:27",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_20260714203410/minitron__4b-it",
+    "acc": 0.3175,
+    "stderr": 0.023304336619246597,
+    "finished_at": "2026-07-14T20:37:45",
+    "duration_seconds": 18.340012073516846,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_20260714203410/minitron__4b-it/results.json"
+}

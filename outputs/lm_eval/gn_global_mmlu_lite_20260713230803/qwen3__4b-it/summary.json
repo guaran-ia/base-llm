@@ -1,0 +1,16 @@
+{
+    "group_name": "qwen3",
+    "variant_name": "4b-it",
+    "huggingface_id": "Qwen/Qwen3-4B-Instruct-2507",
+    "model_name": "qwen3-4b-instruct-2507",
+    "run_name": "qwen3__4b-it",
+    "task": "gn_global_mmlu_lite",
+    "status": "ok",
+    "started_at": "2026-07-13T23:17:30",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_20260713230803/qwen3__4b-it",
+    "acc": 0.2425,
+    "stderr": 0.021456591955524174,
+    "finished_at": "2026-07-13T23:18:22",
+    "duration_seconds": 51.88705492019653,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_20260713230803/qwen3__4b-it/results.json"
+}

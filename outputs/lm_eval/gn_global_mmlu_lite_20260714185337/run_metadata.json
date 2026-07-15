@@ -1,0 +1,122 @@
+{
+    "timestamp": "20260714185337",
+    "task": "gn_global_mmlu_lite",
+    "models_config": "exp/lm_eval/base_models.json",
+    "include_path": "exp/lm_eval",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_20260714185337",
+    "model_backend": "hf",
+    "device": "cuda:0",
+    "batch_size": 1,
+    "dtype": "bfloat16",
+    "limit": null,
+    "log_samples": true,
+    "apply_chat_template": false,
+    "trust_remote_code": true,
+    "enable_thinking": false,
+    "bootstrap_iters": 100000,
+    "skip_existing": false,
+    "dry_run": false,
+    "run_name": "gn_global_mmlu_lite_20260714185337",
+    "only": [],
+    "exclude": [],
+    "selected_models": [
+        {
+            "group_name": "gemma-4",
+            "variant_name": "e4b-it",
+            "huggingface_id": "google/gemma-4-E4B-it",
+            "model_name": "gemma-4-e4b-it",
+            "run_name": "gemma-4__e4b-it"
+        },
+        {
+            "group_name": "gemma-4",
+            "variant_name": "26b-a4b-it",
+            "huggingface_id": "google/gemma-4-26B-A4B-it",
+            "model_name": "gemma-4-26b-a4b-it",
+            "run_name": "gemma-4__26b-a4b-it"
+        },
+        {
+            "group_name": "gemma-3",
+            "variant_name": "4b-it",
+            "huggingface_id": "google/gemma-3-4b-it",
+            "model_name": "gemma-3-4b-it",
+            "run_name": "gemma-3__4b-it"
+        },
+        {
+            "group_name": "gemma-3",
+            "variant_name": "12b-it",
+            "huggingface_id": "google/gemma-3-12b-it",
+            "model_name": "gemma-3-12b-it",
+            "run_name": "gemma-3__12b-it"
+        },
+        {
+            "group_name": "apertus",
+            "variant_name": "8b-it",
+            "huggingface_id": "swiss-ai/Apertus-8B-Instruct-2509",
+            "model_name": "apertus-8b-instruct-2509",
+            "run_name": "apertus__8b-it"
+        },
+        {
+            "group_name": "qwen3",
+            "variant_name": "4b-it",
+            "huggingface_id": "Qwen/Qwen3-4B-Instruct-2507",
+            "model_name": "qwen3-4b-instruct-2507",
+            "run_name": "qwen3__4b-it"
+        },
+        {
+            "group_name": "llama-3.1",
+            "variant_name": "8b-it",
+            "huggingface_id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+            "model_name": "meta-llama-3.1-8b-instruct",
+            "run_name": "llama-3.1__8b-it"
+        },
+        {
+            "group_name": "minitron",
+            "variant_name": "4b-it",
+            "huggingface_id": "nvidia/Nemotron-Mini-4B-Instruct",
+            "model_name": "nemotron-mini-4b-instruct",
+            "run_name": "minitron__4b-it"
+        },
+        {
+            "group_name": "minitron",
+            "variant_name": "8b-it",
+            "huggingface_id": "nvidia/Mistral-NeMo-Minitron-8B-Instruct",
+            "model_name": "mistral-nemo-minitron-8b-instruct",
+            "run_name": "minitron__8b-it"
+        },
+        {
+            "group_name": "mistral",
+            "variant_name": "7b-it",
+            "huggingface_id": "mistralai/Mistral-7B-Instruct-v0.3",
+            "model_name": "mistral-7b-instruct-v0.3",
+            "run_name": "mistral__7b-it"
+        },
+        {
+            "group_name": "capibara",
+            "variant_name": "gemma-2-9b-it-SimPO-Jopara-V3.4",
+            "huggingface_id": "rubuntu/gemma-2-9b-it-SimPO-Jopara-V3.4",
+            "model_name": "gemma-2-9b-it-simpo-jopara-v3.4",
+            "run_name": "capibara__gemma-2-9b-it-simpo-jopara-v3.4"
+        },
+        {
+            "group_name": "princetop-nlp",
+            "variant_name": "gemma-2-9b-it-SimPO",
+            "huggingface_id": "princeton-nlp/gemma-2-9b-it-SimPO",
+            "model_name": "gemma-2-9b-it-simpo",
+            "run_name": "princetop-nlp__gemma-2-9b-it-simpo"
+        }
+    ],
+    "completed_models": [
+        "gemma-4__e4b-it",
+        "gemma-4__26b-a4b-it",
+        "gemma-3__4b-it",
+        "gemma-3__12b-it",
+        "apertus__8b-it",
+        "qwen3__4b-it",
+        "llama-3.1__8b-it",
+        "minitron__4b-it",
+        "minitron__8b-it",
+        "mistral__7b-it",
+        "capibara__gemma-2-9b-it-simpo-jopara-v3.4",
+        "princetop-nlp__gemma-2-9b-it-simpo"
+    ]
+}
