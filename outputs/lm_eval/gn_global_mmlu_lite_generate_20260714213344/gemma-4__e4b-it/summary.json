@@ -12,5 +12,6 @@
     "stderr": 0.02436023506930052,
     "finished_at": "2026-07-14T21:36:33",
     "duration_seconds": 168.87212753295898,
-    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/gemma-4__e4b-it/results.json"
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/gemma-4__e4b-it/results.json",
+    "null_answers": 395
 }

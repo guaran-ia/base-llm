@@ -12,5 +12,6 @@
     "stderr": 0.02229016607742972,
     "finished_at": "2026-07-14T21:49:49",
     "duration_seconds": 71.73808526992798,
-    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/minitron__8b-it/results.json"
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/minitron__8b-it/results.json",
+    "null_answers": 43
 }

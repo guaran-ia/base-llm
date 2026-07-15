@@ -12,5 +12,6 @@
     "stderr": 0.02367245949084853,
     "finished_at": "2026-07-14T21:52:39",
     "duration_seconds": 76.78979754447937,
-    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/princetop-nlp__gemma-2-9b-it-simpo/results.json"
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260714213344/princetop-nlp__gemma-2-9b-it-simpo/results.json",
+    "null_answers": 251
 }

@@ -23,11 +23,14 @@ def extract_answer(text: Any) -> Optional[str]:
     if not response:
         return None
 
+    answer_word = r"(?:answer|respuesta|resposta|mbohov[aá]i|option|op[cç]i[oó]n)"
+    correctness_word = r"(?:correct|correcta|correta|hekopete)"
+    connector = r"(?:is|es|e|é|ha'?e|ha’e|:|=|-)"
     patterns = [
-        r"^\s*[\(\[]?\s*([ABCD])\s*[\)\].,:;]?(?:\s|$)",
-        r"(?i)\b(?:answer|respuesta|resposta|mbohov[aá]i|option|opci[oó]n)\b\s*(?:correcta|hekopete)?\s*(?:is|es|ha'?e|:)?\s*[\(\[]?\s*([ABCD])\b",
-        r"(?i)\b(?:the\s+correct\s+answer\s+is|la\s+respuesta\s+es)\s*[\(\[]?\s*([ABCD])\b",
-        r"\b([ABCD])\b",
+        rf"(?i)\b(?:a|la|el|the)?\s*{answer_word}\b\s*(?:{correctness_word})?\s*(?:{connector})\s*[\(\[]?\s*([ABCD])\b",
+        rf"(?i)\b(?:the\s+correct\s+answer|la\s+respuesta\s+correcta|a\s+resposta\s+correta)\s*(?:{connector})\s*[\(\[]?\s*([ABCD])\b",
+        r"^\s*[\(\[]?\s*([ABCD])\s*[\)\]]?\s*[\].,:;]?\s*$",
+        r"^\s*[\(\[]?\s*([ABCD])\s*[\)\].,:;]\s+",
     ]
     for pattern in patterns:
         match = re.search(pattern, response)

@@ -345,7 +345,16 @@ asks the model to generate a single answer letter and uses
 `A`, `(B)`, `Answer: C`, or `Mbohovái: D`.
 
 Because this task generates answers rather than scoring label likelihoods, using
-the chat template is usually appropriate for instruction-tuned models:
+the chat template is usually appropriate for instruction-tuned models. The
+runner also sends this system instruction by default when chat templates are
+enabled:
+
+```text
+You answer multiple-choice questions. Return exactly one letter: A, B, C, or D.
+```
+
+This matches the plain Global MMLU-Lite runner and helps models such as Qwen
+avoid long explanatory answers that cannot be parsed as `A`, `B`, `C`, or `D`.
 
 ```bash
 python -m src.run_lm_eval_exp \
@@ -369,9 +378,25 @@ python -m src.run_lm_eval_exp \
   --bootstrap-iters 0
 ```
 
+Run a Qwen diagnostic with the default system instruction:
+
+```bash
+python -m src.run_lm_eval_exp \
+  --task gn_global_mmlu_lite_generate \
+  --run-name diagnostic_qwen3_generate_system \
+  --only Qwen/Qwen3-4B-Instruct-2507 \
+  --apply-chat-template \
+  --dtype bfloat16 \
+  --limit 50 \
+  --bootstrap-iters 0
+```
+
+Override the system instruction with `--system-instruction "..."`, or pass
+`--system-instruction ""` to disable it for a chat-templated run.
+
 The `lm-eval` runner writes one directory per model and maintains:
 - `run_metadata.json`
-- `summary.csv`
+- `summary.csv`, including `null_answers` for generative tasks with a parser
 - `summary.jsonl`
 - per-model `results.json`
 - per-model `summary.json`

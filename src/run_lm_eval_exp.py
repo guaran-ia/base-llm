@@ -1,6 +1,7 @@
 import click
 import csv
 import gc
+import importlib.util
 import json
 import os
 import re
@@ -24,6 +25,9 @@ DEFAULT_MODELS_CONFIG = os.path.join('exp', 'lm_eval', 'base_models.json')
 DEFAULT_INCLUDE_PATH = os.path.join('exp', 'lm_eval')
 DEFAULT_OUTPUT_DIR = os.path.join('outputs', 'lm_eval')
 DEFAULT_TASK = 'gn_global_mmlu_lite'
+DEFAULT_SYSTEM_INSTRUCTION = (
+    'You answer multiple-choice questions. Return exactly one letter: A, B, C, or D.'
+)
 
 
 def resolve_path(path: str, project_dir: str = PROJECT_DIR) -> str:
@@ -197,6 +201,74 @@ def extract_stderr(results: Optional[Dict[str, Any]], task: str, metric: str) ->
     return None
 
 
+def load_answer_extractor(task: str, include_path: Optional[str]) -> Optional[Any]:
+    """Load a task-local extract_answer helper when one is available."""
+    candidate_paths = []
+    if include_path:
+        candidate_paths.append(os.path.join(include_path, task, 'utils.py'))
+    candidate_paths.append(os.path.join(PROJECT_DIR, 'exp', 'lm_eval', task, 'utils.py'))
+
+    for utils_path in candidate_paths:
+        if not os.path.isfile(utils_path):
+            continue
+
+        module_name = f'_lm_eval_task_utils_{sanitize_filename(task)}'
+        spec = importlib.util.spec_from_file_location(module_name, utils_path)
+        if spec is None or spec.loader is None:
+            continue
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        extractor = getattr(module, 'extract_answer', None)
+        if callable(extractor):
+            return extractor
+    return None
+
+
+def sample_response(sample: Dict[str, Any]) -> Any:
+    filtered_resps = sample.get('filtered_resps')
+    if filtered_resps:
+        return filtered_resps[0]
+
+    resps = sample.get('resps')
+    if resps:
+        return resps[0]
+    return ''
+
+
+def count_null_answers(
+    results: Optional[Dict[str, Any]],
+    task: str,
+    include_path: Optional[str],
+) -> Optional[int]:
+    if not results:
+        return None
+
+    samples = results.get('samples', {}).get(task)
+    if not samples:
+        return None
+
+    extractor = load_answer_extractor(task, include_path)
+    if extractor is None:
+        return None
+
+    return sum(
+        1
+        for sample in samples
+        if extractor(sample_response(sample)) is None
+    )
+
+
+def enrich_summary_with_results(
+    summary: Dict[str, Any],
+    results: Optional[Dict[str, Any]],
+    task: str,
+    include_path: Optional[str],
+) -> None:
+    null_answers = count_null_answers(results, task, include_path)
+    if null_answers is not None:
+        summary['null_answers'] = null_answers
+
+
 def write_summary_csv(path: str, summaries: List[Dict[str, Any]]) -> None:
     fieldnames = [
         'group_name',
@@ -207,6 +279,7 @@ def write_summary_csv(path: str, summaries: List[Dict[str, Any]]) -> None:
         'status',
         'acc',
         'stderr',
+        'null_answers',
         'started_at',
         'finished_at',
         'duration_seconds',
@@ -215,7 +288,7 @@ def write_summary_csv(path: str, summaries: List[Dict[str, Any]]) -> None:
     ]
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator='\n')
         writer.writeheader()
         for summary in summaries:
             writer.writerow({field: summary.get(field, '') for field in fieldnames})
@@ -246,6 +319,7 @@ def run_one_model(
     limit: Optional[float],
     log_samples: bool,
     apply_chat_template: bool,
+    system_instruction: Optional[str],
     trust_remote_code: bool,
     enable_thinking: Optional[bool],
     bootstrap_iters: int,
@@ -284,6 +358,7 @@ def run_one_model(
             batch_size=batch_size,
             device=device,
             apply_chat_template=apply_chat_template,
+            system_instruction=system_instruction,
             log_samples=log_samples,
             limit=limit,
             bootstrap_iters=bootstrap_iters,
@@ -299,6 +374,7 @@ def run_one_model(
             'duration_seconds': finished_at - started_at,
             'results_path': project_relative_path(results_path),
         })
+        enrich_summary_with_results(summary, results, task, include_path)
         write_json(summary_path, summary)
         return summary
     except Exception as exc:
@@ -336,6 +412,7 @@ def run_experiment(
     limit: Optional[float],
     log_samples: bool,
     apply_chat_template: bool,
+    system_instruction: Optional[str],
     trust_remote_code: bool,
     enable_thinking: Optional[bool],
     bootstrap_iters: int,
@@ -368,6 +445,7 @@ def run_experiment(
         'limit': limit,
         'log_samples': log_samples,
         'apply_chat_template': apply_chat_template,
+        'system_instruction': system_instruction,
         'trust_remote_code': trust_remote_code,
         'enable_thinking': enable_thinking,
         'bootstrap_iters': bootstrap_iters,
@@ -406,6 +484,9 @@ def run_experiment(
                 'output_dir': project_relative_path(model_output_dir),
                 'results_path': project_relative_path(results_path),
             }
+            results = read_json(results_path)
+            enrich_summary_with_results(summary, results, task, include_path)
+            write_json(summary_path, summary)
         else:
             click.echo(
                 f'[{len(summaries) + 1}/{len(selected_models)}] '
@@ -423,6 +504,7 @@ def run_experiment(
                 limit=limit,
                 log_samples=log_samples,
                 apply_chat_template=apply_chat_template,
+                system_instruction=system_instruction,
                 trust_remote_code=trust_remote_code,
                 enable_thinking=enable_thinking,
                 bootstrap_iters=bootstrap_iters,
@@ -466,6 +548,7 @@ def run_cli(
     limit: Optional[str],
     log_samples: bool,
     apply_chat_template: bool,
+    system_instruction: Optional[str],
     trust_remote_code: bool,
     enable_thinking: Optional[bool],
     bootstrap_iters: int,
@@ -488,6 +571,10 @@ def run_cli(
     if include_path_abs and not os.path.isdir(include_path_abs):
         raise FileNotFoundError(f'Include path not found: {include_path_abs}')
 
+    effective_system_instruction = system_instruction or None
+    if not apply_chat_template:
+        effective_system_instruction = None
+
     return run_experiment(
         models_config=models_config_path,
         task=task,
@@ -500,6 +587,7 @@ def run_cli(
         limit=parse_limit(limit),
         log_samples=log_samples,
         apply_chat_template=apply_chat_template,
+        system_instruction=effective_system_instruction,
         trust_remote_code=trust_remote_code,
         enable_thinking=enable_thinking,
         bootstrap_iters=bootstrap_iters,
@@ -523,6 +611,12 @@ def run_cli(
 @click.option('--limit', default=None, help='Optional integer count or fraction for testing.')
 @click.option('--log-samples/--no-log-samples', default=True, show_default=True)
 @click.option('--apply-chat-template/--no-apply-chat-template', default=True, show_default=True)
+@click.option(
+    '--system-instruction',
+    default=DEFAULT_SYSTEM_INSTRUCTION,
+    show_default=True,
+    help='Optional system message used when applying chat templates. Pass an empty string to disable.',
+)
 @click.option('--trust-remote-code/--no-trust-remote-code', default=True, show_default=True)
 @click.option('--enable-thinking/--disable-thinking', default=False, show_default=True)
 @click.option('--bootstrap-iters', default=100000, show_default=True, type=int)
@@ -543,6 +637,7 @@ def main(
     limit,
     log_samples,
     apply_chat_template,
+    system_instruction,
     trust_remote_code,
     enable_thinking,
     bootstrap_iters,
@@ -566,6 +661,7 @@ def main(
             limit=limit,
             log_samples=log_samples,
             apply_chat_template=apply_chat_template,
+            system_instruction=system_instruction or None,
             trust_remote_code=trust_remote_code,
             enable_thinking=enable_thinking,
             bootstrap_iters=bootstrap_iters,
