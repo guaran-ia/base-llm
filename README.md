@@ -12,7 +12,7 @@ The current evaluation workflows are:
 - **Global MMLU-Lite in Guarani:** models answer multiple-choice questions from a
   Guarani Global MMLU-Lite dataset. The repository supports both a plain
   generation-based runner and `lm-evaluation-harness` task variants.
-- **`lm-eval` task development:** task configs are included for likelihood-based
+- **`lm-eval` task development:** task configuration files are included for likelihood-based
   multiple-choice scoring and generative answer parsing.
 
 ## Datasets
@@ -21,7 +21,7 @@ The RTT experiments are conducted on synthetic source-language datasets across
 25 domains such as Arts, Literature, Business, and Technology. Global MMLU-Lite
 experiments use a Guarani multiple-choice question-answering dataset.
 
-Dataset:
+Datasets:
 - `data/RTTBench-Mono-ES.jsonl` — 1,250 synthetic Spanish sentences used for Spanish→Guarani→Spanish RTT.
 - `data/gmlgnt.jsonl` — Guarani Global MMLU-Lite examples used by the plain and `lm-eval` evaluation pipelines.
 
@@ -45,7 +45,7 @@ Tested models include:
 
 - `src/` — scripts and utility code used for dataset preparation, experiment execution, and evaluation.
 - `data/` — input datasets and experiment configuration files.
-- `exp/` — experiment configuration files, including RTT, plain Global MMLU-Lite, and `lm-eval` task/model configs.
+- `exp/` — experiment configuration files, including RTT, plain Global MMLU-Lite, and `lm-eval` task/model configurations.
 - `outputs/` — generated model outputs, translations, and evaluation reports.
 
 ## Installation
@@ -85,7 +85,7 @@ pip install -U "transformers>=5.13.1" accelerate
 
 RTT execution can include language identification metadata for each forward/backward
 translation. This is optional. If the module is not installed, RTT still runs and
-language-identification are not conducted.
+language-identification checks are skipped.
 
 To install only the `language_identifier` module (without cloning the full `corpus`
 repository into this project), run:
@@ -153,7 +153,7 @@ This section shows the exact commands to run the round-trip translation (RTT) pi
 #### 1. Configure credentials
 
 `src/run_rtt_exp.py` loads environment variables from `src/.env`.
-Rename `src/.env.sample` to `src/.env` and add the keys needed by the models 
+Rename `src/.env.sample` to `src/.env` and add the keys needed by the models
 you plan to run:
 
 ```bash
@@ -167,9 +167,9 @@ AZURE_OPENAI_DEPLOYMENT=...
 Notes:
 - `HF_ACCESS_TOKEN` is required because the script always calls `huggingface_hub.login(...)`.
 - `AZURE_API_KEY` is used for **Grok** (`grok-4-fast-non-reasoning`).
-- If you do not run **Grok**, you can keep this key unset and exclude these models in config (see below).
-- `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_DEPLOYMENT` are used to invoke 
-**Azure OpenAI 5.4**, which is employed for translation validation
+- If you do not run **Grok**, you can keep this key unset and exclude these models in the config (see below).
+- `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_DEPLOYMENT` are used to invoke the
+  Azure OpenAI deployment used for translation validation.
 
 #### 2. Set up experiment configuration
 
@@ -180,8 +180,8 @@ Configs live in:
 Each config points to:
 - `rtt_data_path`: input dataset, e.g., `data/RTTBench-Mono.jsonl`
 - `base_models_list_path`: path to the file containing the list of models to run, e.g., `data/rtt_experiments/es_gn/base_models.json`
-- `output_dir`: path to the directory where the experiment outputs should be recorded, e.g., `outputs/rtt_experiment/es_gn`
-- `exclude`: list of model variants to be excluded from the running, e.g., `gemma-4-E4B-it`, `gemma-4-26B-A4B-it`
+- `output_dir`: path to the directory where the experiment outputs should be written, e.g., `outputs/rtt_experiment/es_gn`
+- `exclude`: list of model variants to exclude from the run, e.g., `gemma-4-E4B-it`, `gemma-4-26B-A4B-it`
 
 #### 3. Run RTT generation
 
@@ -219,9 +219,9 @@ or
 python src/eval_rtt_exp.py --res_dir en_gn_YYYYMMDDHHMMSS
 ```
 
-Evaluation updates each `*_rtt_results.json` with metrics and creates:
-- `--res_dir`: name of the directory inside `output_dir` (see configuration file) containing the RTT results 
-- `overall_evaluation_<res_dir>.csv`
+The `--res_dir` argument is the name of the directory inside `output_dir` (see
+the configuration file) containing the RTT results. Evaluation updates each
+`*_rtt_results.json` with metrics and creates `overall_evaluation_<res_dir>.csv`.
 
 #### 5. Metrics produced
 
@@ -234,19 +234,19 @@ The evaluation script computes:
 
 ### Analysis
 
-A notebook with the analyses is available at the `analysis` directory.
+An analysis notebook is available in the `analysis` directory.
 
 ### Notes
 
 - The Spanish dataset was generated with **Azure OpenAI GPT-4.1**.
-- The experiments aim to reveal how translation quality varies across domains and 
+- The experiments aim to reveal how translation quality varies across domains and
 how well models can generalize the Spanish↔Guarani RTT task.
 - Outputs and evaluation reports are saved under `outputs/`.
 
 ### Blog Article
 
-A medium [blog article](https://jorgesaldivar.medium.com/how-well-do-todays-ai-models-handle-guarani-169b575a48a3) 
-was published to present the study and discuss the findigs.
+A [Medium blog article](https://jorgesaldivar.medium.com/how-well-do-todays-ai-models-handle-guarani-169b575a48a3)
+was published to present the study and discuss the findings.
 
 ---
 
@@ -409,3 +409,35 @@ python -m src.run_lm_eval_exp \
   --run-name gn_global_mmlu_lite_generate \
   --skip-existing
 ```
+
+## Experiment Results
+
+The table below combines the latest available aggregate results for the main
+evaluation workflows:
+
+- RTT source: `outputs/rtt_experiment/es_gn_20260415165900/overall_evaluation_es_gn_20260415165900.csv`
+- Global MMLU-Lite source: `outputs/lm_eval/gn_global_mmlu_lite_generate_20260715174104/summary.csv`
+
+Rows are ordered by RTT chrF++, RTT cosine similarity, RTT sacreBLEU, and
+finally Global MMLU-Lite `lm-eval` accuracy. Higher values are better for all
+score columns, except where noted below the table.
+
+| Rank | Model | RTT chrF++ | RTT cosine | RTT sacreBLEU | Global MMLU-Lite acc |
+| ---: | --- | ---: | ---: | ---: | ---: |
+| 1 | gemma-2-9b-it-SimPO | 29.150 | 0.500 | 9.687 | 0.388 |
+| 2 | gemma-4-26B-A4B-it | 26.043 | 0.508 | 6.494 | 0.458 |
+| 3 | Meta-Llama-3.1-8B-Instruct | 21.714 | 0.348 | 6.642 | 0.378 |
+| 4 | gemma-3-4b-it | 18.241 | 0.321 | 5.451 | 0.340 |
+| 5 | gemma-4-E4B-it | 18.100 | 0.299 | 5.196 | 0.367 |
+| 6 | gemma-3-12b-it | 17.724 | 0.287 | 3.450 | 0.405 |
+| 7 | Mistral-NeMo-Minitron-8B-Instruct | 11.283 | 0.171 | 2.280 | 0.312 |
+| 8 | Apertus-8B-Instruct-2509 | 10.901 | 0.200 | 2.381 | 0.330 |
+| 9 | gemma-2-9b-it-SimPO-Jopara-V3.4 | 7.269 | 0.147 | 1.126 | 0.465 |
+| 10 | Nemotron-Mini-4B-Instruct | 2.695 | 0.056 | 0.000 | 0.352 |
+| 11 | Qwen3-4B-Instruct-2507 | 2.695 | 0.056 | 0.000 | 0.280 |
+| 12 | Mistral-7B-Instruct-v0.3 | 29.703 | 0.412 | 14.999 | 0.312 |
+
+> `gpt-4o-mini` and `grok-4-fast-non-reasoning` are not included in the table
+> because they were used only in RTT experiments. `Mistral-7B` occupies the last
+> position despite apparently promising RTT scores because further inspection
+> showed that it is unable to generate Guarani text reliably.
