@@ -38,8 +38,8 @@ Tested models include:
 - Nemotron-Mini-4B-Instruct: `nvidia/Nemotron-Mini-4B-Instruct`
 - Mistral-NeMo-Minitron-8B-Instruct: `nvidia/Mistral-NeMo-Minitron-8B-Instruct`
 - Mistral-7B-Instruct-v0.3: `mistralai/Mistral-7B-Instruct-v0.3`
-- Grok: `grok-4-fast-non-reasoning`
-- GPT: `gpt-4o-mini`
+- Grok: `grok-4-fast-non-reasoning` (only for RTT experiments)
+- GPT: `gpt-4o-mini` (only for RTT experiments)
 
 ## Repository structure
 
