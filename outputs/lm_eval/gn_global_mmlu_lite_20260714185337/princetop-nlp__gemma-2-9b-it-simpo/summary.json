@@ -1,0 +1,16 @@
+{
+    "group_name": "princetop-nlp",
+    "variant_name": "gemma-2-9b-it-SimPO",
+    "huggingface_id": "princeton-nlp/gemma-2-9b-it-SimPO",
+    "model_name": "gemma-2-9b-it-simpo",
+    "run_name": "princetop-nlp__gemma-2-9b-it-simpo",
+    "task": "gn_global_mmlu_lite",
+    "status": "ok",
+    "started_at": "2026-07-14T19:09:57",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_20260714185337/princetop-nlp__gemma-2-9b-it-simpo",
+    "acc": 0.3775,
+    "stderr": 0.02426843148860868,
+    "finished_at": "2026-07-14T19:11:31",
+    "duration_seconds": 94.14824891090393,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_20260714185337/princetop-nlp__gemma-2-9b-it-simpo/results.json"
+}

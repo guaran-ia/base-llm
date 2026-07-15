@@ -1,0 +1,17 @@
+{
+    "group_name": "llama-3.1",
+    "variant_name": "8b-it",
+    "huggingface_id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "model_name": "meta-llama-3.1-8b-instruct",
+    "run_name": "llama-3.1__8b-it",
+    "task": "gn_global_mmlu_lite_generate",
+    "status": "ok",
+    "started_at": "2026-07-15T17:54:10",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260715174104/llama-3.1__8b-it",
+    "acc": 0.3775,
+    "stderr": 0.02426843148860868,
+    "finished_at": "2026-07-15T17:55:39",
+    "duration_seconds": 88.9168610572815,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_generate_20260715174104/llama-3.1__8b-it/results.json",
+    "null_answers": 3
+}

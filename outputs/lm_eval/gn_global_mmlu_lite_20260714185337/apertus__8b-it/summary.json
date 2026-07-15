@@ -1,0 +1,16 @@
+{
+    "group_name": "apertus",
+    "variant_name": "8b-it",
+    "huggingface_id": "swiss-ai/Apertus-8B-Instruct-2509",
+    "model_name": "apertus-8b-instruct-2509",
+    "run_name": "apertus__8b-it",
+    "task": "gn_global_mmlu_lite",
+    "status": "ok",
+    "started_at": "2026-07-14T19:01:16",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_20260714185337/apertus__8b-it",
+    "acc": 0.36,
+    "stderr": 0.024030056367444423,
+    "finished_at": "2026-07-14T19:02:39",
+    "duration_seconds": 83.09137654304504,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_20260714185337/apertus__8b-it/results.json"
+}

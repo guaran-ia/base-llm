@@ -1,0 +1,16 @@
+{
+    "group_name": "gemma-3",
+    "variant_name": "12b-it",
+    "huggingface_id": "google/gemma-3-12b-it",
+    "model_name": "gemma-3-12b-it",
+    "run_name": "gemma-3__12b-it",
+    "task": "gn_global_mmlu_lite",
+    "status": "ok",
+    "started_at": "2026-07-13T23:13:59",
+    "output_dir": "outputs/lm_eval/gn_global_mmlu_lite_20260713230803/gemma-3__12b-it",
+    "acc": 0.235,
+    "stderr": 0.021226490755055016,
+    "finished_at": "2026-07-13T23:16:06",
+    "duration_seconds": 126.69090414047241,
+    "results_path": "outputs/lm_eval/gn_global_mmlu_lite_20260713230803/gemma-3__12b-it/results.json"
+}
